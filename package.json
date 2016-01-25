@@ -1,0 +1,26 @@
+{
+  "name": "dragonfly",
+  "version": "1.0.0",
+  "description": "This project aims to develop a comprehensive todo app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ankurrana/DragonFly.git"
+  },
+  "keywords": [
+    "Dragonfly"
+  ],
+  "author": "Ankur rana <ankurofficial@hotmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Ankurrana/DragonFly/issues"
+  },
+  "homepage": "https://github.com/Ankurrana/DragonFly#readme",
+  "dependencies": {
+    "body-parser": "^1.14.2",
+    "express": "^4.13.4"
+  }
+}
