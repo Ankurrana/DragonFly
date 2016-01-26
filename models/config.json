@@ -1,0 +1,7 @@
+{
+	"hostname" : "localhost",
+	"database"  : "dragonfly",
+	"port" : 27017,
+	"username" : "",
+	"password" : ""
+}
