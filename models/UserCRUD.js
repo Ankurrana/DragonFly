@@ -37,14 +37,15 @@ function validateUserById(userId,UserEnteredPassword,callback){
 
 
 function validateUserByEmail(userEmail,UserEnteredPassword,callback){
-	User.findOne({email:userEmail},"username email password -_id",function(err,doc){
-		var pass = doc.password;
+	User.findOne({email:userEmail},"username email password",function(err,doc){
+		// console.log("password Entered :" + pass);
 		if(err) 
 			callback(err);
+		var pass = doc.password;
 		if( encryption.comparePasswordSync(UserEnteredPassword,pass) == true ){
 			callback(null,doc);
 		}else{
-			callback(null,{"err":1,errCode:2,"errMsg":"Not Validated"});
+			callback(null,false,{"err":1,errCode:2,"errMsg":"Not Validated"});
 		}
 	})
 }
