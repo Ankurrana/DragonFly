@@ -38,14 +38,16 @@ function validateUserById(userId,UserEnteredPassword,callback){
 
 function validateUserByEmail(userEmail,UserEnteredPassword,callback){
 	User.findOne({email:userEmail},"username email password",function(err,doc){
-		// console.log("password Entered :" + pass);
 		if(err) 
 			callback(err);
+		if(doc == null){
+			return callback(null,false,{err:1,errCode:3,'errMsg':"No User Found"});
+		}
 		var pass = doc.password;
 		if( encryption.comparePasswordSync(UserEnteredPassword,pass) == true ){
-			callback(null,doc);
+			return callback(null,doc);
 		}else{
-			callback(null,false,{"err":1,errCode:2,"errMsg":"Not Validated"});
+			return callback(null,false,{"err":1,errCode:2,"errMsg":"Not Validated"});
 		}
 	})
 }
