@@ -1,0 +1,47 @@
+commit ba6d6e17b89077faa93e49328091d27d279b6c42
+Author: Ankur rana <ankurofficial@hotmail.com>
+Date:   Mon Feb 1 22:11:36 2016 +0530
+
+    Look at the message of the last commit in the master branch
+
+commit 075d60bfef14a96054015db9141b9e47ee0abe3f
+Author: Ankur rana <ankurofficial@hotmail.com>
+Date:   Sun Jan 31 15:45:55 2016 +0530
+
+    Leaving passportjs configuration here
+
+commit 556ffc9fa3eb4307e9cb502d396121088907f90c
+Author: Ankur rana <ankurofficial@hotmail.com>
+Date:   Sun Jan 31 14:10:26 2016 +0530
+
+    added code to usercrud.js
+
+commit 65fdb02392b63f2565d9c43c6f6b274dad974c71
+Author: Ankur rana <ankurofficial@hotmail.com>
+Date:   Wed Jan 27 17:00:01 2016 +0530
+
+    Added some dependencies, Not a very important commit
+
+commit 7968205a1edc68d85f93ad4851be1707afdbabb3
+Author: Ankur rana <ankurofficial@hotmail.com>
+Date:   Tue Jan 26 21:57:36 2016 +0530
+
+    Added User Schema Model and addUser and getUser method
+
+commit 941f935d6a3c3b2715ed84b26f4ad41ae9e5135b
+Author: Ankur rana <ankurofficial@hotmail.com>
+Date:   Mon Jan 25 16:49:11 2016 +0530
+
+    Added gitkeep files to maitain the folder structure
+
+commit 2d81e98ba39126bdd75941a54790aeda2c78fa71
+Author: Ankur rana <ankurofficial@hotmail.com>
+Date:   Mon Jan 25 14:46:59 2016 +0530
+
+    created the app structure and left a working server code
+
+commit 3d3f0a6ba6a8c14076191b1e97d5fda41726962e
+Author: Ankur rana <ankurofficial@hotmail.com>
+Date:   Sun Jan 24 20:16:37 2016 +0530
+
+    Initial commit
