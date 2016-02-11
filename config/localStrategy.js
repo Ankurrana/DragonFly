@@ -1,9 +1,5 @@
-var passport = require('passport');
 var passport_local = require('passport-local');
 var userController = require('../models/UserCRUD.js'); 
-
-
-
 var localStrategy = passport_local.Strategy;
 
 var local = new localStrategy({
