@@ -7,10 +7,6 @@ var router = require('./routes/routes.js');
 app.use('/',router);
 app.use(express.static(__dirname + "/public"));
 
-
-
-
-
 app.use('*',function(req,res){
 	res.json({
 		'msg' : "Not Found!"

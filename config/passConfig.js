@@ -1,5 +1,5 @@
 var localStrategy = require('./localStrategy.js');
-var User = require("../models/UserModel.js");
+var User = require("../models/User.js");
 
 function configure(passport){
 	passport.use(localStrategy);
