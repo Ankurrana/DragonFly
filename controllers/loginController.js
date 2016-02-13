@@ -6,16 +6,19 @@
 
 var path = require('path');
 
-var userController =  {
+var loginController =  {
 	Get_login : function(req,res){
 		res.sendFile('login.html', { root: path.join(__dirname, '../views') });
 	},
 	Post_login : function(req,res){
-		res.send(req.user);
+		res.json({
+			username : req.user.username,
+			email : req.user.email
+		});
 	},
 	Get_signup : function(req,res){
 		res.send('This is the signup Page!');
 	}
 }
 
-module.exports = userController;
+module.exports = loginController;
