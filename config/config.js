@@ -3,13 +3,16 @@ var session = require('express-session');
 var cookieParser = require('cookie-parser');
 var passport = require('passport');
 var passConfig = require('./passConfig.js');
-
+var path = require('path');
 
 function configure(app){
 	app.use(bodyParser.urlencoded({ extended: false }))
 	app.use(bodyParser.json())
 	app.use(cookieParser());
-	app.use(session({ secret: 'SECRET' }));
+	app.use(session({ secret: 'SECRET', 
+		saveUninitialized: true,
+		resave:true
+	}));
 	app.use(passport.initialize());
 	app.use(passport.session());
 	passConfig.init(passport);
