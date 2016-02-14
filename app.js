@@ -13,10 +13,6 @@ app.use('*',function(req,res){
 	});
 })
 
-
-
-
-
 /*  Started Server at host localhost and port 3000 */
 app.listen(3000,function(){
 	console.log('Started listening to 3000');

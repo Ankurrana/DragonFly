@@ -71,7 +71,6 @@ userSchema.statics.getUser = function getUser(userEmail,callback){
 	})
 }
 
-
 var User =  mongoose.model('User',userSchema);
 module.exports = User;
 

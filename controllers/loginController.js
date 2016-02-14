@@ -1,10 +1,11 @@
 /*
-*		userController
-*		Handles the request to and from the user/login , user/profile ... 
+*		oginController
+*		Handles the request to and from the login , user/profile ... 
 		Controllers will render views to the functions calling them!
 */
 
 var path = require('path');
+var User = require('../models/User.js');
 
 var loginController =  {
 	Get_login : function(req,res){
@@ -17,8 +18,29 @@ var loginController =  {
 		});
 	},
 	Get_signup : function(req,res){
-		res.send('This is the signup Page!');
-	}
+		res.sendFile('signup.html', { root: path.join(__dirname, '../views') });
+	},
+	Post_signup : function(req,res){
+		User.addUser({
+			'name' : req.body.name,
+			'username' : req.body.username,
+			'email' : req.body.email,
+			'password' : req.body.password
+		},function(err){
+			if(!err)
+				res.redirect('/');
+			else
+				res.redirect('/signup');
+		});
+	},
+	Get_logout : function(req, res){
+		if(req.isAuthenticated()){
+	  		req.logout();
+	  		res.redirect('/');
+	  	}
+	  	else
+	  			res.redirect('/login');
+	},
 }
 
 module.exports = loginController;
