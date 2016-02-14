@@ -6,7 +6,6 @@ var loginController = require('../controllers/loginController.js');
 var auth = require('../middlewares/auth.js');
 
 router.get('/testAuthentication',auth,function(req,res){
-  console.log(req);
 	res.json({
 		'username' : req.user.username,
 		'email' : req.user.email

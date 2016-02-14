@@ -3,7 +3,10 @@ var app = express();
 var appConfig = require('./config/config.js')
 appConfig.init(app);
 var router = require('./routes/routes.js');
+var testRouter = require('./routes/testRoutes.js');
 
+
+app.use('/',testRouter);
 app.use('/',router);
 app.use(express.static(__dirname + "/public"));
 

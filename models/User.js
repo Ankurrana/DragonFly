@@ -71,6 +71,27 @@ userSchema.statics.getUser = function getUser(userEmail,callback){
 	})
 }
 
+userSchema.statics.getAllUsers = function getAllUsers(callback){
+	User.find({},'username name email',function(err,data){
+		if(err)
+			callback(err)
+		else
+			callback(null,data);
+	})
+}
+
+
+userSchema.statics.getUserByUsername = function getUserByUsername(username,callback){
+	User.findOne({"username":username},"-_id -password",function(err,user){
+		if(err)
+			callback(err)
+		if(!user)
+			callback(null,false)
+		else
+			callback(null,user);
+	})
+} 
+
 var User =  mongoose.model('User',userSchema);
 module.exports = User;
 
