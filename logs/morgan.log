@@ -1,0 +1,107 @@
+[0mGET /login [36m304 [0m19.317 ms - -[0m
+[0mPOST /login [32m200 [0m650.271 ms - 48[0m
+[0mGET /testAuthentication [36m304 [0m3.777 ms - -[0m
+[0mGET /logout [36m302 [0m11.531 ms - 58[0m
+[0mGET / [36m304 [0m6.186 ms - -[0m
+[0mGET /user/Ankurasd [32m200 [0m12.521 ms - 5[0m
+[0mGET /logout [36m302 [0m2.574 ms - 68[0m
+[0mGET /login [32m200 [0m16.768 ms - 255[0m
+[0mPOST /login [32m200 [0m513.173 ms - 48[0m
+[0mGET /users [36m304 [0m19.542 ms - -[0m
+[0mGET /test/users [32m200 [0m3.611 ms - 20[0m
+[0mGET /testAuthentication [36m304 [0m2.141 ms - -[0m
+[0mGET /testAuthentication [36m302 [0m21.841 ms - 68[0m
+[0mGET /login [32m200 [0m22.054 ms - 255[0m
+[0mGET /user/ankur [32m200 [0m42.054 ms - 5[0m
+[0mGET /user/Ankur [32m200 [0m34.768 ms - 75[0m
+::ffff:127.0.0.1 - - [14/Feb/2016:12:34:13 +0000] "GET /user/Ankur HTTP/1.1" 304 - "-" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36"
+::ffff:127.0.0.1 - - [14/Feb/2016:12:35:59 +0000] "GET /user/Ankur HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [14/Feb/2016:12:46:26 +0000] "GET /login HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [14/Feb/2016:12:46:30 +0000] "POST /login HTTP/1.1" 200 48
+::ffff:127.0.0.1 - - [14/Feb/2016:12:46:38 +0000] "GET /signup.html HTTP/1.1" 200 523
+::ffff:127.0.0.1 - - [14/Feb/2016:12:47:02 +0000] "POST /signup HTTP/1.1" 302 58
+::ffff:127.0.0.1 - - [14/Feb/2016:12:47:02 +0000] "GET / HTTP/1.1" 200 120
+::ffff:127.0.0.1 - - [14/Feb/2016:12:47:20 +0000] "GET /testAuthentication HTTP/1.1" 200 48
+::ffff:127.0.0.1 - - [14/Feb/2016:12:47:23 +0000] "GET /logout HTTP/1.1" 302 58
+::ffff:127.0.0.1 - - [14/Feb/2016:12:47:23 +0000] "GET / HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [14/Feb/2016:12:47:26 +0000] "GET /login HTTP/1.1" 200 255
+::ffff:127.0.0.1 - - [14/Feb/2016:12:47:38 +0000] "POST /login HTTP/1.1" 401 -
+::ffff:127.0.0.1 - - [14/Feb/2016:12:47:41 +0000] "GET /users HTTP/1.1" 200 959
+::ffff:127.0.0.1 - - [14/Feb/2016:12:48:00 +0000] "GET /user/ankurrana HTTP/1.1" 200 68
+::ffff:127.0.0.1 - - [14/Feb/2016:12:56:43 +0000] "GET /admin HTTP/1.1" 200 20
+::ffff:127.0.0.1 - - [14/Feb/2016:12:58:24 +0000] "GET /admin/users HTTP/1.1" 200 959
+::ffff:127.0.0.1 - - [14/Feb/2016:13:21:15 +0000] "GET /admin/ HTTP/1.1" 200 23
+::ffff:127.0.0.1 - - [14/Feb/2016:13:21:24 +0000] "GET /admin/ HTTP/1.1" 200 29
+::ffff:127.0.0.1 - - [14/Feb/2016:13:23:18 +0000] "GET /admin/ HTTP/1.1" 200 133
+::ffff:127.0.0.1 - - [14/Feb/2016:13:24:43 +0000] "GET /admin/ HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [14/Feb/2016:13:25:01 +0000] "GET /admin/ HTTP/1.1" 200 157
+::ffff:127.0.0.1 - - [14/Feb/2016:13:29:20 +0000] "GET /admin/ HTTP/1.1" 200 179
+::ffff:127.0.0.1 - - [14/Feb/2016:13:29:20 +0000] "GET /admin/node_modules/angular/angular.js HTTP/1.1" 200 20
+::ffff:127.0.0.1 - - [14/Feb/2016:13:29:24 +0000] "GET /admin/node_modules/angular/angular.js HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [14/Feb/2016:13:32:33 +0000] "GET /admin/node_modules/angular/angular.js HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [14/Feb/2016:13:34:26 +0000] "GET /admin/ HTTP/1.1" 200 184
+::ffff:127.0.0.1 - - [14/Feb/2016:13:34:26 +0000] "GET /admin/public/node_modules/angular/angular.js HTTP/1.1" 200 20
+::ffff:127.0.0.1 - - [14/Feb/2016:13:34:30 +0000] "GET /admin/public/node_modules/angular/angular.js HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [14/Feb/2016:13:34:39 +0000] "GET /admin/public/node_modules/angular/angular.js HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [14/Feb/2016:13:35:16 +0000] "GET /admin/node_modules/angular/angular.js HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [14/Feb/2016:13:35:20 +0000] "GET /admin/public/node_modules/angular/angular.js HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [14/Feb/2016:13:36:07 +0000] "GET /admin/ HTTP/1.1" 200 185
+::ffff:127.0.0.1 - - [14/Feb/2016:13:36:07 +0000] "GET /public/node_modules/angular/angular.js HTTP/1.1" 200 20
+::ffff:127.0.0.1 - - [14/Feb/2016:13:38:01 +0000] "GET /admin/ HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [14/Feb/2016:13:38:02 +0000] "GET /public/node_modules/angular/angular.js HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [14/Feb/2016:13:38:05 +0000] "GET /public/node_modules/angular/angular.js HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [14/Feb/2016:13:44:18 +0000] "GET /admin/ HTTP/1.1" 200 223
+::ffff:127.0.0.1 - - [14/Feb/2016:13:48:52 +0000] "GET /admin/ HTTP/1.1" 200 373
+::ffff:127.0.0.1 - - [14/Feb/2016:13:50:20 +0000] "GET /admin/ HTTP/1.1" 200 413
+::ffff:127.0.0.1 - - [14/Feb/2016:14:02:16 +0000] "GET /admin/ HTTP/1.1" 200 381
+::ffff:127.0.0.1 - - [14/Feb/2016:14:03:43 +0000] "GET /admin/user/Ankur HTTP/1.1" 200 75
+::ffff:127.0.0.1 - - [14/Feb/2016:14:40:20 +0000] "GET / HTTP/1.1" 200 20
+::ffff:127.0.0.1 - - [14/Feb/2016:14:41:56 +0000] "GET / HTTP/1.1" 200 119
+::ffff:127.0.0.1 - - [14/Feb/2016:14:42:00 +0000] "GET / HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [14/Feb/2016:14:42:18 +0000] "GET / HTTP/1.1" 200 137
+::ffff:127.0.0.1 - - [14/Feb/2016:14:45:14 +0000] "GET /admin HTTP/1.1" 200 499
+::ffff:127.0.0.1 - - [14/Feb/2016:14:45:14 +0000] "GET /users HTTP/1.1" 200 20
+::ffff:127.0.0.1 - - [14/Feb/2016:14:49:05 +0000] "GET /admin HTTP/1.1" 200 508
+::ffff:127.0.0.1 - - [14/Feb/2016:14:49:05 +0000] "GET /user/Ankur HTTP/1.1" 200 20
+::ffff:127.0.0.1 - - [14/Feb/2016:14:49:29 +0000] "GET /admin HTTP/1.1" 200 534
+::ffff:127.0.0.1 - - [14/Feb/2016:14:49:30 +0000] "GET /user/Ankur HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [14/Feb/2016:14:49:52 +0000] "GET /admin HTTP/1.1" 200 537
+::ffff:127.0.0.1 - - [14/Feb/2016:14:49:52 +0000] "GET /user/Ankur HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [14/Feb/2016:14:50:02 +0000] "GET /admin HTTP/1.1" 200 532
+::ffff:127.0.0.1 - - [14/Feb/2016:14:50:03 +0000] "GET /users HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [14/Feb/2016:14:50:15 +0000] "GET /admin HTTP/1.1" 200 537
+::ffff:127.0.0.1 - - [14/Feb/2016:14:50:16 +0000] "GET /admin/users HTTP/1.1" 200 959
+::ffff:127.0.0.1 - - [14/Feb/2016:14:50:35 +0000] "GET /admin HTTP/1.1" 200 542
+::ffff:127.0.0.1 - - [14/Feb/2016:14:50:36 +0000] "GET /admin/user/Ankur HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [14/Feb/2016:14:51:01 +0000] "GET /admin HTTP/1.1" 200 537
+::ffff:127.0.0.1 - - [14/Feb/2016:14:51:01 +0000] "GET /admin/user/Ankur HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [14/Feb/2016:14:51:12 +0000] "GET /admin HTTP/1.1" 200 536
+::ffff:127.0.0.1 - - [14/Feb/2016:14:51:12 +0000] "GET /admin/user/Ankur HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [14/Feb/2016:14:51:32 +0000] "GET /admin HTTP/1.1" 200 559
+::ffff:127.0.0.1 - - [14/Feb/2016:14:51:32 +0000] "GET /admin/user/Ankur HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [14/Feb/2016:14:51:44 +0000] "GET /admin HTTP/1.1" 200 564
+::ffff:127.0.0.1 - - [14/Feb/2016:14:51:44 +0000] "GET /admin/user/Ankur HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [14/Feb/2016:14:51:55 +0000] "GET /admin HTTP/1.1" 200 567
+::ffff:127.0.0.1 - - [14/Feb/2016:14:51:56 +0000] "GET /admin/user/Ankur HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [14/Feb/2016:14:52:16 +0000] "GET /admin HTTP/1.1" 200 567
+::ffff:127.0.0.1 - - [14/Feb/2016:14:52:16 +0000] "GET /admin/user/Ankur HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [14/Feb/2016:14:52:52 +0000] "GET /admin HTTP/1.1" 200 635
+::ffff:127.0.0.1 - - [14/Feb/2016:14:52:53 +0000] "GET /admin/user/Ankur HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [14/Feb/2016:14:53:04 +0000] "GET /admin HTTP/1.1" 200 621
+::ffff:127.0.0.1 - - [14/Feb/2016:14:53:04 +0000] "GET /admin/user/Ankur HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [14/Feb/2016:15:11:49 +0000] "GET /admin HTTP/1.1" 200 524
+::ffff:127.0.0.1 - - [14/Feb/2016:15:11:49 +0000] "GET /admin/users HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [14/Feb/2016:15:13:58 +0000] "GET /admin HTTP/1.1" 200 519
+::ffff:127.0.0.1 - - [14/Feb/2016:15:13:59 +0000] "GET /admin/users HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [14/Feb/2016:15:14:44 +0000] "GET /admin HTTP/1.1" 200 519
+::ffff:127.0.0.1 - - [14/Feb/2016:15:14:45 +0000] "GET /admin/users HTTP/1.1" 200 597
+::ffff:127.0.0.1 - - [14/Feb/2016:15:18:01 +0000] "GET /admin HTTP/1.1" 200 641
+::ffff:127.0.0.1 - - [14/Feb/2016:15:18:02 +0000] "GET /admin/users HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [14/Feb/2016:15:18:49 +0000] "GET /admin HTTP/1.1" 200 651
+::ffff:127.0.0.1 - - [14/Feb/2016:15:18:49 +0000] "GET /admin/users HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [14/Feb/2016:15:18:51 +0000] "GET /admin HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [14/Feb/2016:15:18:52 +0000] "GET /admin/users HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [14/Feb/2016:15:19:13 +0000] "GET /admin HTTP/1.1" 200 671
+::ffff:127.0.0.1 - - [14/Feb/2016:15:19:13 +0000] "GET /admin/users HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [14/Feb/2016:15:19:24 +0000] "GET /admin HTTP/1.1" 200 658
+::ffff:127.0.0.1 - - [14/Feb/2016:15:19:24 +0000] "GET /admin/users HTTP/1.1" 304 -

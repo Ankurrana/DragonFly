@@ -20,7 +20,8 @@ var userSchema = new mongoose.Schema({
 	},
 	username : {
 		type : String,
-		unique : true
+		unique : true,
+		lowercase : true
 	}
 });
 
@@ -72,7 +73,7 @@ userSchema.statics.getUser = function getUser(userEmail,callback){
 }
 
 userSchema.statics.getAllUsers = function getAllUsers(callback){
-	User.find({},'username name email',function(err,data){
+	User.find({},'username name email -_id',function(err,data){
 		if(err)
 			callback(err)
 		else

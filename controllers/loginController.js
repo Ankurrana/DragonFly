@@ -1,5 +1,5 @@
 /*
-*		oginController
+*		LoginController
 *		Handles the request to and from the login , user/profile ... 
 		Controllers will render views to the functions calling them!
 */
@@ -9,7 +9,7 @@ var User = require('../models/User.js');
 
 var loginController =  {
 	Get_login : function(req,res){
-		res.sendFile('login.html', { root: path.join(__dirname, '../views') });
+		res.sendFile('login.html', { root: path.join(__dirname, '../public') });
 	},
 	Post_login : function(req,res){
 		res.json({
@@ -18,7 +18,7 @@ var loginController =  {
 		});
 	},
 	Get_signup : function(req,res){
-		res.sendFile('signup.html', { root: path.join(__dirname, '../views') });
+		res.sendFile('signup.html', { root: path.join(__dirname, '../public') });
 	},
 	Post_signup : function(req,res){
 		User.addUser({
