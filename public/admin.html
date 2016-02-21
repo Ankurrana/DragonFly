@@ -1,10 +1,16 @@
 <html ng-app="df">
 <head>
 	<title>Admin Console</title>
-	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.js"></script>
+
 </head>
 <body ng-controller="ctrl">
 		This is {{ name }} Page!
+		Location {{ location }}<br>
+		Route {{ route }}<br>
+		routeParams {{ routeParams }}<br>
+
 	<table border="1">
 		<tr ng-repeat="user in users">
 			<td>{{ user.name }}</td>
@@ -14,9 +20,20 @@
 	</table>
 </body>
 <script>
-	var app = angular.module('df',[]);
-	app.controller('ctrl',function($scope,$http){
+	var app = angular.module('df',['ngRoute'],function($locationProvider){
+		$locationProvider.html5Mode({
+			enabled:true,
+			requireBase : false
+		});
+	});
+
+
+	app.controller('ctrl',function($scope,$http,$route,$routeParams,$location){
+		$scope.$route = $route;
+	    $scope.$location = $location;
+	    $scope.$routeParams = $routeParams;
 		$scope.name = "Ankur rana";
+		
 		$http.get('admin/users').then(function succ(obj){
 			var data = obj.data;
 			$scope.users = data;

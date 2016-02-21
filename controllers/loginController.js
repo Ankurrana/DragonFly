@@ -12,10 +12,11 @@ var loginController =  {
 		res.sendFile('login.html', { root: path.join(__dirname, '../public') });
 	},
 	Post_login : function(req,res){
-		res.json({
-			username : req.user.username,
-			email : req.user.email
-		});
+		res.redirect('/testAuthentication');
+		// res.json({
+		// 	username : req.user.username,
+		// 	email : req.user.email
+		// });
 	},
 	Get_signup : function(req,res){
 		res.sendFile('signup.html', { root: path.join(__dirname, '../public') });

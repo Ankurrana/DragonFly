@@ -1,8 +1,3 @@
-/*
-*
-*	Admin Controller 
-*
-*/
 var User = require('../models/User.js');
 var path = require('path');
 

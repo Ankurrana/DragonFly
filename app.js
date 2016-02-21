@@ -4,9 +4,10 @@ var appConfig = require('./config/config.js')
 appConfig.init(app);
 var router = require('./routes/routes.js');
 var testRouter = require('./routes/testRoutes.js');
+var myMiddleware = require('./middlewares/helperMiddleware')
 app.use('/admin',testRouter);
 app.use('/',router);
-
+app.use(myMiddleware);
 
 app.use('/',express.static(__dirname + "/public"));
 
