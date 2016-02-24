@@ -1,0 +1,4 @@
+::ffff:127.0.0.1 - - [21/Feb/2016:18:48:36 +0000] "GET /testAuthentication HTTP/1.1" 302 68
+::ffff:127.0.0.1 - - [21/Feb/2016:18:48:36 +0000] "GET /login HTTP/1.1" 200 255
+::ffff:127.0.0.1 - - [21/Feb/2016:18:48:38 +0000] "POST /login HTTP/1.1" 200 48
+::ffff:127.0.0.1 - - [21/Feb/2016:18:48:41 +0000] "GET /testAuthentication HTTP/1.1" 200 48
