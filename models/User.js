@@ -6,19 +6,19 @@ function encrypt(val){
 }
 
 var userSchema = new mongoose.Schema({
-	name : {
+	'name' : {
 		type : String
 	},
-	email : {
+	'email' : {
 		type : String,
 		unique : true,
 		lowercase : true
 	},
-	password : {
+	'password' : {
 		type : String,
 		set : encrypt
 	},
-	username : {
+	'username' : {
 		type : String,
 		unique : true,
 		lowercase : true

@@ -13,7 +13,7 @@ router.get('/testAuthentication',auth,function(req,res){
 })
 
 router.get('/login',loginController.Get_login);
-router.post('/login',passport.authenticate('local'),loginController.Post_login);
+router.post('/login',passport.authenticate('local',{'failureRedirect':'/login'}),loginController.Post_login);
 router.get('/signup',loginController.Get_signup);
 router.post('/signup',loginController.Post_signup);
 router.get('/logout',loginController.Get_logout);

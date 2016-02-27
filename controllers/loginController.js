@@ -28,10 +28,17 @@ var loginController =  {
 			'email' : req.body.email,
 			'password' : req.body.password
 		},function(err){
-			if(!err)
-				res.redirect('/');
-			else
-				res.redirect('/signup');
+			if(err)
+				res.json({
+					err : 1,
+					msg : "Err : " + err
+				});
+			else{
+					res.json({
+							err : 0,
+							msg : 'Successfully Registered with username :' + req.body.name 
+					});
+			}
 		});
 	},
 	Get_logout : function(req, res){
@@ -44,4 +51,4 @@ var loginController =  {
 	},
 }
 
-module.exports = loginController;
+module.exports = loginController; 
