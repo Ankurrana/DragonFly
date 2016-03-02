@@ -22,9 +22,12 @@ var userSchema = new mongoose.Schema({
 		type : String,
 		unique : true,
 		lowercase : true
+	},
+	'tasks' : {
+		type : Array,
+		default : []
 	}
 });
-
 
 
 userSchema.statics.addUser = function addUser(UserData,callback){
@@ -34,11 +37,11 @@ userSchema.statics.addUser = function addUser(UserData,callback){
 		"email" : UserData.email,
 		"username" : UserData.username 
 	});
-	user.save(function(err){
+	user.save(function(err,data){
 		if(err)
 			 callback(err);
 		else
-			callback(null);
+			callback(null,data);
 	});
 }
 
@@ -92,6 +95,32 @@ userSchema.statics.getUserByUsername = function getUserByUsername(username,callb
 			callback(null,user);
 	})
 } 
+
+
+
+userSchema.statics.assignTaskToUser = function assignTaskToUser(taskId,_username,callback){
+	User.findOne({username:_username},"tasks",function(err,doc){
+		if(err)
+			callback(err);
+		
+		var tasks = doc.tasks;
+		tasks.push(taskId);
+		User.update({_id:doc._id},{
+			$set : {
+				'tasks' : tasks 
+			}
+		},{},function(err,data){
+			if(err)
+				callback(err)
+			else
+				callback(null,data);
+		})
+
+	})
+}
+
+
+
 
 var User =  mongoose.model('User',userSchema);
 module.exports = User;

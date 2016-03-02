@@ -34,19 +34,32 @@ taskSchema.statics.addtask = function(taskDetails,callback){
 		'author' : taskDetails.author,
 		'assignedTo' : taskDetails.assignedTo
 	});
-	task.save(function(err){
+	task.save(function(err,data){
 		if(err)
 			 callback(err);
-		else
-			callback(null,'Success');
+		else{
+			callback(null,data);
+		}
 	});
 }
 
-taskSchema.statics.getTasks = function(author,period){
-	
+taskSchema.statics.getTask = function(taskId,callback){
+	Task.findOne({'_id':taskId},'description status schedule author',function(err,data){
+		if(err)
+			callback(err)
+		else
+			callback(null,data);
+	})
 }
 
-
+taskSchema.statics.getTasks = function(taskIds,callback){
+	Task.find({'_id': { $in : taskIds }},'description status schedule author',function(err,data){
+		if(err)
+			callback(err)
+		else
+			callback(null,data);
+	})
+}
 
 
 

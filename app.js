@@ -1,15 +1,18 @@
 var express = require('express');
 var app = express();
-var appConfig = require('./config/config.js')
+var appConfig = require('./config/config.js');
+var passport = require('passport');
+
 appConfig.init(app);
 
 var router = require('./routes/routes.js');
 var testRouter = require('./routes/testRoutes.js');
 var taskRouter = require('./routes/task.js');
+var auth = require('./middlewares/auth.js');
 
 var myMiddleware = require('./middlewares/helperMiddleware')
 app.use('/admin',testRouter);
-app.use('/task',taskRouter);
+app.use('/task',auth,taskRouter);
 app.use('/',router);
 app.use(myMiddleware);
 
@@ -24,6 +27,6 @@ app.use('*',function(req,res){
 /*  Started Server at host localhost and port 3000 */
 app.listen(3000,function(){
 	console.log('Started listening to 3000');
-}) 
+});
 
 
