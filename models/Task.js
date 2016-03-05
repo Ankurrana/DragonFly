@@ -18,6 +18,9 @@ var taskSchema = new mongoose.Schema({
 	},
 	'schedule' : {
 		type : Object
+	},
+	'key' : {
+		type : String
 	}
 },{
 	timestamps : {
@@ -26,13 +29,13 @@ var taskSchema = new mongoose.Schema({
 	}
 });
 
-
 taskSchema.statics.addtask = function(taskDetails,callback){
 	var task = new this({
 		'description' : taskDetails.description,
 		'schedule' : taskDetails.schedule,
 		'author' : taskDetails.author,
-		'assignedTo' : taskDetails.assignedTo
+		'assignedTo' : taskDetails.assignedTo,
+		'key' : taskDetails.key
 	});
 	task.save(function(err,data){
 		if(err)
@@ -43,7 +46,7 @@ taskSchema.statics.addtask = function(taskDetails,callback){
 	});
 }
 
-taskSchema.statics.getTask = function(taskId,callback){
+taskSchema.statics.getTaskById = function(taskId,callback){
 	Task.findOne({'_id':taskId},'description status schedule author',function(err,data){
 		if(err)
 			callback(err)
@@ -52,8 +55,8 @@ taskSchema.statics.getTask = function(taskId,callback){
 	})
 }
 
-taskSchema.statics.getTasks = function(taskIds,callback){
-	Task.find({'_id': { $in : taskIds }},'description status schedule author',function(err,data){
+taskSchema.statics.getTasksById = function(taskIds,callback){
+	Task.find({'_id': { $in : taskIds }},'description status schedule author key',function(err,data){
 		if(err)
 			callback(err)
 		else
@@ -61,6 +64,14 @@ taskSchema.statics.getTasks = function(taskIds,callback){
 	})
 }
 
+taskSchema.statics.getTaskByKey = function(taskKey,callback){
+	Task.findOne({'key' : taskKey},'-_id',function(err,data){
+		if(err) callback(err);
+		else
+			callback(null, data);
+
+	})
+}
 
 
 

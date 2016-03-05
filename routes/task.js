@@ -5,9 +5,17 @@ var passport = require('passport');
 var taskController = require('../controllers/taskController.js');
 var auth = require('../middlewares/auth.js');
 
-// console.log(taskController.Get_new);
 router.get('/new',taskController.Get_new);
 router.post('/new',taskController.Post_new);
 router.get('/all',taskController.Get_tasks);
+
+router.param('key',function(req,res,next,key){
+	req.key = req.user.username + '-' + key;
+	next();
+});
+router.get('/:key',taskController.Get_getTaskByKey);
+
+router.get('/:key/update',taskController.Get_UpdateTask);
+router.post('/:key/update',taskController.Post_UpdateTask);
 
 module.exports = router;

@@ -26,6 +26,10 @@ var userSchema = new mongoose.Schema({
 	'tasks' : {
 		type : Array,
 		default : []
+	},
+	'tasksCount' : {
+		type : Number,
+		Default : 0
 	}
 });
 
@@ -35,7 +39,8 @@ userSchema.statics.addUser = function addUser(UserData,callback){
 		"name" : UserData.name,
 		"password" : UserData.password,
 		"email" : UserData.email,
-		"username" : UserData.username 
+		"username" : UserData.username,
+		'tasksCount' : 0 
 	});
 	user.save(function(err,data){
 		if(err)
@@ -99,15 +104,20 @@ userSchema.statics.getUserByUsername = function getUserByUsername(username,callb
 
 
 userSchema.statics.assignTaskToUser = function assignTaskToUser(taskId,_username,callback){
-	User.findOne({username:_username},"tasks",function(err,doc){
+	User.findOne({username:_username},"tasks tasksCount",function(err,doc){
 		if(err)
 			callback(err);
+
+		console.log(doc);
 		
 		var tasks = doc.tasks;
+		var tasksCount = doc.tasksCount;
+
 		tasks.push(taskId);
 		User.update({_id:doc._id},{
 			$set : {
-				'tasks' : tasks 
+				'tasks' : tasks,
+				'tasksCount' : tasksCount + 1	
 			}
 		},{},function(err,data){
 			if(err)

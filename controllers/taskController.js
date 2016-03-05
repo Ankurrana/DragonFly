@@ -15,24 +15,30 @@ var taskController = {
 			var schedule = scheduleGenerator(formData.schedule);
 			console.log(schedule.schedules);
 			var currentUser = (req.user != undefined)?req.user.username:'ankurrana';
+			
+			User.getUserByUsername(currentUser,function(err,data){
+				var tasksCount = data.tasksCount + 1;
+				Task.addtask({
+					'description' : formData.desc,
+					'schedule' : schedule,
+					'author' : currentUser,
+					'assignedTo' : currentUser,
+					'key' : currentUser + '-' + tasksCount 
 
-			Task.addtask({
-				'description' : formData.desc,
-				'schedule' : schedule,
-				'author' : currentUser,
-				'assignedTo' : currentUser
-			},function(err,data){
-				if(err)
-					res.json(err);
-				else{
-					User.assignTaskToUser(data._id,currentUser,function(err,data){
-						if(err)
-							console.log(err);
-						else
-							res.json(data);
-					});					
-				}
+				},function(err,data){
+					if(err)
+						res.json(err);
+					else{
+						User.assignTaskToUser(data._id,currentUser,function(err,data){
+							if(err)
+								console.log(err);
+							else
+								res.json(data);
+						});					
+					}
+				})	
 			})
+			
 	},
 	Get_tasks : function(req,res){
 		var currentUser = (req.user != undefined)?req.user.username:'ankurrana';
@@ -40,7 +46,7 @@ var taskController = {
 		User.findOne({'username':currentUser},'tasks',function(err,data){
 			if(err) res.json(err); 	
 			else{
-				Task.getTasks(data.tasks,function(err,data){
+				Task.getTasksById(data.tasks,function(err,data){
 					if(err) res.json(data)
 					else{
 						res.json(data);
@@ -55,9 +61,9 @@ var taskController = {
 		*/
 
 		User.findOne({'username':username},'tasks',function(err,data){
-			if(err) res.json(err); 	
+			if(err) callback(err); 	
 			else{
-				Task.getTasks(data.tasks,function(err,tasks){
+				Task.getTasksById(data.tasks,function(err,tasks){
 					var result = [];
 					for(var i in tasks){
 						if(contains(date,tasks[i].schedule)){
@@ -68,12 +74,24 @@ var taskController = {
 				})
 			}
 		})		
+	},
+	Get_getTaskByKey : function(req,res){
+		Task.getTaskByKey(req.key,function(err,data){
+			if(err) callback(err);
+			else{
+				res.json(data);
+			}
+		})
+	},
+	Get_UpdateTask : function(req,res){
+		// console.log(req.key);
+		res.send()
+	},
+	Post_UpdateTask : function(req,res){
+		var formData = req.body;
+		res.json(formData);
 	}
 }
 
 
-
-taskController.getTasksfordate('ankurrana','2016-03-01',function(data){
-	console.log(data);
-})
 module.exports = taskController;
