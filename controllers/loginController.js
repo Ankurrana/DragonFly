@@ -9,17 +9,15 @@ var User = require('../models/User.js');
 
 var loginController =  {
 	Get_login : function(req,res){
-		res.sendFile('login.html', { root: path.join(__dirname, '../public') });
+		res.render('login',{action:'/login'});
 	},
 	Post_login : function(req,res){
-		// res.redirect('/testAuthentication');
-		res.json({
-			username : req.user.username,
-			email : req.user.email
-		});
+		var redirect_to = req.session.redirect_to ? req.session.redirect_to : '/';
+		delete req.session.redirect_to;
+		res.redirect(redirect_to);
 	},
 	Get_signup : function(req,res){
-		res.sendFile('signup.html', { root: path.join(__dirname, '../public') });
+		res.render('signup');
 	},
 	Post_signup : function(req,res){
 		User.addUser({

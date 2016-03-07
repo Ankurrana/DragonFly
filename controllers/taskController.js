@@ -8,7 +8,8 @@ var contains = laterHelper.contains;
 
 var taskController = {
 	'Get_new' : function(req,res){
-		res.sendFile('newTask.html', { root: path.join(__dirname, '../public') });
+		res.render('newTask',{desc :'write a description',status:'active'})
+		// res.sendFile('newTask.html', { root: path.join(__dirname, '../public') });
 	},
 	'Post_new' : function(req,res){
 			var formData = req.body;
@@ -24,7 +25,6 @@ var taskController = {
 					'author' : currentUser,
 					'assignedTo' : currentUser,
 					'key' : currentUser + '-' + tasksCount 
-
 				},function(err,data){
 					if(err)
 						res.json(err);
@@ -59,7 +59,6 @@ var taskController = {
 		/*	
 			date format : yyyy-mm-dd
 		*/
-
 		User.findOne({'username':username},'tasks',function(err,data){
 			if(err) callback(err); 	
 			else{
@@ -84,12 +83,38 @@ var taskController = {
 		})
 	},
 	Get_UpdateTask : function(req,res){
-		// console.log(req.key);
-		res.send()
+		Task.getTaskByKey(req.key,function(err,data){
+			if(err) callback(err);
+			else{
+				res.render('newTask',{desc:data.description,'action':'',key:req.key,status:data.status});
+			}
+		})
 	},
 	Post_UpdateTask : function(req,res){
 		var formData = req.body;
-		res.json(formData);
+		console.log(formData);
+		if(formData.schedule != null)
+			sch = scheduleGenerator(formData.schedule);			
+
+		if(formData.desc != null || formData.schedule != null  ){
+			Task.update({key:formData.key},{
+				description : formData.desc,
+				status : formData.status,
+				schedule : sch,
+			},function(err,doc){
+				if(err) res.status(500).send('Server Error');
+				else
+					res.json('successfully Updated!');
+			})
+		}else{
+			Task.update({key:formData.key},{
+				status : formData.status,
+			},function(err,doc){
+				if(err) res.status(500).send('Server Error');
+				else
+					res.json('successfully Updated!');
+			})
+		}
 	}
 }
 

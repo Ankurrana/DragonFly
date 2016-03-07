@@ -14,8 +14,7 @@ router.param('key',function(req,res,next,key){
 	next();
 });
 router.get('/:key',taskController.Get_getTaskByKey);
-
-router.get('/:key/update',taskController.Get_UpdateTask);
-router.post('/:key/update',taskController.Post_UpdateTask);
+router.get('/update/:key',taskController.Get_UpdateTask);
+router.post('/update/:key',taskController.Post_UpdateTask);
 
 module.exports = router;

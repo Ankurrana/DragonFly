@@ -3,7 +3,8 @@ var path = require('path');
 
 var adminController = {
 	Get_index : function(req,res){
-		res.sendFile('admin.html',{root: path.join(__dirname,'../public') })
+		res.render('index');
+		//res.sendFile('admin.html',{root: path.join(__dirname,'../public') })
 	},
 	Get_users :  function(req,res){
 			User.getAllUsers(function(err,data){
