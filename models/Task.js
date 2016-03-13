@@ -13,9 +13,6 @@ var taskSchema = new mongoose.Schema({
 	'author' : {
 		type : String
 	},
-	'assignedTo' : {
-		type : String
-	},
 	'schedule' : {
 		type : Object
 	},
@@ -29,13 +26,11 @@ var taskSchema = new mongoose.Schema({
 	}
 });
 
-taskSchema.statics.addtask = function(taskDetails,callback){
+taskSchema.statics.addTask = function(taskDetails,callback){
 	var task = new this({
 		'description' : taskDetails.description,
 		'schedule' : taskDetails.schedule,
 		'author' : taskDetails.author,
-		'assignedTo' : taskDetails.assignedTo,
-		'key' : taskDetails.key
 	});
 	task.save(function(err,data){
 		if(err)

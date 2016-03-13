@@ -2,121 +2,138 @@ var Task  = require('../models/Task.js')
 var path = require('path');
 var moment = require('moment');
 var User = require('../models/User.js');
-var laterHelper = require('../services/laterHelper.js');
-var scheduleGenerator = laterHelper.scheduleGenerator;
-var contains = laterHelper.contains;
+var UserController = require('./userController.js');
+var ErrorManager = require('./ErrorController.js');
+var validator = require('./validatorController.js');
+var scheduleController = require('./scheduleController.js');
 
-var taskController = {
-	'Get_new' : function(req,res){
-		res.render('newTask',{desc :'write a description',status:'active'})
-		// res.sendFile('newTask.html', { root: path.join(__dirname, '../public') });
-	},
-	'Post_new' : function(req,res){
-			var formData = req.body;
-			var schedule = scheduleGenerator(formData.schedule);
-			console.log(schedule.schedules);
-			var currentUser = (req.user != undefined)?req.user.username:'ankurrana';
-			
-			User.getUserByUsername(currentUser,function(err,data){
-				var tasksCount = data.tasksCount + 1;
-				Task.addtask({
-					'description' : formData.desc,
-					'schedule' : schedule,
-					'author' : currentUser,
-					'assignedTo' : currentUser,
-					'key' : currentUser + '-' + tasksCount 
-				},function(err,data){
-					if(err)
-						res.json(err);
-					else{
-						User.assignTaskToUser(data._id,currentUser,function(err,data){
-							if(err)
-								console.log(err);
-							else
-								res.json(data);
-						});					
-					}
-				})	
-			})
-			
-	},
-	Get_tasks : function(req,res){
-		var currentUser = (req.user != undefined)?req.user.username:'ankurrana';
-		
-		User.findOne({'username':currentUser},'tasks',function(err,data){
-			if(err) res.json(err); 	
-			else{
-				Task.getTasksById(data.tasks,function(err,data){
-					if(err) res.json(data)
-					else{
-						res.json(data);
-					}
-				})
+
+var TaskController = {
+	getTask : function(taskId,cb){
+		Task.findOne({'_id':taskId},function(err,task){
+			if(err){
+				err.message = 'Fatal Error';
+				ErrorManager(err,'Fatal Error','Error while looking for the object Id' + taskId);
+				cb(err)
 			}
-		})		
+			else if(task == null){
+				var err = {};
+				err.message = 'No Task was found';
+				ErrorManager(err,'Info','Task with object Id' + taskId + 'doesn\'t exist');
+				cb(err,false);
+			}else{
+				cb(null,task);
+			}
+		})
 	},
-	getTasksfordate : function(username,date,callback){
-		/*	
-			date format : yyyy-mm-dd
-		*/
-		User.findOne({'username':username},'tasks',function(err,data){
-			if(err) callback(err); 	
-			else{
-				Task.getTasksById(data.tasks,function(err,tasks){
-					var result = [];
-					for(var i in tasks){
-						if(contains(date,tasks[i].schedule)){
-							result.push(tasks[i]);
+	getTasks : function(taskIds,cb){
+		Task.find({'_id': { $in : taskIds }},function(err,data){
+			if(err || data == null){
+				err.message = 'There was a fatal error while retriving the tasks with Ids' + taskIds;
+				ErrorManager(err,'Fatal Error','Fatal Error while retrieving tasks');
+				cb(err);
+			}else
+				cb(null,data);
+		})
+	},
+	addTask : function(task,username,cb){
+		task.author = username;
+		task.schedule = scheduleController.convertScheduleStringToLaterSchedule(task.schedule);
+		if ( (err = validator.isTaskValid(task)) == true ){
+			Task.addTask(task,function(err,task){
+				if(err){
+					err.message = 'Error while inserting task to database';
+					ErrorManager(err);
+					cb(err);
+				}else{
+					UserController.addTaskToUserByUsername(username,task._id,function(err,done){
+						if(err){
+							ErrorManager('Error while adding task to the user Task List');
+							cb(err)
+						}else{
+							cb(null,{
+								message : 'successfully Updated!'
+							});
 						}
+					})
+				}
+			});
+		}else{
+			ErrorManager(err,'Validation Error');
+			cb(err)
+		}
+	},
+	getTasksForDate : function(taskIds,date,cb){
+		/* It checks for all the tasks in the taskIds List and returns a list of tasks which satisfy the above date   */
+		var result = [];
+		this.getTasks(taskIds,function(err,tasks){
+			if(err){
+				cb(err);
+			}else{
+				for(var i in tasks){
+					if(scheduleController.scheduleContainsDate(tasks[i].schedule,date)){
+						result.push(tasks[i]);
 					}
-					callback(result);
+				}
+				cb(null,result);
+			}
+		})
+	},
+	updateTask : function(taskId,taskUpdates,cb){
+		Task.update({_id:taskId},{
+			'description' : taskUpdates.description,
+			'schedule' : scheduleController.convertScheduleStringToLaterSchedule(taskUpdates.schedule)
+		},{multi : true},function(err,done){
+			if(err){
+				err.message = 'Error While Updating the task ' + taskId ;
+				ErrorManager(err,'Task Not updated!');
+				cb(err);
+			}else{
+				cb(null,{
+					message : 'successfully Updated!'
 				})
 			}
-		})		
-	},
-	Get_getTaskByKey : function(req,res){
-		Task.getTaskByKey(req.key,function(err,data){
-			if(err) callback(err);
-			else{
-				res.json(data);
-			}
 		})
-	},
-	Get_UpdateTask : function(req,res){
-		Task.getTaskByKey(req.key,function(err,data){
-			if(err) callback(err);
-			else{
-				res.render('newTask',{desc:data.description,'action':'',key:req.key,status:data.status});
-			}
-		})
-	},
-	Post_UpdateTask : function(req,res){
-		var formData = req.body;
-		console.log(formData);
-		if(formData.schedule != null)
-			sch = scheduleGenerator(formData.schedule);			
-
-		if(formData.desc != null || formData.schedule != null  ){
-			Task.update({key:formData.key},{
-				description : formData.desc,
-				status : formData.status,
-				schedule : sch,
-			},function(err,doc){
-				if(err) res.status(500).send('Server Error');
-				else
-					res.json('successfully Updated!');
-			})
-		}else{
-			Task.update({key:formData.key},{
-				status : formData.status,
-			},function(err,doc){
-				if(err) res.status(500).send('Server Error');
-				else
-					res.json('successfully Updated!');
-			})
-		}
 	}
+
 }
 
 
-module.exports = taskController;
+module.exports = TaskController;
+
+/*Tests*/
+
+
+// UserController.getTasksOfUserByUsername('ankur',function(err,data){
+// 	console.log(err);
+// 	TaskController.getTasksForDate(data,'2016-03-06',function(err,data){
+// 		console.log(err);
+// 		console.log(data);
+// 	});	
+// })
+
+// TaskController.updateTask('56d7ff0d82cd18fc1a5629f3',{
+// 	description : 'UPDATED task',
+// 	schedule : 'tomorrow'
+// },function(err,asd){
+// 	console.log(err);
+// 	console.log(asd);
+// })
+
+
+
+// TaskController.addTask({
+// 	'description' : 'qwerty',
+// 	'author' : 'slkdkfur',
+// 	'schedule' : 'asdasflhsf'
+// },'ankur ranas',function(err,asd){
+// 	console.log(err);
+// 	console.log(asd);
+// })
+
+
+
+// TaskController.getTask('56dc154abced9b836367495',function(sda,asdasd){
+// 	console.log(sda);
+// 	console.log(asdasd);
+// })

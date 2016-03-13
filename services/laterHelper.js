@@ -22,7 +22,6 @@ var generator;
 var scheduleGenerator = function(description){
 	/* Description is an object containing information on how to generate schedule */
 	var schedule = later.parse.recur();
-	console.log(moment().month());
 	if(description == 'today'){
 		var today = moment();
 		schedule.on(today.date()).dayOfMonth().on(today.month()+1).month().on(today.year()).year();

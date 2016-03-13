@@ -16,4 +16,6 @@ var local = new localStrategy({
 	})
 })
 
+
+
 module.exports = local;
