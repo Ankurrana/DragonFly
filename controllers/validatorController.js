@@ -4,19 +4,19 @@ validator.new_user_constraints = {
 	'name' : {
 		presence : true,
 		length : {
-			minimum : 6
+			minimum : 5
 		}
 	},
 	'username' : {
 		presence : true,
 		length : {
-			minimum : 6
+			minimum : 5
 		}
 	},
 	'password' : {
 		presence : true,
 		length : {
-			minimum : 6
+			minimum : 5
 		}
 		
 	},
@@ -25,7 +25,6 @@ validator.new_user_constraints = {
 		email : true
 	}
 }
-
 
 validator.new_task_constraints = {
 	'description' : {
@@ -56,6 +55,29 @@ validator.authorisation_credentials_constraints = {
 		}
 	} 
 }
+
+validator.edit_task_constraints = {
+	description : {
+		presence : true
+	},
+	schedule : {
+		presence : true
+	}
+}
+
+validator.areEditTaskDetailsValid = function(taskDetails){
+	var error;
+	if( (errors = validator(taskDetails,validator.edit_task_constraints)) == undefined ){
+		return true
+	}
+	return errors;
+}
+
+validator.isDateValid = function(Object){
+	return validator.isDate(Object);
+}
+
+
 
 
 validator.areCredentialsValid = function(credentials){

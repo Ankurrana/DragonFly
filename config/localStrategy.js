@@ -1,3 +1,4 @@
+
 var passport_local = require('passport-local');
 var User = require('../models/User.js'); 
 var localStrategy = passport_local.Strategy;

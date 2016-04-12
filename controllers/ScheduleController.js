@@ -27,6 +27,34 @@ var schedule = {
 	scheduleContainsDate : function(schedule,date){
 		/* date : 'YYYY-MM-DD' */
 		return later.schedule(schedule).isValid(new Date(date));
+	},
+	findDateRange : function(startDate,endDate,cb){
+		if( moment(startDate).isValid()  && moment(endDate).isValid() ){
+			from_Date = moment(startDate).format('YYYY-MM-DD');
+			to_Date = moment(endDate).format('YYYY-MM-DD');
+			var dateRange = [];
+			dateRange.push(from_Date);
+
+			if( from_Date == to_Date ){
+				cb(null,dateRange);
+				return;
+			}
+			var count = 0;
+			while(true){
+				if(count++ > 200 ) 
+					break;
+				from_Date = moment(from_Date).add(1,'days').format('YYYY-MM-DD');
+				dateRange.push(from_Date);
+				if(from_Date == to_Date){
+					break;
+				}
+			}
+			cb(null,dateRange);
+		}else{	
+			var error = {};
+			error.message = 'Date Format Incorrect , please provide YYYY-MM-DD';
+			cb(error);
+		}
 	}
 }
 

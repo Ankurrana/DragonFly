@@ -31,6 +31,7 @@ taskSchema.statics.addTask = function(taskDetails,callback){
 		'description' : taskDetails.description,
 		'schedule' : taskDetails.schedule,
 		'author' : taskDetails.author,
+		'key' : taskDetails.key
 	});
 	task.save(function(err,data){
 		if(err)

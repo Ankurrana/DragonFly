@@ -17,12 +17,11 @@ var encryptor = require('../services/bcrypt.js');
 var UserController = {
 	/** 
 	*	IntraController Function
-	*
-	*
 	*/
 	'getUser' : function(opts,cb){
 		User.findOne(opts,function(err,user){
 			if(err){
+				err.code = 1,
 				err.message = 'Some Fatal error occured in the database';
 				cb(err);
 			}else if(user == null){
@@ -54,12 +53,16 @@ var UserController = {
 	'addUser' : function(userDetails,cb){
 		/* Validate User Info here */
 		var err;
-		if ( (err = validator.isUserValid(userDetails)) == true ){
+		err = validator.isUserValid(userDetails);
+		if ( err == true ){
 			User.addUser(userDetails,function(err,user){
 				if(err){
-					err.message = 'Some Error occured while saving the userDetails :'+  userDetails +', check logs for info';
-					err.error = true;
+					// err.message = 'Some Error occured while saving the userDetails :'+  userDetails +', check logs for info';
+					// err.error = true;
 					// ErrorManager(err,'Info','Some Error occured while saving the userDetails :'+  userDetails +', check logs for info');
+					// var error = {};
+					// error.message = err; 
+					// err
 					cb(err)
 				}else{
 					logger.info('New User Added to the Database' + user );
@@ -69,7 +72,7 @@ var UserController = {
 		}else{
 			err.error = true;
 			err.message = 'User details failed to validate , check logs for err.details';
-			err.details = errors;
+			// err.details = errors;
 			ErrorManager(err,'Info','Unable to validate user Details , check logs for err.details');
 			cb(err);
 		}
@@ -128,6 +131,16 @@ var UserController = {
 				cb(null,user.tasks);
 			}
 		})
+	},
+	getTasksCountByUsername : function(username,cb){
+		this.getUser({
+			'username' : username 
+		},function(err,user){
+			if(err){
+				cb(err);
+			}
+			cb(null,user.tasksCount);
+		})
 	}
 
 }
@@ -139,6 +152,13 @@ module.exports = UserController;
 /**  Tests 
 *	 Add these files to Test Files 
 */
+
+
+
+// UserController.getTasksCountByUsername('ankurrana',function(err,a){
+// 	console.log(a);
+// })
+
 
 // UserController.getTasksOfUserByUsername('ankur',function(err,data){
 // 	console.log(data);

@@ -8,7 +8,8 @@ var errorMap = {
 		type : 'Fatal',
 		message : 'Req Body Empty',
 		status : 400
-	},
+	}
+	,
 	'500' : {
 		status : 200,
 		message : 'Validation Error'

@@ -1,4 +1,3 @@
 module.exports = {
-
-	"SECRET_ENCRYPTION_KEY" : "ankur"
+	"SECRET_ENCRYPTION_KEY" : "asdjkld"
 }

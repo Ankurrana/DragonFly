@@ -18,7 +18,7 @@ mongoose.connect(connectionString,function(err){
 });
 
 mongoose.connection.on('connected', function () {  
-  console.log('Connected' );
+  // console.log('Connected' );
 }); 
 
 // If the connection throws an error
