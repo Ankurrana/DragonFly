@@ -68,6 +68,20 @@ var taskAPIController = {
 			}
 		})
 	},
+	updateTaskByKey : function(req,res){
+		var key = req.params['key'];
+		key = req.user.username + '-' + key;
+		var taskDetails = req.body;
+		Task.updateTaskByKey(key, taskDetails,function(err,data){
+			if(err){
+				res.send(err)
+			}else{
+				res.send({
+					'message' : 'Successfully Updated'
+				})
+			}
+		})
+	},
 	addTask : function(req,res){
 		var username = req.user.username;
 		if(req != null && req.body!=null){

@@ -148,11 +148,19 @@ var TaskController = {
 			 cbb(err);
 		}
 	},
-	updateTask : function(taskId,taskUpdates,cb){ 
-		Task.update({_id:taskId},{
-			'description' : taskUpdates.description,
-			'schedule' : scheduleController.convertScheduleStringToLaterSchedule(taskUpdates.schedule)
-		},{multi : true},function(err,done){
+	updateTask : function(taskId,taskUpdates,cb){
+		var Updates = {};
+		if( taskUpdates.schedule ){
+			Updates.schedule = scheduleController.convertScheduleStringToLaterSchedule(taskUpdates.schedule);
+		}
+		if( taskUpdates.description ){
+			Updates.description = taskUpdates.description;
+		}
+		if( taskUpdates.status ){
+			Updates.status = taskUpdates.status;
+		}
+
+		Task.update({_id:taskId},Updates,{multi : true},function(err,done){
 			if(err){
 				err.message = 'Error While Updating the task ' + taskId ;
 				ErrorManager(err,'Task Not updated!');
