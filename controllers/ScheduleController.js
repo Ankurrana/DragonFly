@@ -12,7 +12,7 @@ var schedule = {
 			schedule.on(tomorrow.date()).dayOfMonth().on(tomorrow.month()+1).month().on(tomorrow.year()).year();
 		}else if(description == 'week'){
 			var today = moment();
-			schedule.on(today.week()).weekOfMonth().on(today.year()).year();
+			schedule.on(today.isoWeek()).weekOfYear().on(today.year()).year();
 		}else if(description == 'month'){
 			var today = moment();
 			schedule.on(today.month()+1).month().on(today.year()).year();	
@@ -59,3 +59,21 @@ var schedule = {
 }
 
 module.exports = schedule;
+
+// var schedule =  {
+//         "schedules" : [ 
+//             {
+//                 "Y" : [ 
+//                     2016
+//                 ],
+//                 "wy" : [ 
+//                     19
+//                 ]
+//             }
+//         ]
+//     }
+
+// // var k = later.schedule(schedule).isValid(new Date('2016-05-02'));
+// var k = later.schedule(schedule).next(2);
+
+// console.log(k);

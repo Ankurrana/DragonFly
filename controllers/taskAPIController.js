@@ -33,7 +33,7 @@ var taskAPIController = {
 			date = moment(moment()).format('YYYY-MM-DD');
 		}else{
 			if( !moment(date).isValid()){
-				res.send('error');
+				res.send('Error : Date Format Invalid');
 				return;
 			}else{
 				date = moment(date).format('YYYY-MM-DD');

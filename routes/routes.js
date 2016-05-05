@@ -4,12 +4,11 @@ var router = express.Router();
 var passport = require('passport');
 var loginController = require('../controllers/loginController.js');
 var auth = require('../middlewares/auth.js');
-router.get('/testAuthentication',passport.authenticate('jwt',{session:false}),function(req,res){
-	res.json({
-		'username' : req.user.username,
-		'email' : req.user.email
-	});
-})
+var indexController = require('../controllers/indexController.js');
+
+router.get('/',indexController.indexpage);
+
+
 
 router.get('/login',loginController.Get_login);
 router.post('/login',passport.authenticate('jwt',{'failureRedirect':'/login'}),loginController.Post_login);

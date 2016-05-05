@@ -15,7 +15,7 @@ opts.jwtFromRequest = function (req) {
 };
 
 var k = new JwtStrategy(opts, function(jwt_payload, done) {
-  User.findOne({username: jwt_payload.username}, function(err, user) {
+  User.findOne({username: jwt_payload.username},'username name email' ,function(err, user) {
       if (err) {
           return done(err, false);
       }

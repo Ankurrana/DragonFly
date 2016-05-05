@@ -1,0 +1,19 @@
+
+	<div class="row">
+		<div class="col-md-6">	
+			<div >
+					{{error }}
+			</div>
+			<form class="form-inline">
+				<div class="form-group">
+					<label class="sr-only" for="username">Username</label>
+					<input type="text" name="username" class="form-control" placeholder="username" ng-model="loginFormData.username"/>	
+				</div>
+				<div class="form-group">
+					<label for="password" class="sr-only">Password</label>	
+					<input type="password" class="form-control" placeholder="password" name="password" ng-model="loginFormData.password"/>
+				</div>
+				<button class="btn btn-default" type="submit" ng-click="loginFormSubmit()">SignIn</button>
+			</form>
+		</div>
+	</div>

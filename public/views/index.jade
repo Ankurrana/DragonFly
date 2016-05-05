@@ -1,0 +1,10 @@
+include header.jade
+body(ng-controller="mainController" class="container-fluid")
+	div(class="row")
+		div(class="col-md-8 col-xs-12")
+			h1 {{ labels.title }}
+			i {{ labels.bottomline }}
+			h4 Welcome {{ user.username | titleCase }} , {{ labels.welcomeMessage }}
+	div
+			div(ng-include="currentViewURL")
+include footer.html

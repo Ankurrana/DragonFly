@@ -7,7 +7,7 @@ var taskSchema = new mongoose.Schema({
 	},
 	'status' : {
 		type : String,
-		enum : ['ACTIVE','INPROGRESS','DELETED','DONE','CLOSED'],
+		enum : ['ACTIVE','INPROGRESS','DELETED','DONE','CLOSED','COMPLETED'],
 		default : 'ACTIVE'
 	},
 	'author' : {

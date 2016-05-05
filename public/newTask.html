@@ -1,14 +1,12 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>
-		New Task	
-	</title>
-</head>
-<body>
-<h1>Create a new Task</h1>
-<form method="post" action="new">
-	<input type="text" name="desc" size="100"></textarea>
+<style>	
+	.newTaskForm{
+		width: 100%;
+		size:100px;
+		padding:10px;
+	}
+</style>
+<form id="newTaskForm">
+	<input type="text" name="desc" id="taskDescField"></textarea>
 	<select name="schedule">
 		<option value="today">Today</option>
 		<option value="tomorrow">Tomorrow</option>
@@ -17,5 +15,3 @@
 	</select>
 	<input type="submit"/>
 </form>
-</body>
-</html>
