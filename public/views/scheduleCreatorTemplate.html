@@ -1,0 +1,59 @@
+<div class="row" ng-show="newTaskForm.showComplexScheduleCreator">
+	<div class="col-xs-8 col-md-8">
+		<form>
+			<div ng-repeat="param in newTaskForm.complexScheduleParams">
+				<select name="on" ng-model="param.frequency">
+					<option value="on">On</option>
+					<option value="every">Every</option>
+				</select>
+				<input type="text" ng-model="param.values"></input>
+				<span>{{ param.name }}</span>
+			</div>
+
+			<!-- <div>				
+				<select name="on" ng-model="scheduleForm.dayOfWeek.frequency">
+					<option value="on"  ng-selected="true">On</option>
+					<option value="every">Every</option>
+				</select>
+				<input type="text" ng-model="scheduleForm.dayOfWeek.values"></input>
+				<span>Day of Week</span>	
+			</div>
+			<div>
+				<select name="on" ng-model="scheduleForm.dayOfMonth.frequency">
+					<option value="on" ng-selected="true">On</option>
+					<option value="every">Every</option>
+				</select>
+				<input type="text" ng-model="scheduleForm.dayOfMonth.values">
+				</input>
+				<span>Day of Month</span>
+			</div>
+			<div>
+				<select name="on" ng-model="scheduleForm.weekOfMonth.frequency">
+					<option value="on" ng-selected="true">On</option>
+					<option value="every">Every</option>
+				</select>
+				<input type="text" ng-model="scheduleForm.weeksOfMonth.values">
+				</input>
+				<span>Week Of Month</span>
+			</div>
+			<div>
+				<select name="on" ng-model="scheduleForm.month.frequency">
+					<option value="on" ng-selected="true">On</option>
+					<option value="every">Every</option>
+				</select>
+				<input type="text" ng-model="scheduleForm.month.values">
+				</input>
+				<span>Month</span>
+			</div>
+			<div>
+				<select name="on" ng-model="scheduleForm.year.frequency">
+					<option value="on" ng-selected="true">On</option>
+					<option value="every">Every</option>
+				</select>
+				<input type="text" ng-model="scheduleForm.year.values">
+				</input>
+				<span>Year</span>
+			</div> -->
+		</form>
+	</div>
+</div>

@@ -17,8 +17,7 @@ var schedule = {
 			var today = moment();
 			schedule.on(today.month()+1).month().on(today.year()).year();	
 		}else{
-			var today = moment();
-			schedule.on(today.date()).dayOfMonth().on(today.month()+1).month().on(today.year()).year();
+			schedule.schedules  = JSON.parse(description);
 		}
 		return {
 			schedules : schedule.schedules
@@ -77,3 +76,8 @@ module.exports = schedule;
 // var k = later.schedule(schedule).next(2);
 
 // console.log(k);
+
+
+var k = later.parse.recur()["on"](5,6,7).dayOfWeek();
+// k.on(2016).year();
+console.log(k.schedules);

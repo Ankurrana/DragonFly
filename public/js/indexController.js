@@ -83,14 +83,8 @@ app.controller('mainController',['$scope','$http','$cookies','$resource','$route
 }])
 
 
-
-app.controller('taskController',['$scope','$http','$cookies','$resource',function($scope,$http,$cookies,$resource){
-	$scope.viewTasksURL = "public/views/tasksList.html";
-	$scope.tasks = [];
-	$scope.newTaskForm = {};
-
-
-	var Task = $resource('/api/tasks/:key',{'date':'@date','key':'@key'},{
+app.service('Task',['$resource','$cookies',function($resource,$cookies){
+	return $resource('/api/tasks/:key',{'date':'@date','key':'@key'},{
 			'get' : { 'method' : 'GET' , 
 				headers : {
 					'jwt' : $cookies.get('token')
@@ -117,6 +111,222 @@ app.controller('taskController',['$scope','$http','$cookies','$resource',functio
 			}
 		}
 	);
+}])
+
+
+app.controller('taskController',['$scope','$http','$cookies','$resource','Task',function($scope,$http,$cookies,$resource,Task){
+	$scope.viewTasksURL = "public/views/tasksList.html";
+	$scope.tasks = [];
+	$scope.showComplesScheduleCreator = false;
+
+
+	$scope.newTaskForm = {
+		scheduleOptions : [
+			{
+				'label' : 'Today',
+				'value' : 'today'
+			},
+			{
+				'label' : 'Tomorrow',
+				'value' : 'tomorrow'	
+			},
+			{
+				'label' : 'Current Week',
+				'value' : 'week'
+			},
+			{
+				'label' : 'Current Month',
+				'value' : 'month'
+			},
+			{
+				'label' : 'Complex',
+				'value' : 'complex'
+			}
+		],
+		selectedSchedule : null,
+		description : null,
+		showComplexScheduleCreator : false,
+		complexScheduleParams : [
+			{
+				'name' : 'Day of Week',
+				'frequency' : null,
+				'values' : null,
+				'functionName' : 'dayOfWeek'
+			},
+			{
+				'name' : 'Day of Month',
+				'frequency' : null,
+				'values' : null,
+				'functionName' : 'dayOfMonth'
+			},
+			{
+				'name' : 'WeekOfMonth',
+				'frequency' : null,
+				'values' : null,
+				'functionName' : 'weekOfMonth'
+			},
+			{
+				'name' : 'Week Of Year',
+				'frequency' : null,
+				'values' : null,
+				'functionName' : 'weekOfYear'
+			},
+			{
+				'name' : 'Month',
+				'frequency' : null,
+				'values' : null,
+				'functionName' : 'month'
+			},
+			{
+				'name' : 'Year',
+				'frequency' : null,
+				'values' : null,
+				'functionName' : 'year'
+			},
+		],
+
+
+		getDescription : function(){
+			return this.description;
+		},
+		getScheduleOptions : function(){
+			return this.scheduleOptions;
+		},
+		getSelectedOption : function(){
+			return this.selectedSchedule.value;
+		},
+		setSelectedOption : function(index){
+			this.selectedSchedule  = this.scheduleOptions[index];
+		},
+		selectedOptionChanged : function(){
+			console.log("Selected Schedule Option Changed");
+			this.setupComplexScheduleCreator();
+		},
+		setupComplexScheduleCreator : function(){
+			if( this.getSelectedOption()  == 'complex'){
+				this.showComplexScheduleCreator = true;
+			}else{
+				this.showComplexScheduleCreator = false;
+			}
+		},
+		getScheduleStringForComplexSchedule : function(){
+			var laterSchedule = later.parse.recur();
+			angular.forEach(this.complexScheduleParams,function(param){
+				if( param.values ){
+					var valArray = param.values.split(",");
+					var fre = param.frequency;
+					angular.forEach(valArray,function(value, key){
+							laterSchedule[fre](parseInt(value))[param.functionName]();
+					})
+				}
+			})
+			return JSON.stringify(laterSchedule.schedules);
+		},
+		submit : function(){
+			var description = this.getDescription();
+			var schedule = this.getSelectedOption();
+
+			console.log("New Submission with " + description + ' schedule : ' + JSON.stringify(schedule) );
+
+			if( schedule == 'complex' ) schedule = this.getScheduleStringForComplexSchedule();
+
+			console.log('Requesting Server to create a new Task (' +  description+', ' + schedule + ')' );
+
+			var newSavedTask = Task.save({
+				'description' : description,
+				'schedule' : schedule
+			},function(data){
+				console.log(newSavedTask);
+				$scope.$broadcast('tasksUpdated');
+				$scope.newTaskForm.init();
+			},function(data){
+				console.log(data);
+			})
+				/* Submit Form Ends */
+		},	
+		'init' : function(){
+			this.setSelectedOption(0);
+			this.showComplexScheduleCreator = false;
+			angular.forEach(this.complexScheduleParams,function(param){
+				param.values = "",
+				param.frequency = "on"
+			})
+			this.description = "";
+		}
+
+	}
+	$scope.newTaskForm.init();
+
+
+	var TaskList = function(scope){
+		this.that = this;
+		this.tasks = [];
+		this.localScope = scope;
+		
+		this.date = function(){
+			this.val =  new Date();
+			this.previous = function(){
+				var new_date = new Date(moment(this.val).subtract(1, 'days').format('YYYY-MM-DD'));
+				this.val = new_date;
+				$scope.updateTasks();
+			}
+			this.next = function(){
+				var new_date = new Date(moment(this.val).add(1, 'days').format('YYYY-MM-DD'));
+				this.val = new_date;
+				$scope.updateTasks();
+			}
+			this.today = function(){
+				var new_date = new Date(moment().format('YYYY-MM-DD'));
+				this.val = new_date;
+				$scope.updateTasks();			
+			}
+		}
+		this.getTasks = function(date){
+			Task.get({
+				'date' : date
+			},function(data){
+				var UpdatedTasks = [];			
+				var index = 1;
+				angular.forEach(data, function(item) {
+					item.serial = index++;
+					UpdatedTasks.push(item);
+				});
+				this.tasks = UpdatedTasks;
+			},function(data){
+				console.log("Error: " + data);
+			})
+		},
+		this.renderTasks = function(){
+			angular.forEach(this.tasks,function(value){
+				if(value.status == "COMPLETED"){
+					value.cssClass = "strike";
+				}
+				this.localScope.push(value);
+			})
+			this.localScope.tasks = tasks;
+		}
+	}
+
+	// $scope.TaskList = {
+	// 	date : {
+	// 		'val' : new Date(),
+	// 		'previous' : function(){
+	// 			var new_date = new Date(moment(this.val).subtract(1, 'days').format('YYYY-MM-DD'));
+	// 			this.val = new_date;
+	// 			$scope.updateTasks();
+	// 		},
+	// 		next : function(){
+	// 			var new_date = new Date(moment(this.val).add(1, 'days').format('YYYY-MM-DD'));
+	// 			this.val = new_date;
+	// 			$scope.updateTasks();
+	// 		},
+	// 		'today' : function(){
+	// 			var new_date = new Date(moment().format('YYYY-MM-DD'));
+	// 			$scope.date1.val = new_date;
+	// 			$scope.updateTasks();			
+	// 		}
+	// 	};
+	// }
 
 	$scope.getTasks = function(date){
 		console.log('Getting Tasks For :' + date );
@@ -142,18 +352,6 @@ app.controller('taskController',['$scope','$http','$cookies','$resource',functio
 		})
 	}
 	
-	$scope.newTaskFormSubmit = function(){
-		var newSavedTask = Task.save({
-			'description' : $scope.newTaskForm.description,
-			'schedule' : $scope.newTaskForm.schedule
-		},function(data){
-			console.log(newSavedTask);
-			$scope.$broadcast('tasksUpdated');
-			$scope.newTaskForm.description = "";
-		},function(data){
-			console.log(newSavedTask);
-		})
-	}
 
 
 	$scope.taskCompleted = function(taskKey){
@@ -165,7 +363,6 @@ app.controller('taskController',['$scope','$http','$cookies','$resource',functio
 			$scope.$broadcast('tasksUpdated');
 			console.log(data);
 		},function(data){
-
 			console.log(data);
 		})
 	}
@@ -198,6 +395,11 @@ app.controller('taskController',['$scope','$http','$cookies','$resource',functio
 			$scope.date1.val = new_date;
 			$scope.updateTasks();
 
+		},
+		'today' : function(){
+			var new_date = new Date(moment().format('YYYY-MM-DD'));
+			$scope.date1.val = new_date;
+			$scope.updateTasks();			
 		}
 	};
 	$scope.updateTasks = function(){
@@ -225,6 +427,15 @@ app.directive('task',function(){
 	}
 })
 
+
+
+app.directive('schedulecreator',function(){
+	return {
+		'templateUrl' : 'public/views/scheduleCreatorTemplate.html'
+	}
+})
+
+// console.log(later);
 // Create a RestFUL resource which uses cookies to get the token and request from the server!
 /*
 	1. Check if the user is login
