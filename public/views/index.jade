@@ -6,5 +6,5 @@ body(ng-controller="mainController" class="container-fluid")
 			i {{ labels.bottomline }}
 			h4 Welcome {{ user.username | titleCase }} , {{ labels.welcomeMessage }}
 	div
-			div(ng-include="currentViewURL")
+		div(ng-include="currentViewURL")
 include footer.html

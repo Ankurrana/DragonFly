@@ -1,4 +1,4 @@
-var Task  = require('../models/Task.js')
+p:var Task  = require('../models/Task.js')
 var path = require('path');
 var moment = require('moment');
 var User = require('../models/User.js');
@@ -7,6 +7,7 @@ var ErrorManager = require('./ErrorController.js');
 var validator = require('./validatorController.js');
 var scheduleController = require('./scheduleController.js');
 var momentRange = require('moment-range')
+var Comment = require('./commentController.js');
 
 var TaskController = {
 	getTask : function(taskId,cb){
@@ -159,7 +160,11 @@ var TaskController = {
 		if( taskUpdates.status ){
 			Updates.status = taskUpdates.status;
 		}
-
+		if( taskUpdates.completedAt ){
+			Updates.completedAt = taskUpdates.completedAt;
+		}
+		console.log(taskUpdates.completedAt);	
+			
 		Task.update({_id:taskId},Updates,{multi : true},function(err,done){
 			if(err){
 				err.message = 'Error While Updating the task ' + taskId ;
@@ -176,13 +181,73 @@ var TaskController = {
 		TaskController.getTaskByKey(key,function(err,task){
 			TaskController.updateTask(task._id,taskUpdates,cb)
 		})
+	},
+	addCommentToTaskByKey : function(key,username, commentString, cb){
+		UserController.getUser({'username' : username },function(err,data){
+			if(!err && data){
+				var userId = data._id
+				Comment.addComment({
+					'description' :  commentString,
+					'createdBy' : userId,
+					'createdOn' : moment()
+				},function(err,data){
+					if(!err && data){
+						var commentId = data._id;
+						Task.getTaskByKey(key,function(err,data){
+							if(!err && data){
+								var taskId = data._id;
+								Task.assignCommentToTask(taskId,commentId,function(err,data){
+									if(err){
+										cb(err)
+									}else{
+										cb(null,data);
+									}
+								})
+
+							}else{
+								cb(err);
+							}
+						})
+					}else{
+						cb(err)
+					}
+				})
+			}else{
+				cb(err);
+			}
+		})
+	},
+	getCommentsOfTaskByKey : function(key,cb){
+		Task.find({'key':key},"comments",function(err,data){
+			if(err || data == null){
+				err.message = "No Task Found";
+				cb(err);
+			}
+			Comment.getComments(data[0].comments,function(err,comments){
+				cb(null,comments)
+			})
+
+
+		})
 	}
 }
+
+// TaskController.addCommentToTaskByKey('ankurrana-4','ankurrana',function(err,data){
+// 	console.log(rr);
+// 	console.log(data);
+// })
+// TaskController.addCommentToTaskByKey('ankurrana-59','ankurrana','anewComment',function(err,data){
+// 	console.log('asdsad');
+// 	console.log(err);
+// 	console.log(data);
+// })
+
 
 
 module.exports = TaskController;
 
 /*Tests*/
+// TaskController.getCommentsOfTaskByKey('ankurrana-59',function);
 
 
 
@@ -244,7 +309,7 @@ module.exports = TaskController;
 // })
 
 
-var Person = function(name){
-	this.name = name; 
-	get
-}
+// var Person = function(name){
+// 	this.name = name; 
+// 	get
+// }

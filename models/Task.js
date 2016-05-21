@@ -18,7 +18,14 @@ var taskSchema = new mongoose.Schema({
 	},
 	'key' : {
 		type : String
-	}
+	},
+	'completedAt' : {
+		type : String 
+	},
+	'comments' : {
+		type : [String],
+		default : []
+	} 
 },{
 	timestamps : {
 		createdAt : 'createdAt',
@@ -31,7 +38,8 @@ taskSchema.statics.addTask = function(taskDetails,callback){
 		'description' : taskDetails.description,
 		'schedule' : taskDetails.schedule,
 		'author' : taskDetails.author,
-		'key' : taskDetails.key
+		'key' : taskDetails.key,
+		'completedAt' : taskDetails.completedAt
 	});
 	task.save(function(err,data){
 		if(err)
@@ -42,8 +50,13 @@ taskSchema.statics.addTask = function(taskDetails,callback){
 	});
 }
 
+
+taskSchema.statics.addCommentToTask = function(taskId,commentId,cb){
+	Task.findOne({_id : taskId})
+}
+
 taskSchema.statics.getTaskById = function(taskId,callback){
-	Task.findOne({'_id':taskId},'description status schedule author',function(err,data){
+	Task.findOne({'_id':taskId},'description status schedule author key completedAt',function(err,data){
 		if(err)
 			callback(err)
 		else
@@ -52,7 +65,7 @@ taskSchema.statics.getTaskById = function(taskId,callback){
 }
 
 taskSchema.statics.getTasksById = function(taskIds,callback){
-	Task.find({'_id': { $in : taskIds }},'description status schedule author key',function(err,data){
+	Task.find({'_id': { $in : taskIds }},'description status schedule author key completedAt',function(err,data){
 		if(err)
 			callback(err)
 		else
@@ -61,13 +74,35 @@ taskSchema.statics.getTasksById = function(taskIds,callback){
 }
 
 taskSchema.statics.getTaskByKey = function(taskKey,callback){
-	Task.findOne({'key' : taskKey},'-_id',function(err,data){
+	Task.findOne({'key' : taskKey},function(err,data){
 		if(err) callback(err);
 		else
 			callback(null, data);
 
 	})
 }
+
+taskSchema.statics.assignCommentToTask = function(task_id,comment_id,callback){
+	
+	Task.findOne({_id:task_id},"comments",function(err,doc){
+		if(err)
+			callback(err);		
+		var comments = doc.comments;
+
+		comments.push(comment_id);
+		Task.update({_id:doc._id},{
+			$set : {
+				'comments' : comments
+			}
+		},{},function(err,data){
+			if(err)
+				callback(err)
+			else
+				callback(null,data);
+		})
+	})
+}
+
 
 
 

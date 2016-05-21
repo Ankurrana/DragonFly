@@ -78,6 +78,6 @@ module.exports = schedule;
 // console.log(k);
 
 
-var k = later.parse.recur()["on"](5,6,7).dayOfWeek();
-// k.on(2016).year();
-console.log(k.schedules);
+// var k = later.parse.recur()["on"](5,6,7).dayOfWeek();
+// // k.on(2016).year();
+// console.log(k.schedules);

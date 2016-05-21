@@ -105,7 +105,6 @@ userSchema.statics.addUser = function addUser(UserData,callback){
 
 
 userSchema.statics.assignTaskToUser = function assignTaskToUser(user_id,task_id,callback){
-	
 	User.findOne({_id:user_id},"tasks tasksCount",function(err,doc){
 		if(err)
 			callback(err);		

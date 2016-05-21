@@ -16,6 +16,7 @@ app.controller('templateController',['$scope','$http','$cookies','$resource',fun
 }])
 
 
+
 app.controller('mainController',['$scope','$http','$cookies','$resource','$route','$window',function($scope,$http,$cookies,$resource,$route,$window){
 	var isUserLoggedIn = false;
 	var user = {};
@@ -79,7 +80,6 @@ app.controller('mainController',['$scope','$http','$cookies','$resource','$route
 		$window.location.reload();
 	}
 
-
 }])
 
 
@@ -114,7 +114,192 @@ app.service('Task',['$resource','$cookies',function($resource,$cookies){
 }])
 
 
-app.controller('taskController',['$scope','$http','$cookies','$resource','Task',function($scope,$http,$cookies,$resource,Task){
+app.service('Comment',['$resource','$cookies',function($resource,$cookies){
+	return $resource('/api/comments/:key',{'key':'@key'},{
+			'get' : { 'method' : 'GET' , 
+				headers : {
+					'jwt' : $cookies.get('token')
+				},
+				isArray:true
+			},
+			'save' : {
+				'method' : 'POST',
+				'headers' : {
+					'jwt' : $cookies.get('token')
+				}
+			}
+		}
+	);
+}])
+
+
+var TaskList = function(scope,Task,ln,$rootScope){
+	var that = this;
+	this.tasks = [];
+	this.localScope = scope;
+	this.ListName = ln;
+	this.localScope.ListName = ln;
+	this.localScope.tasks = [];
+	this.localScope.date = {
+		'val' : new Date(),
+		'next' : function(){
+			this.val = new Date( moment(this.val).add(1,'days'));
+		},
+		'previous' : function(){
+			this.val = new Date( moment(this.val).subtract(1,'days'));
+		},
+		'today' : function(){
+			this.val = new Date();
+		}
+	};
+	this.localScope.$watch('date.val',function(){
+		that.updateView();
+	})
+	this.localScope.$on('tasksUpdated',function(){
+		that.updateView();
+	})
+
+	this.getTasks = function(date){
+		Task.get({
+			'date' : moment(that.localScope.date.val).format('YYYY-MM-DD')
+		},function(data){
+			var UpdatedTasks = [];			
+			var index = 1;
+			angular.forEach(data, function(item) {
+				item.serial = index++;
+				UpdatedTasks.push(item);
+			});
+			that.tasks = UpdatedTasks;
+			that.renderTasks();
+		},function(data){
+			console.log("Error: " + data);
+		})
+	},
+	this.localScope.taskCompleted = function(taskKey){
+			var keyValue = taskKey.split('-')[1];
+			Task.update({
+				'key' : keyValue,
+				'status' : 'COMPLETED',
+				'completedAt' : moment( moment() ).format('YYYY-MM-DD')
+			},function(data){	
+				that.localScope.$broadcast('tasksUpdated');
+				console.log(data);
+			},function(data){
+				console.log(data);
+			})
+	},
+	this.localScope.taskInProgress = function(taskKey){
+		var keyValue = taskKey.split('-')[1];
+		Task.update({
+			'key' : keyValue,
+			'status' : 'INPROGRESS'
+		},function(data){
+			console.log(data);
+			that.localScope.$broadcast('tasksUpdated');
+		},function(data){
+			console.log(data);
+		})		
+	}
+	this.renderTasks = function(){
+		var tasksList = [];
+		angular.forEach(this.tasks,function(value){
+			if(value.status == "COMPLETED"){
+				value.cssClass = "strike";
+			}
+			tasksList.push(value);
+		})
+		that.localScope.tasks = tasksList;
+
+	}
+	this.updateView = function(){
+		that.getTasks(moment(that.localScope.date.val).format('YYYY-MM-DD') );
+	}
+	this.localScope.updatetasksView = function(){
+		that.updateView();
+	}
+	this.localScope.showDetails = function(taskKey){
+
+		var taskKey = taskKey.split('-')[1];
+		$rootScope.$broadcast('showDetails',taskKey);
+	}
+}
+
+app.controller('detailBoxController',['$scope','$http','$cookies','$resource','Comment','$rootScope','Task',function($scope,$http,$resource,$cookies,Comment,$rootScope,Task){
+	var taskDetails = {};
+	$scope.taskDetails = {};
+	$scope.newComment;
+	$scope.showDetailBox = false;
+	$rootScope.$on('showDetails',function(event,taskKey){
+		$scope.showDetailBox = true;
+			
+		getDetails(taskKey,function(taskDetails){
+			$scope.taskDetails = taskDetails;
+		});
+	})
+
+	var getDetails = function(taskKey,callback){
+
+		Task.getOne({
+			'key' : taskKey
+		},function(data){
+			//console.log(data);
+			taskDetails.description = data.description;
+			taskDetails.author = data.author;
+			taskDetails.status = data.status;
+			taskDetails.comments = [];
+			taskDetails.key = data.key.split('-')[1]
+			Comment.get({
+				'key' : taskKey
+			},function(comments){
+				taskDetails.comments = [];
+				angular.forEach(comments, function(item) {
+					taskDetails.comments.push(item);
+				})
+				callback(taskDetails);
+			})
+		})
+	}
+
+	var updateView = function(){
+		$scope.newComment = "";
+		getDetails($scope.taskDetails.key,function(data){
+			$scope.taskDetails = data;
+		})
+	}
+
+	$scope.addComment = function(){
+		if( !$scope.newComment  || !$scope.taskDetails)
+			return;
+		// console.log($scope.taskDetails);
+		Comment.save({
+			'key' : $scope.taskDetails.key,
+			'comment' : $scope.newComment
+		},function(data){
+			updateView();
+		});
+	}
+
+	
+	// console.log($scope.taskDetails);
+}])
+
+
+
+
+// app.controller('commentsController',['$scope','$http','$cookies','$resource','Comment',function($scope,$http,$resource,$cookies,Comment){
+// 	$scope.controllerName = "commentsController";
+// 	$scope.updateCommentBox = function(){
+// 		var commentsList = Comment.get({
+// 			key : '59'
+// 		},function(data){
+// 			$scope.comments = data;
+// 		})	
+// 	}
+// }])
+
+
+
+app.controller('taskController',['$scope','$http','$cookies','$resource','$rootScope','Task',function($scope,$http,$cookies,$resource,$rootScope,Task){
 	$scope.viewTasksURL = "public/views/tasksList.html";
 	$scope.tasks = [];
 	$scope.showComplesScheduleCreator = false;
@@ -160,7 +345,7 @@ app.controller('taskController',['$scope','$http','$cookies','$resource','Task',
 				'functionName' : 'dayOfMonth'
 			},
 			{
-				'name' : 'WeekOfMonth',
+				'name' : 'Week Of Month',
 				'frequency' : null,
 				'values' : null,
 				'functionName' : 'weekOfMonth'
@@ -256,159 +441,8 @@ app.controller('taskController',['$scope','$http','$cookies','$resource','Task',
 
 	}
 	$scope.newTaskForm.init();
-
-
-	var TaskList = function(scope){
-		this.that = this;
-		this.tasks = [];
-		this.localScope = scope;
-		
-		this.date = function(){
-			this.val =  new Date();
-			this.previous = function(){
-				var new_date = new Date(moment(this.val).subtract(1, 'days').format('YYYY-MM-DD'));
-				this.val = new_date;
-				$scope.updateTasks();
-			}
-			this.next = function(){
-				var new_date = new Date(moment(this.val).add(1, 'days').format('YYYY-MM-DD'));
-				this.val = new_date;
-				$scope.updateTasks();
-			}
-			this.today = function(){
-				var new_date = new Date(moment().format('YYYY-MM-DD'));
-				this.val = new_date;
-				$scope.updateTasks();			
-			}
-		}
-		this.getTasks = function(date){
-			Task.get({
-				'date' : date
-			},function(data){
-				var UpdatedTasks = [];			
-				var index = 1;
-				angular.forEach(data, function(item) {
-					item.serial = index++;
-					UpdatedTasks.push(item);
-				});
-				this.tasks = UpdatedTasks;
-			},function(data){
-				console.log("Error: " + data);
-			})
-		},
-		this.renderTasks = function(){
-			angular.forEach(this.tasks,function(value){
-				if(value.status == "COMPLETED"){
-					value.cssClass = "strike";
-				}
-				this.localScope.push(value);
-			})
-			this.localScope.tasks = tasks;
-		}
-	}
-
-	// $scope.TaskList = {
-	// 	date : {
-	// 		'val' : new Date(),
-	// 		'previous' : function(){
-	// 			var new_date = new Date(moment(this.val).subtract(1, 'days').format('YYYY-MM-DD'));
-	// 			this.val = new_date;
-	// 			$scope.updateTasks();
-	// 		},
-	// 		next : function(){
-	// 			var new_date = new Date(moment(this.val).add(1, 'days').format('YYYY-MM-DD'));
-	// 			this.val = new_date;
-	// 			$scope.updateTasks();
-	// 		},
-	// 		'today' : function(){
-	// 			var new_date = new Date(moment().format('YYYY-MM-DD'));
-	// 			$scope.date1.val = new_date;
-	// 			$scope.updateTasks();			
-	// 		}
-	// 	};
-	// }
-
-	$scope.getTasks = function(date){
-		console.log('Getting Tasks For :' + date );
-		Task.get({
-			'date' : date
-		},function(data){
-			var UpdatedTasks = [];			
-			var index = 1;
-			angular.forEach(data, function(item) {
-				item.serial = index++;
-				if( item.status == "ACTIVE" ){
-					item.cssClass = ''
-				}else if( item.status == "COMPLETED"){
-					item.cssClass = 'strike'
-				}else if(item.status == "INPROGRESS"){
-					item.cssClass = ''
-				}
-  				UpdatedTasks.push(item);
-			});
-			$scope.tasks = UpdatedTasks;
-		},function(data){
-			console.log("Error: " + data);
-		})
-	}
-	
-
-
-	$scope.taskCompleted = function(taskKey){
-		var keyValue = taskKey.split('-')[1];
-		Task.update({
-			'key' : keyValue,
-			'status' : 'COMPLETED'
-		},function(data){	
-			$scope.$broadcast('tasksUpdated');
-			console.log(data);
-		},function(data){
-			console.log(data);
-		})
-	}
-
-	$scope.taskInProgress = function(taskKey){
-		var keyValue = taskKey.split('-')[1];
-		Task.update({
-			'key' : keyValue,
-			'status' : 'INPROGRESS'
-		},function(data){
-			console.log(data);
-			$scope.$broadcast('tasksUpdated');
-		},function(data){
-			console.log(data);
-		})		
-	}
-
-	$scope.$on('tasksUpdated',function(){
-		$scope.updateTasks();
-	})
-	$scope.date1 = {
-		'val' : new Date(),
-		'previous' : function(){
-			var new_date = new Date(moment(this.val).subtract(1, 'days').format('YYYY-MM-DD'));
-			$scope.date1.val = new_date;
-			$scope.updateTasks();
-		},
-		next : function(){
-			var new_date = new Date(moment(this.val).add(1, 'days').format('YYYY-MM-DD'));
-			$scope.date1.val = new_date;
-			$scope.updateTasks();
-
-		},
-		'today' : function(){
-			var new_date = new Date(moment().format('YYYY-MM-DD'));
-			$scope.date1.val = new_date;
-			$scope.updateTasks();			
-		}
-	};
-	$scope.updateTasks = function(){
-		console.log('Date : = ' + $scope.date1.val);
-		var d = moment($scope.date1.val).format('YYYY-MM-DD');
-		$scope.getTasks(d);
-	}
-	$scope.getTasks(moment($scope.date1.val).format("YYYY-MM-DD"));
-
+	var MyTasks = new TaskList($scope,Task,'MyOwnTaskList',$rootScope);
+	MyTasks.updateView();
 
 }])
 
@@ -427,6 +461,11 @@ app.directive('task',function(){
 	}
 })
 
+app.directive('comments',function(){
+	return {
+		'templateUrl' : 'public/views/comments.html'
+	}
+})
 
 
 app.directive('schedulecreator',function(){
@@ -435,127 +474,3 @@ app.directive('schedulecreator',function(){
 	}
 })
 
-// console.log(later);
-// Create a RestFUL resource which uses cookies to get the token and request from the server!
-/*
-	1. Check if the user is login
-		if not , then show him the login buttons
-		else move to the 
-
-
-*/
-
-
-
-
-
-/*$scope.username = "Ankur rana";
-	$scope.formData = {};
-
-	if( $cookies.get('token') ){
-		console.log('asdasd');
-		$scope.$emit('loggedIn');
-	}
-
-	$scope.submit = function(){
-		loginRequest($scope.formData.username,$scope.formData.password);
-	}
-
-	var privateData = {};
-	var userInfo;
-	var loggedIn = false;
-	if($cookies.getObject('user')){
-		console.log($cookies.getObject('user'));
-	}
-	$scope.url = '/public/views/login.jade'
-
-	$scope.info = {
-		loggedInUser : '',
-		message  : 'Please Login',
-		status : 'LOGGED OUT',
-		token : undefined,
-		tasks : undefined,
-		date : new Date()
-	}
-	var addAuthenticationDataToHeaders = function(){
-		return { headers : {'jwt' : privateData.token}}
-	}
-	var loginRequest = function(username, password){
-		var data = {
-			'username' : username,
-			'password' : password
-		};
-		$http.post('/api/token',data).then(function(data){
-			if(data.data.token){
-				ClientLogIn(data.data.token);
-				$cookies.putObject('user',data.data);
-				loggedIn = true;
-				$scope.$emit('loggedIn');
-			}else{
-				showError(data.data.message);
-			}	
-		});
-	}
-	var ClientLogIn = function(token){
-				privateData.token = token;
-				$scope.info.status = 'LOGGEDIN'
-				$cookies.put('token',privateData.token);
-	}
-	var showError = function(msg){
-		$scope.info.message = msg;
-	}
-	var getUser = function(){
-		var data = {};
-		$http.get('/api/me', { headers : privateData.token }).then(function(d){
-			$scope.username = d.data.username  
-		},function(){})
-	}
-	$scope.change = function(date){
-		if(moment($scope.info.date).isValid()) getTasks(moment($scope.info.date).format('YYYY-MM-DD'));
-	}
-	
-
-	//loginRequest('ankurrana','ankurrana');
-
-	// if( !privateData.token )
-	// 	console.log("TOKEN UNDEFINED YET!");
-	// console.log(privateData.token);
-	var Task = $resource('/api/tasks/:key',{'date':'@date'},{
-			'get' : { 'method' : 'GET' , 
-				headers : {
-					'jwt' : privateData.token
-				},
-				isArray:true
-			},
-			'getOne' : {
-				'method' : 'GET',
-				'headers' : {
-					'jwt' : privateData.token
-				}  
-			}	
-		}
-		
-	);
-
-
-	var getTasks = function(date){
-		$scope.data = Task.get({'date':date},function(){});
-	}
-
-	
-
-	$scope.$on('init',function(){
-		console.log("Initialized!");
-	})
-
-	$scope.$emit('init');
-	$scope.$on('loggedIn',function(){
-		getUser();
-		getTasks(moment(moment()).format('YYYY-MM-DD'));
-		$scope.url = '/public/views/tasksList.html'
-	})
-
-	if( $cookies.get('token') ){
-		console.log('asdasd');
-		$scope.$emit('loggedIn');
-	}*/

@@ -1,15 +1,18 @@
 <style>
-	
+	.btn{
+		margin-left:1px;
+	}
 </style>
 
 <div>
 	<div id="task.status" type="task" class="row">
-		<div class="col-md-8 col-xs-8">
-			<span class="{{ task.cssClass }}">{{task.serial}}. {{task.description}}</span>
+		<div class="col-md-8 col-xs-12">
+			<h4><span class="{{ task.cssClass }}">{{task.serial}}. {{task.description}}</span></h4>
 		</div>
-		<div class="col-md-4 col-xs-4">
-			<button key="{{task.key}}" class="btn btn-success form-group" ng-click="taskCompleted(this.task.key)">Completed</button>
-			<button key="{{task.key}}" class="btn btn-info form-group" ng-click="taskInProgress(this.task.key)">RESET</button>
+		<div class="col-md-4 col-xs-12 icon-arrow-right">
+			<button key="{{task.key}}" class="btn btn-success form-group pull-right" ng-click="taskCompleted(this.task.key)"><span class="glyphicon glyphicon-ok"></span></button>
+			<button key="{{task.key}}" class="btn btn-danger form-group pull-right" ng-click="taskInProgress(this.task.key)"><span class="glyphicon glyphicon-remove"></span></button>
+			<button key="{{task.key}}" class="btn btn-info form-group pull-right" ng-click="showDetails(this.task.key)"><span class="glyphicon glyphicon-info-sign"></span></button>
 		</div>
 	</div>
 </div>

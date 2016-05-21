@@ -64,6 +64,9 @@ var taskAPIController = {
 				task.status = data.status;
 				task.author = data.author;
 				task.schedule = data.schedule;
+				task.completedOn = data.completedOn;
+				task.comments = data.comments;
+				task.key = data.key
 				res.send(task);
 			}
 		})
@@ -98,6 +101,38 @@ var taskAPIController = {
 			error.code = 1;
 			ErrorGenerator(error,function(err){
 				res.send(err);
+			})
+		}
+	},
+	addCommentToTaskByKey : function(req,res){
+		if( req && req.body ){
+			var commentString  =  req.body.comment;
+			var username = req.user.username;
+			var TaskKey = username + '-' + req.params['key'];
+			Task.addCommentToTaskByKey(TaskKey,username,commentString,function(err,data){
+				if(!err)
+					res.send(data);
+				else
+					console.log(err);
+			})
+
+		}
+	},
+	getCommentsOfTaskByKey : function(req,res){
+		if(req && req.body){
+			var username = req.user.username;
+			var taskKey = username + '-' + req.params['key'];
+			Task.getCommentsOfTaskByKey(taskKey,function(err,data){
+				if(!err && data){
+					res.send(data);
+				}else{
+					if(data == null){
+						err.message = 'No Data recieved from the server'
+					}
+					res.send({
+						'error' : err,
+					})
+				}
 			})
 		}
 	}	

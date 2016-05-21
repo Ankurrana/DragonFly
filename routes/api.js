@@ -16,6 +16,13 @@ router.put('/tasks/:key',passport.authenticate('jwt'),taskAPIController.updateTa
 router.post('/users',registrationController.newUserRequestHandler);
 router.get('/users/:username',userAPIController.getUser);
 router.post('/token',authController.requestAuthorisationToken);
+
+router.get('/comments/:key',passport.authenticate('jwt'),taskAPIController.getCommentsOfTaskByKey)
+router.post('/comments/:key',passport.authenticate('jwt'),taskAPIController.addCommentToTaskByKey)
+
+
+
+
 router.get('/me',passport.authenticate('jwt'),function(req,res){
 	res.send(req.user);
 })

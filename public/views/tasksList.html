@@ -5,28 +5,24 @@
 .strike{
 	text-decoration: line-through;
 }
+.centered{
+	text-align: center;
+}
 </style>
-<div class="row">
-	<div class="col-md-3 col-xs-3">
-		<div class="text-right">
-			<button class="btn btn-primary" ng-click="date1.previous()"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></button>
-		</div>
-	</div>
-	<div class="col-md-3 col-xs-3">
+<div class="row centered">
+	<div class="col-md-3 col-xs-12">
 		<div> 
-			<input id="date" type="date" class="form-control" ng-model="date1.val" ng-change="updateTasks()"></input>
+			<input id="date" type="date" class="form-control col-md-3 col-xs-12" ng-model="date.val" ng-change="updateView()"></input>
 		</div>
 	</div>
-	<div class="col-md-3 col-xs-3">
-		<div class="text-left">
-			<button class="btn btn-primary" ng-click="date1.today()"><span>Today</span></button>
-			<button class="btn btn-primary" ng-click="date1.next()"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button>
-
-		</div>
+	<div class="col-md-9 col-xs-12 centered">
+			<button class="btn btn-primary" ng-click="date.previous()"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></button>	
+			<button class="btn btn-primary" ng-click="date.today()"><span>Today</span></button>
+			<button class="btn btn-primary" ng-click="date.next()"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button>
 	</div>	
 </div>
+
 <div class="row">
-	{{qwe}}
 	<div class="col-md-12 col-xs-12">
 		<div ng-repeat="task in tasks">
 			<task></task>
