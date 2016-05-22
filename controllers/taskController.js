@@ -8,6 +8,7 @@ var validator = require('./validatorController.js');
 var scheduleController = require('./scheduleController.js');
 var momentRange = require('moment-range')
 var Comment = require('./commentController.js');
+var RandomStringGenerator = require('randomstring');
 
 var TaskController = {
 	getTask : function(taskId,cb){
@@ -218,30 +219,17 @@ var TaskController = {
 		})
 	},
 	getCommentsOfTaskByKey : function(key,cb){
-		Task.find({'key':key},"comments",function(err,data){
-			if(err || data == null){
-				err.message = "No Task Found";
-				cb(err);
+		TaskController.getTaskByKey(key,function(err,data){
+			if(err)
+				cb(err)
+			else{
+				Comment.getComments(data.comments,function(err,comments){
+					cb(null,comments)
+				})
 			}
-			Comment.getComments(data[0].comments,function(err,comments){
-				cb(null,comments)
-			})
-
-
 		})
 	}
 }
-
-// TaskController.addCommentToTaskByKey('ankurrana-4','ankurrana',function(err,data){
-// 	console.log(rr);
-// 	console.log(data);
-// })
-// TaskController.addCommentToTaskByKey('ankurrana-59','ankurrana','anewComment',function(err,data){
-// 	console.log('asdsad');
-// 	console.log(err);
-// 	console.log(data);
-// })
-
 
 
 module.exports = TaskController;

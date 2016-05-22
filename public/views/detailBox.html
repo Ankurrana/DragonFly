@@ -1,0 +1,40 @@
+
+<div class="detailBoxContainer">
+	<div ng-controller="detailBoxController" ng-show="showDetailBox">
+		
+			<div class="panel panel-default">
+				<div class="panel-heading">Task Details</div>
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-md-12 col-sm-12 col-xs-12">
+							<blockquote>
+								{{ taskDetails.description }}
+								<footer><span>{{ taskDetails.author }}</span></footer>
+							</blockquote>
+						</div>
+						<div class="col-md-3 col-xs-12 col-sm-12">
+								<h4>{{ taskDetails.status }}</h4>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12 col-xs-12">
+							<ul class="list-group">
+								<div ng-repeat="comment in taskDetails.comments">
+									<li class="list-group-item">{{ comment.description }}</li>		
+								</div>
+								<li class="list-group-item">
+									<form class="form-inline">
+									  	<div class="form-group">
+									    	<label class="hide" for="exampleInputName2">Name</label>
+									    	<input type="text" id="commentBox" ng-model="newComment" class="search-query form-control input large" placeholder="Comment" name="comment"></input>
+									 	 </div>
+								  		<button type="submit" class="btn btn-default" ng-click="addComment()">Comment</button>
+									</form>
+								</li>
+							</ul>
+						</div>
+					</div>	
+				</div>
+			</div>
+		</div>
+	</div>

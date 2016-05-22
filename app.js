@@ -4,17 +4,16 @@ var app = express();
 var appConfig = require('./config/config.js');
 var passport = require('passport');
 appConfig.init(app);
-
 app.set('views', __dirname + '/public/views');
 app.set('view engine','jade')
-var router = require('./routes/routes.js');
 var api = require('./routes/api.js');
 
 
 app.use('/api',api);
-app.use('/',router);
-
 app.use('/public',express.static(__dirname + "/public"));
+app.use('/',function(req,res){
+	res.render('index');
+});
 
 app.use('*',function(req,res){
 	res.status(404).render('notfound',{message:'this is the message',title:'NinTendo!'});

@@ -1,10 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var auth = require('../middlewares/auth.js');
-var adminController = require('../controllers/adminController.js');
 var registrationController = require('../controllers/registrationController.js');
-var authController = require('../controllers/authAPIController.js');
 var passport = require('passport');
+var authController = require('../controllers/authAPIController.js');
 var userAPIController = require('../controllers/userAPIController.js');
 var taskAPIController = require('../controllers/taskAPIController.js');
 

@@ -33,16 +33,19 @@ var taskAPIController = {
 			date = moment(moment()).format('YYYY-MM-DD');
 		}else{
 			if( !moment(date).isValid()){
-				res.send('Error : Date Format Invalid');
+				res.send({
+					err : {
+						message : 'Date Format Invalid'
+					}
+				});
 				return;
 			}else{
 				date = moment(date).format('YYYY-MM-DD');
-				console.log(date);
 			}
 		}
 		User.getTasksOfUserByUsername(username,function(err,taskIds){
 			if(err){
-				res.send(err);
+				res.status(400).send(err);
 			}else{
 				Task.getTasksForDate(taskIds,date,function(err,tasks){
 					res.send(tasks);
@@ -57,7 +60,7 @@ var taskAPIController = {
 		key = req.user.username + '-' + key;
 		Task.getTaskByKey(key,function(err,data){
 			if(err){
-				res.send(err)
+				res.status(400).send(err)
 			}else{
 				var task = {};
 				task.description = data.description;
@@ -77,7 +80,7 @@ var taskAPIController = {
 		var taskDetails = req.body;
 		Task.updateTaskByKey(key, taskDetails,function(err,data){
 			if(err){
-				res.send(err)
+				res.status(400).send(err)
 			}else{
 				res.send({
 					'message' : 'Successfully Updated'
@@ -91,7 +94,7 @@ var taskAPIController = {
 			var taskDetails = req.body;
 			Task.addTask(taskDetails,username,function(err,done){
 				if(err){
-					res.send(err)
+					res.status(400).send(err)
 				}else{
 					res.send(done);
 				}
@@ -100,7 +103,7 @@ var taskAPIController = {
 			var error = {};
 			error.code = 1;
 			ErrorGenerator(error,function(err){
-				res.send(err);
+				res.status(400).send(err);
 			})
 		}
 	},
@@ -113,7 +116,7 @@ var taskAPIController = {
 				if(!err)
 					res.send(data);
 				else
-					console.log(err);
+					res.status(400).send(err)
 			})
 
 		}
@@ -129,7 +132,7 @@ var taskAPIController = {
 					if(data == null){
 						err.message = 'No Data recieved from the server'
 					}
-					res.send({
+					res.status(400).send({
 						'error' : err,
 					})
 				}
