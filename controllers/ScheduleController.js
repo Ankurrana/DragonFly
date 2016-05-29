@@ -59,6 +59,40 @@ var schedule = {
 
 module.exports = schedule;
 
+
+// var today = new Date("May 25, 2016");
+// var tomorrow = new Date("May 26, 2016");
+// var romorrow = new Date("May 27, 2016")
+// var schedule = 
+
+// later.parse.recur()
+// .on(25).dayOfMonth().on(5).month().on(2016).year()
+// .and()
+// .on(26).dayOfMonth().on(5).month().on(2016).year()
+// .and()
+// .on(27).dayOfMonth().on(5).month().on(2016).year()
+
+// var sched = later.schedule(schedule);
+// var ans = sched.isValid(new Date('2016-05-27'));
+// console.log(ans);
+// console.log(ans)
+  // --> false
+
+  // sched.isValid(new Date('2013-03-22T10:02:05Z'));
+  // --> false
+
+
+/* attaches  a later schedule for the next n days*/
+// var nextNDays = function(schedule,n){
+// 	for(var i=0;i<n;i++){
+// 		var day = moment().add(i,'day');
+// 		schedule = schedule.and();
+// 		schedule.on(day.date()).dayOfMonth().on(day.month()+1).month().on(day.year()).year()
+// 	}
+// 	return schedule;
+// }	
+
+
 // var schedule =  {
 //         "schedules" : [ 
 //             {

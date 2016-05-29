@@ -27,7 +27,7 @@ var commentSchema = new mongoose.Schema({
 commentSchema.statics.addComment = function(commentDetails,callback){
 	var comment = new this({
 		'description' : commentDetails.description,
-		'createdBy' : commentDetails.authorId,
+		'createdBy' : commentDetails.createdBy,
 		'createdOn' : commentDetails.createdOn
 	});
 	comment.save(function(err,data){

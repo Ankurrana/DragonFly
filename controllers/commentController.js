@@ -32,8 +32,21 @@ var CommentController = {
 				err.message = 'There was a fatal error while retriving the tasks with Ids' + commentIds;
 				ErrorManager(err,'Fatal Error','Fatal Error while retrieving tasks');
 				cb(err);
-			}else
+			}else{
 				cb(null,data);
+				// var length = data.length;
+				// var UserIdsSet = [];
+				// data.forEach(function(value, index){
+				// 	UserIdsSet.add(value.createdBy)
+				// })
+				// UserController.getUsernamesByIds(UserIdsSet,function(err,data){
+				// 	if(err)
+				// 		cb(err)
+				// 	else{
+				// 		data.forEach()
+				// 	}
+				// })
+			}
 		})
 	},
 	addComment : function(commentDetails,cb){
@@ -41,6 +54,7 @@ var CommentController = {
 			if(err){
 				cb(err)
 			}else{
+
 				cb(null,data);
 			}
 		})

@@ -26,7 +26,6 @@ var taskAPIController = {
 
 	},
 	getTaskForPeriod : function(req,res){
-		// initialize(req,res);
 		var username = req.user.username;
 		var date = req.query.date;
 		if(!date ){
@@ -52,12 +51,9 @@ var taskAPIController = {
 				})
 			}
 		})
-
-
 	},	
 	getTaskByKey: function(req,res){
 		var key = req.params['key'];
-		key = req.user.username + '-' + key;
 		Task.getTaskByKey(key,function(err,data){
 			if(err){
 				res.status(400).send(err)
@@ -76,7 +72,6 @@ var taskAPIController = {
 	},
 	updateTaskByKey : function(req,res){
 		var key = req.params['key'];
-		key = req.user.username + '-' + key;
 		var taskDetails = req.body;
 		Task.updateTaskByKey(key, taskDetails,function(err,data){
 			if(err){
@@ -84,6 +79,18 @@ var taskAPIController = {
 			}else{
 				res.send({
 					'message' : 'Successfully Updated'
+				})
+			}
+		})
+	},
+	deleteTaskByKey : function (req,res) {
+		var key = req.params['key'];
+		Task.deleteTaskByKey(key,function(err,data){
+			if(err){
+				res.status(400).send(err)
+			}else{
+				res.send({
+					message : 'Successfully Deleted!'
 				})
 			}
 		})
@@ -111,7 +118,7 @@ var taskAPIController = {
 		if( req && req.body ){
 			var commentString  =  req.body.comment;
 			var username = req.user.username;
-			var TaskKey = username + '-' + req.params['key'];
+			var TaskKey = req.params['key'];
 			Task.addCommentToTaskByKey(TaskKey,username,commentString,function(err,data){
 				if(!err)
 					res.send(data);
@@ -124,12 +131,13 @@ var taskAPIController = {
 	getCommentsOfTaskByKey : function(req,res){
 		if(req && req.body){
 			var username = req.user.username;
-			var taskKey = username + '-' + req.params['key'];
+			var taskKey = req.params['key'];
 			Task.getCommentsOfTaskByKey(taskKey,function(err,data){
 				if(!err && data){
 					res.send(data);
 				}else{
 					if(data == null){
+						var err = {};
 						err.message = 'No Data recieved from the server'
 					}
 					res.status(400).send({
@@ -138,6 +146,26 @@ var taskAPIController = {
 				}
 			})
 		}
+	},
+	'shareTaskWithUsername' : function(req,res){
+		var username = req.params['username'];
+		var taskKey = req.params['key']
+		console.log('username + + taskKey');
+		Task.getTaskByKey(taskKey,function(err,data){
+			if(err)
+				res.send(err);
+			else{
+				var taskId = data._id;
+				User.addTaskToUserByUsername(username,taskId,function(err,data){
+					if(err)
+						res.send(err)
+					else{
+						res.send(data);
+					}
+				})
+			}
+		})
+
 	}	
 }
 

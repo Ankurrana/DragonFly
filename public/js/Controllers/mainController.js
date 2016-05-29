@@ -4,6 +4,8 @@ app.controller('mainController',['$scope','$http','$cookies','$resource','$route
 	var user = {};
 	var loginFormURL = 'public/views/login.jade'
 	var bodyURL = 'public/views/body.html'
+	$scope.registrationFormURL = 'public/views/registrationForm.html';
+	
 	$scope.currentViewURL = loginFormURL;
 	$scope.newTaskFormURL = 'public/views/newTask.html';
 	$scope.taskDetailBox = 'public/views/detailBox.html'

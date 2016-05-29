@@ -50,6 +50,40 @@ var UserController = {
 			cb(null,this.user);
 		})	
 	},
+	'getUsernameById' : function(Id,cb){
+		this.getUser({
+			'_id' : Id
+		},function(err,data){
+			if(err)
+				cb(err)
+			else{
+				cb(null,data.username);
+			}
+		})
+	},
+	getUsernamesByIds : function(Ids,cb){
+		User.find({ '_id' : {
+			$in : Ids
+		}},'username',function(err,data){
+			if(err)
+				cb(err)
+			else{
+				cb(null,data);
+			}
+		})
+	}
+	,
+	'getUsers' : function(username,cb){
+		/* just gets the username of all the  */
+		User.find({'username': new RegExp(username, 'i') },'username -_id',function(err,data){
+			if(err)
+				cb(err)
+			else{
+				cb(null,data);
+			}
+		})
+	},
+
 	'addUser' : function(userDetails,cb){
 		/* Validate User Info here */
 		var err;
@@ -148,10 +182,15 @@ var UserController = {
 
 module.exports = UserController;
 
+// UserController.getUsernamesByIds(['572b872461e183b832450978'],function(err,data){
+// 	console.log(data);
+// })
+
 
 /**  Tests 
 *	 Add these files to Test Files 
 */
+
 
 
 

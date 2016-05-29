@@ -1,16 +1,36 @@
 
-app.controller('detailBoxController',['$scope','$http','$cookies','$resource','Comment','$rootScope','Task',function($scope,$http,$resource,$cookies,Comment,$rootScope,Task){
+app.controller('detailBoxController',['$scope','$http','$cookies','$resource','Comment','$rootScope','Task','User','Share',function($scope,$http,$resource,$cookies,Comment,$rootScope,Task,User,Share){
 	var taskDetails = {};
 	$scope.taskDetails = {};
 	$scope.newComment;
 	$scope.showDetailBox = false;
+	
 	$rootScope.$on('showDetails',function(event,taskKey){
-		$scope.showDetailBox = true;
-			
+		$scope.showDetailBox = true;		
 		getDetails(taskKey,function(taskDetails){
 			$scope.taskDetails = taskDetails;
 		});
 	})
+
+	$scope.users;
+	$scope.share;
+	
+	$scope.shareit = function(){
+		if($scope.sharee){
+			if(!confirm('Are you sure you want to share it with :' +  $scope.sharee.username)){
+				return
+			}
+			Share.share({
+				'key' : taskDetails.key,
+				'username' : $scope.sharee.username  
+			},function(data){
+				console.log(data);
+			},function(err){
+				console.log('Error : '+ err);
+			})
+
+		}
+	}
 
 	var getDetails = function(taskKey,callback){
 		Task.getOne({
@@ -20,7 +40,7 @@ app.controller('detailBoxController',['$scope','$http','$cookies','$resource','C
 			taskDetails.author = data.author;
 			taskDetails.status = data.status;
 			taskDetails.comments = [];
-			taskDetails.key = data.key.split('-')[1]
+			taskDetails.key = data.key;
 			Comment.get({
 				'key' : taskKey
 			},function(comments){
@@ -33,7 +53,18 @@ app.controller('detailBoxController',['$scope','$http','$cookies','$resource','C
 				$rootScope.$emit('error',err);
 			})
 		})
+		User.get({},function(data){
+			console.log('Getting users from Server!');
+			$scope.users = data;
+		})
 	}
+
+	$rootScope.$on('loggedIn',function(){
+		User.get({},function(data){
+			console.log('Getting users from Server!');
+			$scope.users = data;
+		})
+	})
 
 	var updateView = function(){
 		$scope.newComment = "";
@@ -53,5 +84,17 @@ app.controller('detailBoxController',['$scope','$http','$cookies','$resource','C
 		},function(err){
 			$rootScope.$emit('error',err);
 		});
+	},
+	$scope.delete = function(){
+		if(!confirm('Are you sure you want to delete the Task with Description : ' + taskDetails.description))
+			return;
+		
+		Task.delete({
+			key : $scope.taskDetails.key
+		},function(data){
+			console.log('Task Deleted!');
+			$rootScope.$emit('tasksUpdated')
+			$scope.showDetailBox = false;
+		})
 	}
 }])

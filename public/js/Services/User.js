@@ -1,10 +1,10 @@
-app.service('Task',['$resource','$cookies',function($resource,$cookies){
-	return $resource('/api/tasks/:key',{'date':'@date','key':'@key'},{
+app.service('User',['$resource','$cookies',function($resource,$cookies){
+	return $resource('/api/users',{'username':'@username'},{
 			'get' : { 'method' : 'GET' , 
 				headers : {
 					'jwt' : $cookies.get('token')
 				},
-				isArray:true
+				isArray: true
 			},
 			'getOne' : {
 				'method' : 'GET',

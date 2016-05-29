@@ -5,6 +5,7 @@ app.controller('taskController',['$scope','$http','$cookies','$resource','$rootS
 
 
 	$scope.newTaskForm = {
+		nextNDays : undefined,
 		scheduleOptions : [
 			{
 				'label' : 'Today',
@@ -103,17 +104,34 @@ app.controller('taskController',['$scope','$http','$cookies','$resource','$rootS
 					})
 				}
 			})
+			var nextNDays = function(schedule,n){
+				for(var i=0;i<n;i++){
+					var day = moment().add(i,'day');
+					// schedule = schedule.and();
+					schedule.on(day.date()).dayOfMonth().on(day.month()+1).month().on(day.year()).year()
+					if( i+1 < n )
+						schedule.and();
+				}
+				return schedule;
+			}	
+
+			if( this.nextNDays ){
+				laterSchedule = nextNDays(laterSchedule,parseInt(this.nextNDays));
+			}
+
+			console.log(laterSchedule.schedules);
 			return JSON.stringify(laterSchedule.schedules);
 		},
 		submit : function(){
 			var description = this.getDescription();
 			var schedule = this.getSelectedOption();
 			if( schedule == 'complex' ) schedule = this.getScheduleStringForComplexSchedule();
+
 			var newSavedTask = Task.save({
 				'description' : description,
 				'schedule' : schedule
 			},function(data){
-				console.log(newSavedTask);
+				// console.log(newSavedTask);
 				$scope.$broadcast('tasksUpdated');
 				$scope.newTaskForm.init();
 			},function(data){
@@ -132,6 +150,20 @@ app.controller('taskController',['$scope','$http','$cookies','$resource','$rootS
 			this.description = "";
 		}
 
+	}
+	function week_of_month(date) {
+		prefixes = [1,2,3,4,5];
+		return prefixes[0 | moment(date).date() / 7];
+	}
+	
+	$scope.fillToday = function(){
+		var today  = moment(moment());
+		$scope.newTaskForm.complexScheduleParams[0].values = ((today.isoWeekday())+1)%7 + "";
+		$scope.newTaskForm.complexScheduleParams[1].values = today.date() + "";
+		$scope.newTaskForm.complexScheduleParams[2].values = week_of_month(moment(moment())) + "";
+		$scope.newTaskForm.complexScheduleParams[3].values = today.isoWeek() + "";
+		$scope.newTaskForm.complexScheduleParams[4].values = today.month() + 1 + "";
+		$scope.newTaskForm.complexScheduleParams[5]	.values = today.year() + "";
 	}
 	$scope.newTaskForm.init();
 	var MyTasks = new TaskList($scope,Task,'MyOwnTaskList',$rootScope);

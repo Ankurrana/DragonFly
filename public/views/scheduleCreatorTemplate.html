@@ -1,29 +1,37 @@
-<div class="row">
-	<div class="col-md-12 col-xs-12">
-		<div ng-show="newTaskForm.showComplexScheduleCreator">
-				<div>
-					<div ng-repeat="param in newTaskForm.complexScheduleParams">
-						<form class="form-inline">
-							<div class="form-group">
-								<div>
-									<label class ="sr-only" for="{{param.name}}"> {{ param.name }} </label>
+<div ng-show="newTaskForm.showComplexScheduleCreator">
+	<div class="row">
+		<div class="col-md-6 col-xs-12">
+			<div>
+				<div ng-repeat="param in newTaskForm.complexScheduleParams">
+					<div class="row">
+						<div class="col-md-6">
+							<form class="form-inline">
+								<div class="form-group">
+										<div>
+											<label class ="s-only" for="{{param.name}}"> {{ param.name }} </label>	
+										</div>
+										</div>				
 								</div>
-								<div>
-									<select name="on"  class="form-control" ng-model="param.frequency">
-										<option value="on">On</option>
-										<option value="every">Every</option>
-									</select>
+								
+								<div class="col-md-6">
+									<div class="form-group">
+									<!--	<select name="on"  class="form-control" ng-model="param.frequency">
+											<option value="on">On</option>
+											<option value="every">Every</option>
+										</select>-->
+										
 									<input type="text" class="form-control" id="param.name" placeholder="{{param.name}}" ng-model="param.values"></input>
-								</div>		
-							</div>					
+								</div>	
+								</div>
 						</form>
 					</div>
-				</div>			
-			</div>
+				</div>
+			</div>			
+		</div>	
+		<div class="col-md-6 col-xs-12 col-sm-12">
+			<button class="btn btn-primary" ng-click="fillToday()">Fill Today</button>
 		</div>
-	<div class="col-md-6 col-xs-6">
-
-	</div>
+	</div> <!-- Row End -->
 </div>
 
 			<!-- <div>				

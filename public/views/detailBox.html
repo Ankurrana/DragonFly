@@ -12,8 +12,27 @@
 								<footer><span>{{ taskDetails.author }}</span></footer>
 							</blockquote>
 						</div>
-						<div class="col-md-3 col-xs-12 col-sm-12">
+					</div>
+					<div class="row">
+						<div class="col-md-6 col-xs-12 col-sm-12">
 								<h4>{{ taskDetails.status }}</h4>
+						</div>
+						<div class="col-md-6 col-xs-12 col-sm-12">
+							<button class="btn btn-danger" ng-click="delete()">Delete</button>	
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<form class="form-inline">
+								  	<div class="form-group">
+								    	<label for="exampleInputName2">Share it with</label>
+								    		<select ng-model="sharee" ng-options="user.username for user in users" class="search-query form-control input large" name="sharee">
+								    		
+								    	</select>
+								 	 </div>
+							  		<button type="submit" class="btn btn-default" ng-click="shareit()">Share</button>
+								</form>
+						</div>
 						</div>
 					</div>
 					<div class="row">

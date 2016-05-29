@@ -1,4 +1,4 @@
-p:var Task  = require('../models/Task.js')
+var Task  = require('../models/Task.js')
 var path = require('path');
 var moment = require('moment');
 var User = require('../models/User.js');
@@ -70,7 +70,7 @@ var TaskController = {
 		task.schedule = scheduleController.convertScheduleStringToLaterSchedule(task.schedule);
 
 		UserController.getTasksCountByUsername(username,function(err,taskCount){
-			task.key = username  + '-' + (taskCount+1);
+			task.key = RandomStringGenerator.generate();
 			if ( (err = validator.isTaskValid(task)) == true ){
 				Task.addTask(task,function(err,task){
 					if(err){
@@ -228,11 +228,25 @@ var TaskController = {
 				})
 			}
 		})
+	},
+	deleteTaskByKey : function(key,cb){
+		Task.findOne({'key':key},function(err,task){
+			if(err){
+				cb(err)
+			}else{
+				task.remove();
+				cb(null,{
+					message : 'Deleted Successfully'
+				})
+			}
+		})
 	}
 }
 
 
 module.exports = TaskController;
+
+
 
 /*Tests*/
 // TaskController.getCommentsOfTaskByKey('ankurrana-59',function);
