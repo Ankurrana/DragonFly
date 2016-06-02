@@ -41,5 +41,8 @@
     "validate.js": "^0.9.0",
     "winston": "^2.2.0"
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "engines": {
+    "node": "5.11.0"
+  },
 }
