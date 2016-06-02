@@ -1,5 +1,5 @@
 {
-  "name": "dragonfly",
+  "name": "taskkeeper",
   "version": "1.0.0",
   "description": "This project aims to develop a comprehensive todo app",
   "main": "index.js",
@@ -40,5 +40,6 @@
     "randomstring": "^1.1.5",
     "validate.js": "^0.9.0",
     "winston": "^2.2.0"
-  }
+  },
+  "devDependencies": {}
 }
