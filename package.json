@@ -44,5 +44,5 @@
   "devDependencies": {},
   "engines": {
     "node": "5.11.0"
-  },
+  }
 }
