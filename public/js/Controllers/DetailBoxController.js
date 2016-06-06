@@ -24,6 +24,7 @@ app.controller('detailBoxController',['$scope','$http','$cookies','$resource','C
 				'key' : taskDetails.key,
 				'username' : $scope.sharee.username  
 			},function(data){
+				$scope.sharee.username = "";
 				console.log(data);
 			},function(err){
 				console.log('Error : '+ err);
@@ -41,11 +42,19 @@ app.controller('detailBoxController',['$scope','$http','$cookies','$resource','C
 			taskDetails.status = data.status;
 			taskDetails.comments = [];
 			taskDetails.key = data.key;
+			taskDetails.owner = data.owner
+			if(taskDetails.owner == undefined){
+				taskDetails.owner = {};
+				taskDetails.owner.username = data.author;
+				taskDetails.owner.name = data.author;
+			}
 			Comment.get({
 				'key' : taskKey
 			},function(comments){
+				console.log(comments);
 				taskDetails.comments = [];
-				angular.forEach(comments, function(item) {
+				angular.forEach(comments, function(item){
+					item.createdAt = moment(item.createdAt).fromNow();
 					taskDetails.comments.push(item);
 				})
 				callback(taskDetails);

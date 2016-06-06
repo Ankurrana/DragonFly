@@ -5,6 +5,11 @@ var TaskList = function(scope,Task,ln,$rootScope){
 	this.ListName = ln;
 	this.localScope.ListName = ln;
 	this.localScope.tasks = [];
+	scope.filters = {
+		'showActive' : true,
+		'showCompleted' : true
+	};
+
 	this.localScope.date = {
 		'val' : new Date(),
 		'next' : function(){
@@ -17,9 +22,21 @@ var TaskList = function(scope,Task,ln,$rootScope){
 			this.val = new Date();
 		}
 	};
+
+	scope.$watch('filters.showCompleted',function(){
+		that.renderTasks();
+		console.log('Tasks Updated! Show completed');
+	})
+	scope.$watch('filters.showActive',function(){
+		that.renderTasks();
+		console.log('Tasks Updated! Show Active');
+		
+	})
 	this.localScope.$watch('date.val',function(){
 		that.updateView();
 	})
+
+
 	this.localScope.$on('tasksUpdated',function(){
 		that.updateView();
 	})
@@ -39,6 +56,7 @@ var TaskList = function(scope,Task,ln,$rootScope){
 				UpdatedTasks.push(item);
 			});
 			that.tasks = UpdatedTasks;
+			console.log(that.tasks);
 			that.renderTasks();
 		},function(err){
 			$rootScope.$emit('error',err)
@@ -60,7 +78,7 @@ var TaskList = function(scope,Task,ln,$rootScope){
 		var keyValue = taskKey;
 		Task.update({
 			'key' : keyValue,
-			'status' : 'INPROGRESS'
+			'status' : 'ACTIVE'
 		},function(data){
 			that.localScope.$broadcast('tasksUpdated');
 		},function(err){
@@ -73,9 +91,15 @@ var TaskList = function(scope,Task,ln,$rootScope){
 			if(value.status == "COMPLETED"){
 				value.cssClass = "strike";
 			}
-			tasksList.push(value);
+			if(value.status == 'COMPLETED' && scope.filters.showCompleted){
+			 	tasksList.push(value);
+			 }
+			if(value.status == 'ACTIVE' && scope.filters.showActive){
+				tasksList.push(value)
+			}
 		})
 		that.localScope.tasks = tasksList;
+		console.log(that.localScope.tasks);
 
 	}
 	this.updateView = function(){
@@ -85,8 +109,10 @@ var TaskList = function(scope,Task,ln,$rootScope){
 		that.updateView();
 	}
 	this.localScope.showDetails = function(taskKey){
-
 		var taskKey = taskKey;
 		$rootScope.$broadcast('showDetails',taskKey);
+	}
+	this.localScope.edit = function(taskKey){
+		var taskKey = taskKey;
 	}
 }

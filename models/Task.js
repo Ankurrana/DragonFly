@@ -1,4 +1,5 @@
 var mongoose = require('./mongooseConnection.js');
+var UserModel = require('./User.js');
 
 var taskSchema = new mongoose.Schema({
 	'description' : {
@@ -13,6 +14,11 @@ var taskSchema = new mongoose.Schema({
 	'author' : {
 		type : String
 	},
+	'owner' : {
+		type : mongoose.Schema.Types.ObjectId,
+		ref : 'User'
+	}
+	,
 	'schedule' : {
 		type : Object
 	},
@@ -38,6 +44,7 @@ taskSchema.statics.addTask = function(taskDetails,callback){
 		'description' : taskDetails.description,
 		'schedule' : taskDetails.schedule,
 		'author' : taskDetails.author,
+		'owner' : taskDetails.owner,
 		'key' : taskDetails.key,
 		'completedAt' : taskDetails.completedAt
 	});
@@ -50,13 +57,8 @@ taskSchema.statics.addTask = function(taskDetails,callback){
 	});
 }
 
-
-taskSchema.statics.addCommentToTask = function(taskId,commentId,cb){
-	Task.findOne({_id : taskId})
-}
-
 taskSchema.statics.getTaskById = function(taskId,callback){
-	Task.findOne({'_id':taskId},'description status schedule author key completedAt',function(err,data){
+	Task.findOne({'_id':taskId},'description status schedule author owner key completedAt',function(err,data){
 		if(err)
 			callback(err)
 		else
@@ -65,7 +67,7 @@ taskSchema.statics.getTaskById = function(taskId,callback){
 }
 
 taskSchema.statics.getTasksById = function(taskIds,callback){
-	Task.find({'_id': { $in : taskIds }},'description status schedule author key completedAt',function(err,data){
+	Task.find({'_id': { $in : taskIds }},'description status schedule owner author key completedAt',function(err,data){
 		if(err)
 			callback(err)
 		else

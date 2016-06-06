@@ -62,6 +62,7 @@ var taskAPIController = {
 				task.description = data.description;
 				task.status = data.status;
 				task.author = data.author;
+				task.owner = data.owner
 				task.schedule = data.schedule;
 				task.completedOn = data.completedOn;
 				task.comments = data.comments;
@@ -150,7 +151,6 @@ var taskAPIController = {
 	'shareTaskWithUsername' : function(req,res){
 		var username = req.params['username'];
 		var taskKey = req.params['key']
-		console.log('username + + taskKey');
 		Task.getTaskByKey(taskKey,function(err,data){
 			if(err)
 				res.send(err);

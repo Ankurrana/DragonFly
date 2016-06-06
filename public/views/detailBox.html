@@ -9,7 +9,7 @@
 						<div class="col-md-12 col-sm-12 col-xs-12">
 							<blockquote>
 								{{ taskDetails.description }}
-								<footer><span>{{ taskDetails.author }}</span></footer>
+								<footer><span>{{ taskDetails.owner.name }}</span></footer>
 							</blockquote>
 						</div>
 					</div>
@@ -39,7 +39,13 @@
 						<div class="col-md-12 col-xs-12">
 							<ul class="list-group">
 								<div ng-repeat="comment in taskDetails.comments">
-									<li class="list-group-item">{{ comment.description }}</li>		
+									<li class="list-group-item">
+										
+										<b>{{comment.createdBy.name | titleCase }}</b> :
+										{{ comment.description }}
+										<div class="text-right"><small>{{ comment.createdAt}}<small></div>
+
+									</li>		
 								</div>
 								<li class="list-group-item">
 									<form class="form-inline">

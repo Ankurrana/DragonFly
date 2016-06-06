@@ -35,6 +35,18 @@ var UserController = {
 			}
 		})
 	},
+	getIdByUsername : function(username,cb){
+		this.getUser({
+			"username" : username
+		},function(err,data){
+			if(err){
+				cb(err)
+			}else{
+				cb(null,data._id);
+			}
+		})
+	}
+	,	
 	'getUserByUsername' : function(username,cb){
 		this.getUser({"username":username},function(err,user){
 			if(err){
@@ -178,7 +190,6 @@ var UserController = {
 	}
 
 }
-
 
 module.exports = UserController;
 

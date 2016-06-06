@@ -12,7 +12,7 @@ var RandomStringGenerator = require('randomstring');
 
 var TaskController = {
 	getTask : function(taskId,cb){
-		Task.findOne({'_id':taskId},function(err,task){
+		Task.findOne({'_id':taskId}).populate('owner','username name').exec(function(err,task){
 			if(err){
 				err.message = 'Fatal Error';
 				ErrorManager(err,'Fatal Error','Error while looking for the object Id' + taskId);
@@ -29,7 +29,7 @@ var TaskController = {
 		})
 	},
 	getTaskByKey : function(taskKey,cb){
-		Task.findOne({'key':taskKey},function(err,task){
+		Task.findOne({'key':taskKey}).populate('owner','username name').exec(function(err,task){
 			if(err){
 				err.message = 'Fatal Error';
 				ErrorManager(err,'Fatal Error','Error while looking for the object Id' + taskId);
@@ -46,7 +46,7 @@ var TaskController = {
 		})
 	},
 	getTasks : function(taskIds,cb){
-		Task.find({'_id': { $in : taskIds }},function(err,data){
+		Task.find({'_id': { $in : taskIds }}).populate('owner','username name').exec(function(err,data){
 			if(err || data == null){
 				err.message = 'There was a fatal error while retriving the tasks with Ids' + taskIds;
 				ErrorManager(err,'Fatal Error','Fatal Error while retrieving tasks');
@@ -56,7 +56,7 @@ var TaskController = {
 		})
 	},
 	getTasksByKeys : function(taskKeys,cb){
-		Task.find({'key': { $in : taskKeys }},function(err,data){
+		Task.find({'key': { $in : taskKeys }}).populate('owner','username name').exec(function(err,data){
 			if(err || data == null){
 				err.message = 'There was a fatal error while retriving the tasks with Ids' + taskIds;
 				ErrorManager(err,'Fatal Error','Fatal Error while retrieving tasks');
@@ -69,8 +69,9 @@ var TaskController = {
 		task.author = username;
 		task.schedule = scheduleController.convertScheduleStringToLaterSchedule(task.schedule);
 
-		UserController.getTasksCountByUsername(username,function(err,taskCount){
+		UserController.getIdByUsername(username,function(err,userId){
 			task.key = RandomStringGenerator.generate();
+			task.owner = userId;
 			if ( (err = validator.isTaskValid(task)) == true ){
 				Task.addTask(task,function(err,task){
 					if(err){
@@ -164,7 +165,6 @@ var TaskController = {
 		if( taskUpdates.completedAt ){
 			Updates.completedAt = taskUpdates.completedAt;
 		}
-		console.log(taskUpdates.completedAt);	
 			
 		Task.update({_id:taskId},Updates,{multi : true},function(err,done){
 			if(err){
@@ -187,6 +187,7 @@ var TaskController = {
 		UserController.getUser({'username' : username },function(err,data){
 			if(!err && data){
 				var userId = data._id
+				var username = data.username;
 				Comment.addComment({
 					'description' :  commentString,
 					'createdBy' : userId,
@@ -224,7 +225,12 @@ var TaskController = {
 				cb(err)
 			else{
 				Comment.getComments(data.comments,function(err,comments){
-					cb(null,comments)
+
+					if(err){
+						cb(err)
+					}else{
+						cb(null,comments);
+					}
 				})
 			}
 		})
@@ -247,6 +253,14 @@ var TaskController = {
 module.exports = TaskController;
 
 
+// TaskController.getTask('57531b616edfdb00129722ff',function(err,data){
+// 	console.log(data);
+// })
+
+
+// TaskController.getCommentsOfTaskByKey('onmHiLLPiab4Uo8Ex1CF3d8Lu9grFDVy',function(err,data){
+// 	console.log(data);
+// });
 
 /*Tests*/
 // TaskController.getCommentsOfTaskByKey('ankurrana-59',function);
