@@ -51,7 +51,6 @@ app.controller('detailBoxController',['$scope','$http','$cookies','$resource','C
 			Comment.get({
 				'key' : taskKey
 			},function(comments){
-				console.log(comments);
 				taskDetails.comments = [];
 				angular.forEach(comments, function(item){
 					item.createdAt = moment(item.createdAt).fromNow();

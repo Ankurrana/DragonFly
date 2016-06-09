@@ -27,7 +27,9 @@ var CommentController = {
 		})
 	},
 	getComments : function(commentIds,cb){
-		Comment.find({'_id': { $in : commentIds }}).populate('createdBy','name username -_id').exec(function(err,data){
+		Comment.find({'_id': { $in : commentIds }}).populate('createdBy','name username -_id')
+		.sort('-createdAt')
+		.exec(function(err,data){
 			if(err || data == null){
 				err.message = 'There was a fatal error while retriving the tasks with Ids' + commentIds;
 				ErrorManager(err,'Fatal Error','Fatal Error while retrieving tasks');

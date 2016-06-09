@@ -12,6 +12,23 @@ app.controller('registrationController',['$scope','$http','$cookies','$resource'
         	this.message = ""
         }
     }
+    $scope.successMessageBox = {
+        'showMessageBox' : false,
+        'message' : '',
+        close : function(){
+            this.showMessageBox = false;
+            this.message = '';
+        },
+        set : function(msg){
+            this.message = msg;
+            this.showMessageBox = true;
+        }   
+    }
+    $scope.success = function(msg){
+        console.log($scope.successMessageBox);
+        $scope.successMessageBox.set('Hello ' + $scope.formData.username + ', You are registered!, Please Login to continue');
+        $scope.reset();
+    }
     $scope.reset = function(){
 		$scope.formData  = {
 			'name' : '',
@@ -27,8 +44,9 @@ app.controller('registrationController',['$scope','$http','$cookies','$resource'
     		'email' : $scope.formData.email,
     		'password' : $scope.formData.password
     	},function(data){
-    		console.log(data);
+    		// console.log(data);
     		$scope.registrationError.close();
+            $scope.success($scope.formData.username + 'Sucessfully Registered! Please login');
     	},function(data){
     		$scope.registrationError.showError(data.data.message);
     	})

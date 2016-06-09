@@ -1,4 +1,4 @@
-<br>
+    <br>
 <br>
 <div ng-controller="registrationController">
         <div class="panel panel-primary">
@@ -9,6 +9,10 @@
             <div class="alert alert-danger" ng-show="registrationError.showErrorBox">
                 {{ registrationError.message }}
                 <div class="pull-right"><span class="glyphicon glyphicon-remove" ng-click="registrationError.close()"></span></div>
+            </div>
+            <div class="alert alert-success" ng-show="successMessageBox.showMessageBox">
+                {{ successMessageBox.message }}
+                <div class="pull-right"><span class="glyphicon glyphicon-remove" ng-click="successMessageBox.close()"></span></div>
             </div>
             <form class="form-horizontal">
                 <div class="form-group">

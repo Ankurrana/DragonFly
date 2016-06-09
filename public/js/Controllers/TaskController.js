@@ -100,7 +100,18 @@ app.controller('taskController',['$scope','$http','$cookies','$resource','$rootS
 					var valArray = param.values.split(",");
 					var fre = param.frequency;
 					angular.forEach(valArray,function(value, key){
-							laterSchedule[fre](parseInt(value))[param.functionName]();
+						var range = value.split('-');
+						var start,end;
+						if(range.length == 2){
+							start = parseInt(range[0]);
+							end = parseInt(range[1]);
+						}else{
+							start = parseInt(range[0]);
+							end = parseInt(range[0]);
+						}	
+						
+						for(var i = start;i<=end;i++) 
+							laterSchedule[fre](i)[param.functionName]();
 					})
 				}
 			})
