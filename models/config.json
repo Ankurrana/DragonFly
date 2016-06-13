@@ -1,7 +1,7 @@
 {
-	"hostname" : "localhost",
-	"database"  : "dragonfly",
+	"hostname" : "130.211.163.66:27017,158.69.91.201:27017",
+	"database"  : "087bd7ae4f23c7ee38323ec0acb0383b",
 	"port" : 27017,
-	"username" : "",
-	"password" : ""
+	"username" : "087bd7ae4f23c7ee38323ec0acb0383b",
+	"password" : "Ankur123!@#"
 }
