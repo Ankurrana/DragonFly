@@ -9,12 +9,13 @@
 
 var mongoose = require('mongoose');
 var config  = require('./config.json');
-var EvennodeConfig = JSON.parse(process.env.APP_CONFIG);
+// var EvennodeConfig = JSON.parse(process.env.APP_CONFIG);
 
 //Only configured for localhost connection without the user authentication
 // var connectionString = "mongodb://" + config.hostname + "/" + config.database;
-// var connectionString = "mongodb://130.211.163.66:27017,158.69.91.201:27017/087bd7ae4f23c7ee38323ec0acb0383b?replicaSet=rs0 -u 087bd7ae4f23c7ee38323ec0acb0383b -p Ankur123!@#";
-var connectionString = "mongodb://" + EvennodeConfig.mongo.user + ":ankur123@"+ EvennodeConfig.mongo.hostString;
+var connectionString = "mongodb://ankur:ankur123@ds013584.mlab.com:13584/dragonfly";
+
+// var connectionString = "mongodb://" + EvennodeConfig.mongo.user + ":ankur123@"+ EvennodeConfig.mongo.hostString;
 mongoose.connect(connectionString,function(err){
 	if(err) throw err;
 });
