@@ -7,14 +7,18 @@ var path = require('path');
 var morgan = require('morgan');
 var fs = require('fs');
 var accessLogStream = fs.createWriteStream(path.join(__dirname,'../logs/morgan.log'), {flags: 'a'});
+const MongoStore = require('connect-mongo')(session);
+var mongoose = require('./../models/mongooseConnection.js');
 
 function configure(app){
 	app.use(bodyParser.urlencoded({ extended: false }))
 	app.use(bodyParser.json())
 	app.use(cookieParser());
-	app.use(session({ secret: 'SECRET', 
+	app.use(session({ 
+		secret: 'SECRET', 
 		saveUninitialized: true,
-		resave:true
+		resave:true,
+		store : new MongoStore({ mongooseConnection: mongoose.connection })
 	}));
 	app.use(morgan('common',{'stream': accessLogStream}));
 	app.use(passport.initialize());
