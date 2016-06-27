@@ -1,3 +1,4 @@
+
 'use strict'
 var express = require('express');
 var app = express();
@@ -18,7 +19,13 @@ app.use('/',function(req,res){
 app.use('*',function(req,res){
 	res.status(404).render('notfound',{message:'this is the message',title:'NinTendo!'});
 })
-app.listen(3000,function(){
+
+if(!process.env.PORT){
+	process.env.PORT = 3000;
+}
+
+app.listen(process.env.PORT,function(){
 	console.log('Started listening to 3000');
-});
+});		
+
 
