@@ -14,7 +14,7 @@
 		
 			<div class="col-md-8 col-xs-12">
 				<li class="list-group-item task">
-					<span class="{{ task.cssClass }}">{{task.description}}</span>
+					<span class="{{ task.cssClass }}" ng-bind-html="task.description | autolinker"></span>
 				</li>
 			</div>
 			<div class="col-md-4 col-xs-12">

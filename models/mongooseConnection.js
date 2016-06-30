@@ -11,8 +11,8 @@ var mongoose = require('mongoose');
 var config  = require('./config.json');
 
 //Only configured for localhost connection without the user authentication
-// var connectionString = "mongodb://" + config.hostname + "/" + config.database;
-var connectionString = "mongodb://ankur:ankur123@ds013584.mlab.com:13584/dragonfly"
+var connectionString = "mongodb://" + config.hostname + "/" + config.database;
+// var connectionString = "mongodb://ankur:ankur123@ds013584.mlab.com:13584/dragonfly"
 
 
 mongoose.connect(connectionString,function(err){

@@ -8,7 +8,8 @@
 					<div class="row">
 						<div class="col-md-12 col-sm-12 col-xs-12">
 							<blockquote>
-								{{ taskDetails.description }}
+								<span ng-bind-html="taskDetails.description | autolinker ">
+									<!-- {{ taskDetails.description | autolinker }} -->
 								<footer><span>{{ taskDetails.owner.name }}</span></footer>
 							</blockquote>
 						</div>
