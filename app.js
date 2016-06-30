@@ -29,5 +29,4 @@ app.listen(process.env.PORT,function(){
 	console.log('Started listening to 3000');
 });		
 
->>>>>>> develop
 
