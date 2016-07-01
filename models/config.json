@@ -1,5 +1,5 @@
 {
-	"hostname" : "130.211.163.66:27017,158.69.91.201:27017",
+	"hostname" : "localhost",
 	"database"  : "dragonfly",
 	"port" : 27017,
 	"username" : "ankur",
