@@ -6,9 +6,13 @@
     	display: list-item;
     	border: 0 none;
 	}
+	[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  		display: none !important;
+	}
 
 </style>
 
+	
 <div>
 	<div id="task.status" type="task" class="row">
 		
@@ -18,9 +22,9 @@
 				</li>
 			</div>
 			<div class="col-md-4 col-xs-12">
-				<button key="{{task.key}}" class="btn btn-success form-group pull-right" ng-click="taskCompleted(this.task.key)"><span class="glyphicon glyphicon-ok"></span></button>
-				<button key="{{task.key}}" class="btn btn-danger form-group pull-right" ng-click="taskInProgress(this.task.key)"><span class="glyphicon glyphicon-remove"></span></button>
-				<button key="{{task.key}}" class="btn btn-info form-group pull-right" ng-click="showDetails(this.task.key)"><span class="glyphicon glyphicon-info-sign"></span></button>
+				<button id="completeButton" key="{{task.key}}" class="btn btn-success form-group pull-right" ng-click="taskCompleted(this.task.key)"><span class="glyphicon glyphicon-ok"></span></button>
+				<button id="resetButton" key="{{task.key}}" class="btn btn-danger form-group pull-right" ng-click="taskInProgress(this.task.key)"><span class="glyphicon glyphicon-remove"></span></button>
+				<button id="detailButton" onclick="document.getElementById('detailBox').scrollIntoView({block: 'end', behavior: 'smooth'})" key="{{task.key}}" class="btn btn-info form-group pull-right" ng-click="showDetails(this.task.key)"><span class="glyphicon glyphicon-info-sign"></span></button>
 				<!-- <button key="{{task.key}}" class="btn btn-info form-group pull-right" ng-click="edit(this.task.key)"><span class="glyphicon glyphicon-pencil"></span></button> -->
 			</div>
 		</li>

@@ -11,7 +11,7 @@
 	<div class="col-md-8 col-xs-12">
 		<div ng-show="showErrorBox">
 			<div class="alert alert-danger">
-				<strong>Error!</strong> {{ errorMessage }}
+				<strong>Error!</strong> <span ng-bind="errorMessage"> errorMessage </span>
 				<div class="btn pull-right" ng-click="closeErrorAlertBox()"><span class="glyphicon glyphicon-remove-sign"></div>
 			</div>
 		</div>

@@ -7,11 +7,11 @@
             </div>
         <div class="panel-body">
             <div class="alert alert-danger" ng-show="registrationError.showErrorBox">
-                {{ registrationError.message }}
+                <span ng-bind="registrationError.message"></span>
                 <div class="pull-right"><span class="glyphicon glyphicon-remove" ng-click="registrationError.close()"></span></div>
             </div>
             <div class="alert alert-success" ng-show="successMessageBox.showMessageBox">
-                {{ successMessageBox.message }}
+                <span ng-bind="successMessageBox.message"></span>
                 <div class="pull-right"><span class="glyphicon glyphicon-remove" ng-click="successMessageBox.close()"></span></div>
             </div>
             <form class="form-horizontal">

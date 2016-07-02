@@ -1,0 +1,12 @@
+<script>
+		// $(document).click(function(){
+		// 	console.log('asdasd');
+		// })
+
+$(document).on('click','#detailButton',function(){
+	console.log('DetailBox Clicked!');
+	document.getElementById('detailBox').scrollIntoView({
+		behavior: "smooth"
+	})
+})
+</script>
