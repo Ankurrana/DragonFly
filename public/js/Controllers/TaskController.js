@@ -130,7 +130,7 @@ app.controller('taskController',['$scope','$http','$cookies','$resource','$rootS
 				laterSchedule = nextNDays(laterSchedule,parseInt(this.nextNDays));
 			}
 
-			console.log(laterSchedule.schedules);
+			
 			return JSON.stringify(laterSchedule.schedules);
 		},
 		submit : function(){
@@ -142,12 +142,12 @@ app.controller('taskController',['$scope','$http','$cookies','$resource','$rootS
 				'description' : description,
 				'schedule' : schedule
 			},function(data){
-				// console.log(newSavedTask);
+				
 				$scope.$broadcast('tasksUpdated');
 				$scope.newTaskForm.init();
 			},function(data){
 				$rootScope.$emit('error',data.data.description);
-				//console.log(data);
+				console.log(data);
 			})
 				/* Submit Form Ends */
 		},	

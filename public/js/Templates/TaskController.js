@@ -25,11 +25,11 @@ var TaskList = function(scope,Task,ln,$rootScope){
 
 	scope.$watch('filters.showCompleted',function(){
 		that.renderTasks();
-		console.log('Tasks Updated! Show completed');
+		// console.log('Tasks Updated! Show completed');
 	})
 	scope.$watch('filters.showActive',function(){
 		that.renderTasks();
-		console.log('Tasks Updated! Show Active');
+		// console.log('Tasks Updated! Show Active');
 		
 	})
 	this.localScope.$watch('date.val',function(){
@@ -56,7 +56,7 @@ var TaskList = function(scope,Task,ln,$rootScope){
 				UpdatedTasks.push(item);
 			});
 			that.tasks = UpdatedTasks;
-			console.log(that.tasks);
+			// console.log(that.tasks);
 			that.renderTasks();
 		},function(err){
 			$rootScope.$emit('error',err)
@@ -99,7 +99,7 @@ var TaskList = function(scope,Task,ln,$rootScope){
 			}
 		})
 		that.localScope.tasks = tasksList;
-		console.log(that.localScope.tasks);
+		// console.log(that.localScope.tasks);
 
 	}
 	this.updateView = function(){

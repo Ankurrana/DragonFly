@@ -18,7 +18,7 @@ if( process.env.PORT ){
 }else{
   var connectionString = "mongodb://" + config.hostname + "/" + config.database;
 }
-console.log(connectionString);
+// console.log(connectionString);
 // var connectionString = "mongodb://" + EvennodeConfig.mongo.user + ":ankur123@"+ EvennodeConfig.mongo.hostString;
 mongoose.connect(connectionString,function(err){
 	if(err) throw err;

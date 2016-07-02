@@ -25,7 +25,7 @@ app.controller('registrationController',['$scope','$http','$cookies','$resource'
         }   
     }
     $scope.success = function(msg){
-        console.log($scope.successMessageBox);
+        // console.log($scope.successMessageBox);
         $scope.successMessageBox.set('Hello ' + $scope.formData.username + ', You are registered!, Please Login to continue');
         $scope.reset();
     }

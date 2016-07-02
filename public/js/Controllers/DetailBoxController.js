@@ -6,8 +6,9 @@ app.controller('detailBoxController',['$scope','$http','$cookies','$resource','C
 	$scope.showDetailBox = false;
 	
 	$rootScope.$on('showDetails',function(event,taskKey){
-		$scope.showDetailBox = true;		
+				
 		getDetails(taskKey,function(taskDetails){
+			$scope.showDetailBox = true;
 			$scope.taskDetails = taskDetails;
 		});
 	})
@@ -25,7 +26,6 @@ app.controller('detailBoxController',['$scope','$http','$cookies','$resource','C
 				'username' : $scope.sharee.username  
 			},function(data){
 				$scope.sharee.username = "";
-				console.log(data);
 			},function(err){
 				console.log('Error : '+ err);
 			})
@@ -61,15 +61,14 @@ app.controller('detailBoxController',['$scope','$http','$cookies','$resource','C
 				$rootScope.$emit('error',err);
 			})
 		})
-		User.get({},function(data){
-			console.log('Getting users from Server!');
-			$scope.users = data;
-		})
+		if(!$scope.users)
+			User.get({},function(data){
+				$scope.users = data;
+			})
 	}
 
 	$rootScope.$on('loggedIn',function(){
 		User.get({},function(data){
-			console.log('Getting users from Server!');
 			$scope.users = data;
 		})
 	})
@@ -100,7 +99,6 @@ app.controller('detailBoxController',['$scope','$http','$cookies','$resource','C
 		Task.delete({
 			key : $scope.taskDetails.key
 		},function(data){
-			console.log('Task Deleted!');
 			$rootScope.$emit('tasksUpdated')
 			$scope.showDetailBox = false;
 		})
