@@ -1,5 +1,6 @@
 var mongoose = require('./mongooseConnection.js');
 var UserModel = require('./User.js');
+var CheckPointModel = require('./Checkpoint.js');
 
 var taskSchema = new mongoose.Schema({
 	'description' : {
@@ -31,7 +32,10 @@ var taskSchema = new mongoose.Schema({
 	'comments' : {
 		type : [String],
 		default : []
-	} 
+	},
+	'checkpoints' : {
+		type : [CheckPointModel.schema]
+	}
 },{
 	timestamps : {
 		createdAt : 'createdAt',
@@ -105,7 +109,24 @@ taskSchema.statics.assignCommentToTask = function(task_id,comment_id,callback){
 	})
 }
 
+taskSchema.statics.addCheckpointToTask = function(task_id,checkpoint,callback){
+	Task.findOne({_id:task_id},"",function(err,doc){
+		if(err)
+			callback(err);		
+		doc.checkpoints.push(checkpoint)
+		doc.save(function(err,data){
+			if(err)
+				callback(err)
+			else
+				callback(null,{
+					'success' : 'Checkpoint Added Successfully'
+				})
 
+		});
+	})
+
+
+}
 
 
 var Task =  mongoose.model('Task',taskSchema);

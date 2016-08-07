@@ -23,6 +23,8 @@ router.get('/comments/:key',passport.authenticate('jwt'),taskAPIController.getCo
 router.post('/comments/:key',passport.authenticate('jwt'),taskAPIController.addCommentToTaskByKey)
 
 
+router.post('/checkpoints/:key',passport.authenticate('jwt'),taskAPIController.addCheckPointToTaskByKey)
+router.put('/checkpoints/:key/:id',passport.authenticate('jwt'),taskAPIController.updateCheckpoint)
 
 
 router.get('/me',passport.authenticate('jwt'),function(req,res){

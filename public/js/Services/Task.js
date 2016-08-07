@@ -25,8 +25,8 @@ app.service('Task',['$resource','$cookies',function($resource,$cookies){
 				}
 			},
 			'delete' : {
-				method : 'delete',
-				headers : {
+				'method' : 'delete',
+				'headers' : {
 					'jwt' : $cookies.get('token')
 				}
 			}

@@ -2,6 +2,7 @@ var Task  = require('../models/Task.js')
 var path = require('path');
 var moment = require('moment');
 var User = require('../models/User.js');
+var Checkpoint = require('../models/Checkpoint.js');
 var UserController = require('./userController.js');
 var ErrorManager = require('./ErrorController.js');
 var validator = require('./validatorController.js');
@@ -219,6 +220,28 @@ var TaskController = {
 			}
 		})
 	},
+
+	addCheckpointToTask : function(key,checkpointString, cb){
+		Task.getTaskByKey(key,function(err,data){
+			if(!err && data){
+				var taskId = data._id;
+				Task.addCheckpointToTask(taskId,
+					new Checkpoint({
+						description : checkpointString
+					}),
+					function(err,data){
+					if(err){
+						cb(err)
+					}else{
+						cb(null,data);
+					}
+				})
+			}else{
+				cb(err);
+			}
+		})
+	}
+	,
 	getCommentsOfTaskByKey : function(key,cb){
 		TaskController.getTaskByKey(key,function(err,data){
 			if(err)
@@ -246,12 +269,39 @@ var TaskController = {
 				})
 			}
 		})
+	},
+	updateCheckpoint : function(key,_id, status,cb){
+			Task.update({
+				'key':key,
+				'checkpoints._id' : _id
+			},{
+				$set : {
+					'checkpoints.$.status' : status
+				}
+			},function(err,data){
+				console.log(data);
+				if(!err)
+					cb(null,data)
+				else
+					cb(err)
+			})
+	
 	}
 }
 
 
 module.exports = TaskController;
 
+
+
+
+
+// TaskController.addCheckpointToTask('5XIQ3cilfKZo9xKhe1c3nP7bjAOpYPFr','Call her for sure',function(err,data){
+// 	if(!err)
+// 		console.log('Checkpoint Added!');
+// 	else
+// 		console.log(err);
+// })
 
 // TaskController.getTask('57531b616edfdb00129722ff',function(err,data){
 // 	console.log(data);

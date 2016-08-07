@@ -1,4 +1,5 @@
 
+
 <div id="detailBox" class="detailBoxContainer">
 	<div ng-controller="detailBoxController" ng-show="showDetailBox">
 		
@@ -41,23 +42,48 @@
 							<ul class="list-group">
 								<li class="list-group-item">
 									<form class="form-inline">
-									  	<div class="form-group">
-									    	<label class="hide" for="exampleInputName2">Name</label>
-									    	<input type="text" id="commentBox" ng-model="newComment" class="search-query form-control input large" placeholder="Comment" name="comment"></input>
-									 	 </div>
-								  		<button type="submit" class="btn btn-default" ng-click="addComment()">Comment</button>
+										<div class="form-group">
+								    		<input type="text" id="checkpointBox" ng-model="checkpointBox" class="form-control" placeholder="Add Subtask" name="checkpoint"></input>
+										</div>
+										<div class="form-group">
+											<button type="button" class="btn btn-default" class="form-control" ng-click="addCheckpoint()">Add</button>											
+										</div>
+									
+										<div class="form-group" style="padding-top:1px">
+											<a class="btn btn-primary" role="button" class="form-control" data-toggle="collapse" href="#checkpointList">Subtasks</span></a>
+										</div>
 									</form>
 								</li>
-								<div ng-repeat="comment in taskDetails.comments">
-									<li class="list-group-item">
-										
-										<b><span ng-bind="comment.createdBy.name | titleCase"></span></b> :
-										<span ng-bind="comment.description"></span>
-										<div class="text-right"><small><span ng-bind="comment.createdAt"></span><small></div>
-
-									</li>		
+								<div id="checkpointList">
+									<div ng-show="taskDetails.checkpoints" ng-repeat="checkpoint in taskDetails.checkpoints">
+										<li class="list-group-item">										
+											 <input ng-change="checkpoint.changeCheckpointStatus()" type="checkbox" ng-model="checkpoint.status">
+											<span ng-bind="checkpoint.description"></span>
+										</li>		
+									</div>
 								</div>
-								
+								<li class="list-group-item">
+									<form class="form-inline">
+									  	<div class="form-group">									 
+									    	<input type="text" class="form-control" id="commentBox" ng-model="newComment" class="search-query form-control input large" placeholder="Comment" name="comment"></input>
+									 	</div>
+								 	 	<div class="form-group">
+								  			<button type="submit" class="form-control" class="btn btn-default" ng-click="addComment()">Comment</button>
+							  			</div>
+							  			<div class="form-group">
+								  			<a class="btn btn-primary" class="form-control" role="button" data-toggle="collapse" href="#commentsList" aria-expanded="false" aria-controls="collapseExample">Comment</a>
+										</div>
+									</form>
+								</li>
+								<div id="commentsList">
+									<div ng-repeat="comment in taskDetails.comments">
+										<li class="list-group-item">										
+											<b><span ng-bind="comment.createdBy.name | titleCase"></span></b> :
+											<span ng-bind="comment.description"></span>
+											<div class="text-right"><small><span ng-bind="comment.createdAt"></span><small></div>
+										</li>		
+									</div>
+								</div>
 							</ul>
 						</div>
 					</div>	

@@ -67,6 +67,7 @@ var taskAPIController = {
 				task.completedOn = data.completedOn;
 				task.comments = data.comments;
 				task.key = data.key
+				task.checkpoints = data.checkpoints
 				res.send(task);
 			}
 		})
@@ -129,6 +130,33 @@ var taskAPIController = {
 
 		}
 	},
+	addCheckPointToTaskByKey : function(req,res){
+		console.log(req.body.checkpoint);
+		if(req && req.body){
+			var checkpointString  =  req.body.checkpoint;
+			var TaskKey = req.params['key'];
+			Task.addCheckpointToTask(TaskKey,checkpointString,function(err,data){
+				
+				if(!err)
+					res.send(data);
+				else
+					res.status(400).send(err)
+			})
+		}
+	},
+	updateCheckpoint : function(req,res){
+		if(req && req.body){
+			var checkPointId  =  req.body.id;
+			var status = req.body.status;
+			var key = req.body.key
+			Task.updateCheckpoint(key,checkPointId,status,function(err,data){		
+				if(!err)
+					res.send(data);
+				else
+					res.status(400).send(err)
+			})
+		}
+	},	
 	getCommentsOfTaskByKey : function(req,res){
 		if(req && req.body){
 			var username = req.user.username;
@@ -165,7 +193,6 @@ var taskAPIController = {
 				})
 			}
 		})
-
 	}	
 }
 

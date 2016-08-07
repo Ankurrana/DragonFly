@@ -1,10 +1,10 @@
 
-app.controller('detailBoxController',['$scope','$http','$cookies','$resource','Comment','$rootScope','Task','User','Share',function($scope,$http,$resource,$cookies,Comment,$rootScope,Task,User,Share){
+app.controller('detailBoxController',['$scope','$http','$cookies','$resource','Comment','$rootScope','Task','User','Share','Checkpoint',function($scope,$http,$resource,$cookies,Comment,$rootScope,Task,User,Share,Checkpoint){
 	var taskDetails = {};
 	$scope.taskDetails = {};
 	$scope.newComment;
 	$scope.showDetailBox = false;
-	
+	$scope.checkpointBox = ""
 	$rootScope.$on('showDetails',function(event,taskKey){
 				
 		getDetails(taskKey,function(taskDetails){
@@ -43,6 +43,20 @@ app.controller('detailBoxController',['$scope','$http','$cookies','$resource','C
 			taskDetails.comments = [];
 			taskDetails.key = data.key;
 			taskDetails.owner = data.owner
+			taskDetails.checkpoints = data.checkpoints
+
+			angular.forEach(taskDetails.checkpoints,function(item){
+				item.changeCheckpointStatus = function(status){
+					Checkpoint.changeStatus({
+						'id' : item._id, 
+						'key' : taskDetails.key,
+						'status' : item.status
+					},function(data){
+						updateView()	
+					})	
+				}
+			})
+
 			if(taskDetails.owner == undefined){
 				taskDetails.owner = {};
 				taskDetails.owner.username = data.author;
@@ -75,6 +89,7 @@ app.controller('detailBoxController',['$scope','$http','$cookies','$resource','C
 
 	var updateView = function(){
 		$scope.newComment = "";
+		$scope.checkpointBox = ""		
 		getDetails($scope.taskDetails.key,function(data){
 			$scope.taskDetails = data;
 		})
@@ -103,4 +118,16 @@ app.controller('detailBoxController',['$scope','$http','$cookies','$resource','C
 			$scope.showDetailBox = false;
 		})
 	}
+
+	$scope.addCheckpoint = function(){
+		if($scope.checkpointBox != "") {
+			Checkpoint.save({
+				'checkpoint' : $scope.checkpointBox,
+				'key' : $scope.taskDetails.key
+			},function(data){
+				updateView();		
+			})
+		}
+	}
+
 }])
