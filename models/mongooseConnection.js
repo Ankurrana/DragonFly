@@ -16,7 +16,8 @@ var config  = require('./config.json');
 if( process.env.PORT ){
   var connectionString = "mongodb://ankur:ankur123@ds013584.mlab.com:13584/dragonfly"
 }else{
-  var connectionString = "mongodb://" + config.hostname + "/" + config.database;
+  // var connectionString = "mongodb://" + config.hostname + "/" + config.database;
+  var connectionString = "mongodb://ankur:ankur123@ds013584.mlab.com:13584/dragonfly"
 }
 // console.log(connectionString);
 // var connectionString = "mongodb://" + EvennodeConfig.mongo.user + ":ankur123@"+ EvennodeConfig.mongo.hostString;
