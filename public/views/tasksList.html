@@ -42,11 +42,15 @@
 	<div class="col-md-12 col-xs-12">
 		<div ng-show="tasks.length > 0">
 			<ol class="list-group">
+				<div class ng-show="showWaiter">
+				<waiter></waiter>
+				</div>
 				<div ng-repeat="task in tasks">
 					<task></task>
 				</div>
 			</ol>
 		</div>
+		<waitingScroll></waitingScroll>
 		<div ng-show="tasks.length == 0">
 			<br>
 			<br>

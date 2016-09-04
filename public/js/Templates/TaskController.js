@@ -5,6 +5,7 @@ var TaskList = function(scope,Task,ln,$rootScope){
 	this.ListName = ln;
 	this.localScope.ListName = ln;
 	this.localScope.tasks = [];
+	scope.showWaiter = true;
 	scope.filters = {
 		'showActive' : true,
 		'showCompleted' : true
@@ -46,6 +47,7 @@ var TaskList = function(scope,Task,ln,$rootScope){
 	})
 
 	this.getTasks = function(date){
+		scope.showWaiter = true;
 		Task.get({
 			'date' : moment(that.localScope.date.val).format('YYYY-MM-DD')
 		},function(data){
@@ -58,6 +60,7 @@ var TaskList = function(scope,Task,ln,$rootScope){
 			that.tasks = UpdatedTasks;
 			// console.log(that.tasks);
 			that.renderTasks();
+			scope.showWaiter = false;
 		},function(err){
 			$rootScope.$emit('error',err)
 		})

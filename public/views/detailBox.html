@@ -1,8 +1,14 @@
 
 
 <div id="detailBox" class="detailBoxContainer">
-	<div ng-controller="detailBoxController" ng-show="showDetailBox">
-		
+	<div ng-controller="detailBoxController">
+	<div ng-show="showWaiter">
+	<waiter></waiter>
+	</div>
+
+
+	<div  ng-show="showDetailBox">
+			
 			<div class="panel panel-default">
 				<div class="panel-heading">Task Details</div>
 				<div class="panel-body">
@@ -58,7 +64,7 @@
 									<div ng-show="taskDetails.checkpoints" ng-repeat="checkpoint in taskDetails.checkpoints">
 										<li class="list-group-item">										
 											 <input ng-change="checkpoint.changeCheckpointStatus()" type="checkbox" ng-model="checkpoint.status">
-											<span ng-bind="checkpoint.description"></span>
+											<span ng-bind-html="checkpoint.description | autolinker"></span>
 										</li>		
 									</div>
 								</div>
@@ -68,7 +74,7 @@
 									    	<input type="text" class="form-control" id="commentBox" ng-model="newComment" class="search-query form-control input large" placeholder="Comment" name="comment"></input>
 									 	</div>
 								 	 	<div class="form-group">
-								  			<button type="submit" class="form-control" class="btn btn-default" ng-click="addComment()">Comment</button>
+								  			<button type="submit" class="form-control" class="btn btn-default" ng-click="addComment()">Add</button>
 							  			</div>
 							  			<div class="form-group">
 								  			<a class="btn btn-primary" class="form-control" role="button" data-toggle="collapse" href="#commentsList" aria-expanded="false" aria-controls="collapseExample">Comment</a>
@@ -79,7 +85,7 @@
 									<div ng-repeat="comment in taskDetails.comments">
 										<li class="list-group-item">										
 											<b><span ng-bind="comment.createdBy.name | titleCase"></span></b> :
-											<span ng-bind="comment.description"></span>
+											<span ng-bind-html="comment.description | autolinker"></span>
 											<div class="text-right"><small><span ng-bind="comment.createdAt"></span><small></div>
 										</li>		
 									</div>
@@ -91,3 +97,4 @@
 			</div>
 		</div>
 	</div>
+</div>

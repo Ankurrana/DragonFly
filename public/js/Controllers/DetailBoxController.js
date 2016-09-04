@@ -1,15 +1,17 @@
-
 app.controller('detailBoxController',['$scope','$http','$cookies','$resource','Comment','$rootScope','Task','User','Share','Checkpoint',function($scope,$http,$resource,$cookies,Comment,$rootScope,Task,User,Share,Checkpoint){
 	var taskDetails = {};
 	$scope.taskDetails = {};
 	$scope.newComment;
 	$scope.showDetailBox = false;
-	$scope.checkpointBox = ""
+	$scope.checkpointBox = "";
+	$scope.showWaiter = false;
 	$rootScope.$on('showDetails',function(event,taskKey){
-				
+		$scope.showWaiter = true;
 		getDetails(taskKey,function(taskDetails){
+			$scope.showWaiter = false;
 			$scope.showDetailBox = true;
 			$scope.taskDetails = taskDetails;
+
 		});
 	})
 
@@ -34,9 +36,11 @@ app.controller('detailBoxController',['$scope','$http','$cookies','$resource','C
 	}
 
 	var getDetails = function(taskKey,callback){
+		
 		Task.getOne({
 			'key' : taskKey
 		},function(data){
+
 			taskDetails.description = data.description;
 			taskDetails.author = data.author;
 			taskDetails.status = data.status;
@@ -65,12 +69,14 @@ app.controller('detailBoxController',['$scope','$http','$cookies','$resource','C
 			Comment.get({
 				'key' : taskKey
 			},function(comments){
+				$scope.showDetailBox = true;
 				taskDetails.comments = [];
 				angular.forEach(comments, function(item){
 					item.createdAt = moment(item.createdAt).fromNow();
 					taskDetails.comments.push(item);
 				})
-				callback(taskDetails);
+				callback(taskDetails); 	
+				
 			},function(err){
 				$rootScope.$emit('error',err);
 			})
@@ -92,6 +98,7 @@ app.controller('detailBoxController',['$scope','$http','$cookies','$resource','C
 		$scope.checkpointBox = ""		
 		getDetails($scope.taskDetails.key,function(data){
 			$scope.taskDetails = data;
+			$scope.showWaiter = false;
 		})
 	}
 
