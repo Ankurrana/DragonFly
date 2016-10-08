@@ -41,7 +41,7 @@ var userAPIController = {
 
 	getUsers : function(req,res){
 		var searchUsername = req.query.username;
-		console.log(searchUsername);
+		// console.log(searchUsername);
 		User.getUsers(searchUsername,function(err,data){
 			if(err){
 				res.send(err);

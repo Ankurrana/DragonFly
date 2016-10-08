@@ -14,7 +14,7 @@ router.get('/tasks/:key',passport.authenticate('jwt'),taskAPIController.getTaskB
 router.put('/tasks/:key',passport.authenticate('jwt'),taskAPIController.updateTaskByKey);
 router.delete('/tasks/:key',passport.authenticate('jwt'),taskAPIController.deleteTaskByKey);
 
-router.get('/users',userAPIController.getUsers); //It should be an authenticated route!! Temporarily setting it to unauthenticated!
+router.get('/users',passport.authenticate('jwt'),userAPIController.getUsers); //It should be an authenticated route!! Temporarily setting it to unauthenticated!
 router.post('/users',registrationController.newUserRequestHandler);
 router.get('/users/:username',passport.authenticate('jwt'),userAPIController.getUser);
 router.post('/token',authController.requestAuthorisationToken);
@@ -25,7 +25,6 @@ router.post('/comments/:key',passport.authenticate('jwt'),taskAPIController.addC
 
 router.post('/checkpoints/:key',passport.authenticate('jwt'),taskAPIController.addCheckPointToTaskByKey)
 router.put('/checkpoints/:key/:id',passport.authenticate('jwt'),taskAPIController.updateCheckpoint)
-
 
 router.get('/me',passport.authenticate('jwt'),function(req,res){
 	res.send(req.user);

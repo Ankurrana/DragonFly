@@ -91,6 +91,8 @@ var UserController = {
 			if(err)
 				cb(err)
 			else{
+				// removing superuser as one of the users of system
+				data = data.filter(function(val){return val.username!="superuser"})
 				cb(null,data);
 			}
 		})
