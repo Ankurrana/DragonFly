@@ -1,0 +1,18 @@
+<style>
+    .sideBar li{
+        color:#767676; 
+        style:none;
+         cursor:pointer
+    }
+    .sideBar li:hover{
+        color:black; 
+    }
+
+</style>
+<div class="sideBar" ng-controller="sideBarController">
+    <div ng-repeat="page in settingsPages">
+        <ul class="list-unstyled">
+            <li ng-click=""> <span>{{ page.title }} </span></li>
+        </ul>
+    </div>
+</div>

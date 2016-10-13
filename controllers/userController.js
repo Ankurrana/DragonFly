@@ -87,7 +87,7 @@ var UserController = {
 	,
 	'getUsers' : function(username,cb){
 		/* just gets the username of all the  */
-		User.find({'username': new RegExp(username, 'i') },'username -_id',function(err,data){
+		User.find({'username': new RegExp(username, 'i') },'-tasks -password -tasksCount',function(err,data){
 			if(err)
 				cb(err)
 			else{

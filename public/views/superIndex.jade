@@ -1,7 +1,11 @@
-include commonHeader.jade
 include superHeader.jade
-body(class="container-fluid")
-	div(class="row")
+body(ng-app="superdragon",class="container-fluid")
+	div(class="row",ng-controller="mainController")
 		div(class="col-md-8 col-xs-12")
-			h1 I am Superuser
+			h1 System Settings
+			div(class="row")
+				div(class="col-md-2 xs-hidden")
+					div(ng-include="sideBarURL")
+				div(class="col-md-10 col-xs-8")
+					div(ng-include="rightPanelURL")
 include footer.html

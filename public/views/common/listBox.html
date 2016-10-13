@@ -1,0 +1,27 @@
+
+<div class="row">
+    
+    <div class="col-md-12">
+        <p>
+            {{ datasource.descriptionString }}
+        </p>
+        </p> 
+            <label for="filter">Filter</label>
+            <input name="filter" type="text" ng-model="filter" ng-change="search()"> </input>
+        </p>
+        <table>
+            <tr>
+                <th>{{datasource.columnName}}</th>
+                <th>Selected</th>
+            </tr>
+            <tr ng-repeat="row in datasource.rows track by row._id " ng-show="row.visible">
+                <th>
+                    {{ row.text }}
+                </th> 
+                <th>
+                    <input type="checkbox" ng-checked="row.isSelected" ng-click="row.update()">
+                </th>   
+            </tr> 
+        </table>
+    </div>
+</div>

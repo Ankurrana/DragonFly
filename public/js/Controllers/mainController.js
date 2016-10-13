@@ -33,7 +33,6 @@ app.controller('mainController',['$scope','$http','$cookies','$resource','$route
 		});
 	}
 
-
 	$scope.closeErrorAlertBox = function(){
 		resetError();
 	}

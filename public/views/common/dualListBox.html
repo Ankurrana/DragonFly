@@ -1,0 +1,31 @@
+<div class="row">
+    
+    <div class="col-md-12">
+        <p>
+            Inside the Dual List Box : {{ datasource.name }}
+            {{ datasource.userGroupsSelected }}
+        </p>
+        <select multiple size="5">
+            
+                <options ng-repeat="item in datasource.userGroupsAvailable">{{ item.text }}</option>
+            
+        </select>
+
+        <p>
+            <ul>
+                <div ng-repeat="item in datasource.userGroupsAvailable">
+                    {{ item.text }}
+                </div>
+            </ul>
+        </p>
+    </div>
+    <div style="margin:auto">
+        <button onclick=""><span class="glyphicon glyphicon-chevron-up"></button>
+        <button onclick=""><span class="glyphicon glyphicon-che=-ron-down"></button>
+    </div>
+    <div class="col-md-12">
+        <select multiple size="5">
+            <options ng-repeat="item in datasource.userGroupsSelected" value="{{ item.value }}">{{ item.text }}</option>
+        </select>
+    </div>
+</div>

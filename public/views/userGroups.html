@@ -1,0 +1,26 @@
+<div ng-controller="userGroupsController">
+    <div class="row">
+        <div class="col-md-12">
+            <h3> {{formName}}
+        </div>
+        <div class="col-md-6">
+                <div class="createNewGroup">
+                    <p>
+                        <input type="text" ng-model="GroupName"></input>
+                        <input type="submit" ng-click="submitNewGroup()"/>
+                    </p>
+                </div>
+            <p>
+                <ul ng-repeat="userGroup in userGroups">
+                    <li ng-click="userGroup.groupClick()"> 
+                        {{ userGroup.name }}
+                    </li>
+                </ul>
+            </p>
+        </div>
+        <div class="col-md-6">
+           <list-box datasource="datasource" > 
+           </dlb>
+        </div>
+    </div>
+</div>
