@@ -1,21 +1,18 @@
 
 Superapp.controller('mainController',['$scope','$http','$cookies','$resource','$route','$window','$rootScope',function($scope,$http,$cookies,$resource,$route,$window,$rootScope){
-	var loadPage = function(page){
-        console.log(page);
-        $scope.title = page.title;
-        $scope.rightPanelURL = page.url;
+    var settingsPage = function(title,url){
+        this.url = url;
+        this.title = title;
+        this.openPage = function(){
+            $scope.title = this.title;
+            $scope.rightPanelURL = this.url;
+        }
     }
     
     var SettingsPages = [
-        {
-            "url" : "public/views/userGroups.html",
-            "title" : "User Groups"
-        },
-        {
-            "url" : "public/views/userGroups.html",
-            "title" : "General Settings"
-           
-        }
+        new settingsPage("User Groups","public/views/userGroups.html"),
+        new settingsPage("User Groups","public/views/userGroups.html"),
+        new settingsPage("Assign Permissions","public/views/assignPermissions.html")
     ]
     $scope.sideBarURL = "public/views/sidebar.html";
     $scope.rightPanelURL = SettingsPages[0].url;
@@ -24,14 +21,7 @@ Superapp.controller('mainController',['$scope','$http','$cookies','$resource','$
     
 
     $scope.settingsPages = SettingsPages;
-    $scope.changeSettingsPage = function(pageName){
-        var profile;
-        if(SettingsPages[pageName]){
-            profile = SettingsPages[pageName];
-            $scope.title = profile.title;
-            $scope.rightPanelURL = profile.url;
-        }
-    }
-    $scope.changeSettingsPage("userGroups");
    
 }])
+
+

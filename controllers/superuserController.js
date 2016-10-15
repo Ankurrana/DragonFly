@@ -46,6 +46,9 @@ var SuperuserController = {
                 callback(err)
             }
         })
+    },
+    'assignGroupToUser' : function(groupId, userId,callback){
+        
     }
 }
 

@@ -10,9 +10,9 @@
 
 </style>
 <div class="sideBar" ng-controller="sideBarController">
-    <div ng-repeat="page in settingsPages">
+    <div >
         <ul class="list-unstyled">
-            <li ng-click=""> <span>{{ page.title }} </span></li>
+            <li ng-repeat="page in settingsPages" ng-click="page.openPage()"> <span>{{ page.title }} </span></li>
         </ul>
     </div>
 </div>

@@ -27,10 +27,16 @@ Superapp.directive('listBox',function(){
                 
             
             $scope.refresh = function(){
-                $scope.datasource.rows.forEach(function(item,index){
-                    item.visible = test(item.text);
-                })
+                for(var i=0;i<$scope.datasource.rows.length;i++){
+                    $scope.datasource.rows[i].visible = test($scope.datasource.rows[i].text);
+                }
+                 $scope.datasource.rows.sort(compare);
             }
+            $scope.$watch('filter',function(){
+                $scope.refresh();                
+            })
+
+
             $scope.$watch('datasource',function(){
                 $scope.refresh();
             })

@@ -11,11 +11,11 @@
                     </p>
                 </div>
             <p>
-                <ul ng-repeat="userGroup in userGroups">
-                    <li ng-click="userGroup.groupClick()"> 
-                        {{ userGroup.name }}
-                    </li>
-                </ul>
+                <div class="list-group">
+                    
+                        <button ng-repeat="userGroup in userGroups" type="button" ng-click="userGroup.groupClick()" class="list-group-item">{{ userGroup.name }}</button>
+                    
+                </div>
             </p>
         </div>
         <div class="col-md-6">

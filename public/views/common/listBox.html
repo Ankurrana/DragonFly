@@ -14,7 +14,7 @@
                 <th>{{datasource.columnName}}</th>
                 <th>Selected</th>
             </tr>
-            <tr ng-repeat="row in datasource.rows track by row._id " ng-show="row.visible">
+            <tr ng-repeat="row in datasource.rows track by row.value " ng-show="row.visible">
                 <th>
                     {{ row.text }}
                 </th> 
