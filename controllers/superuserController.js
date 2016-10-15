@@ -1,4 +1,4 @@
-var UserGroups = require('../models/userGroups.js');
+var UserGroups = require('../models/UserGroups.js');
 var logger = require('./logController.js');
 var ErrorManager = require('./ErrorController.js');
 var validator = require('./validatorController.js');
@@ -48,7 +48,7 @@ var SuperuserController = {
         })
     },
     'assignGroupToUser' : function(groupId, userId,callback){
-        
+
     }
 }
 
