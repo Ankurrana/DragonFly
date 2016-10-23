@@ -31,7 +31,7 @@ var userSchema = new mongoose.Schema({
 		type : Number,
 		Default : 0
 	},
-	'groupAccess' :[{type:mongoose.Schema.Types.ObjectId, ref :'User'}]
+	'userGroups' :[{type:mongoose.Schema.Types.ObjectId, ref :'usersGroupSchema'}]
 });
 
 
@@ -86,31 +86,14 @@ userSchema.methods.comparePassword = function (passw, cb) {
 
 
 
-userSchema.statics.assignUserGroupToUser = function assignUserGroup(user_id,userGroup_id,callback){
-	User.findOne({_id:user_id},"groupAccess",function(err,doc){
-		if(err)
-			callback(err);		
-		var userGroups = doc.groupAccess;
-
-		tasks.push(task_id);
-		User.update({_id:doc._id},{
-			$set : {
-				'tasks' : tasks,
-				'tasksCount' : tasksCount + 1	
-			}
-		},{},function(err,data){
-			if(err)
-				callback(err)
-			else
-				callback(null,data);
-		})
-	})
-}
-
-
 
 
 var User =  mongoose.model('User',userSchema);
+
+
+// User.addUserGroupToUser("57488fd34305763c4155ab24","57f8bbc4b253db0c29236c14",function(err,data){
+// 	console.log(data);
+// })
 module.exports = User;
 
 

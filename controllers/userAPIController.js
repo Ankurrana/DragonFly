@@ -20,6 +20,23 @@ var userAPIController = {
 			})
 		}
 	},
+
+	getUserById : function(req,res){
+		if(req != null ){
+			var userId =  req.params.userId;
+			User.getUserById(userId,function(err,user){
+				if(err){
+					res.send({
+						success : false,
+						error : err
+					})
+				}else{
+					res.send(user);
+				}
+			})
+		}
+	},
+
 	createUser : function(req,res){
 		if(req!=null && req.body!=null){
 			var formData = req.body;

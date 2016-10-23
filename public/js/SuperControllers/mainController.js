@@ -11,8 +11,7 @@ Superapp.controller('mainController',['$scope','$http','$cookies','$resource','$
     
     var SettingsPages = [
         new settingsPage("User Groups","public/views/userGroups.html"),
-        new settingsPage("User Groups","public/views/userGroups.html"),
-        new settingsPage("Assign Permissions","public/views/assignPermissions.html")
+        new settingsPage("Assign User Groups","public/views/assignUserGroups.html")
     ]
     $scope.sideBarURL = "public/views/sidebar.html";
     $scope.rightPanelURL = SettingsPages[0].url;

@@ -25,4 +25,8 @@ router.post('/group/',superuserAPIController.createUserGroup);
 //router.post('/group/:groupId',superuserAPIController.getUserGroup);
 router.put('/group/:groupId',superuserAPIController.updateGroup);
 
+
+
+router.put('/users/:userId',superuserAPIController.addUserGroupToUser)
+
 module.exports = router;

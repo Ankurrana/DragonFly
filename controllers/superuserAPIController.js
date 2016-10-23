@@ -45,7 +45,7 @@ var superuserAPIController = {
             var groupId = req.params.groupId;
 			console.log(userId + " " + action + " " + groupId );
 			if(action == "1"){
-				console.log("asdasd");
+				
 				superuserController.addUserToGroup(groupId,userId,function(err,data){
 					if(!err)
 						res.send(data);
@@ -64,7 +64,16 @@ var superuserAPIController = {
 				})
 			}
         }
-	}
+	},
+	addUserGroupToUser : function(req,res){
+		var userId = req.params.userId;
+		var groupId = req.body.groupId;
+		console.log(userId);
+		console.log(groupId);
+		User.addUserGroupToUser(userId,groupId,function(err,data){
+			res.send(err,data);			
+		})
+	}	
 
 	// createUser : function(req,res){
 	// 	if(req!=null && req.body!=null){
@@ -95,7 +104,8 @@ var superuserAPIController = {
 	// 			res.send(data);
 	// 		}
 	// 	})
-	// }	
+	// }
+	
 }
 
 module.exports = superuserAPIController;

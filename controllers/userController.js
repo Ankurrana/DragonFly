@@ -73,7 +73,7 @@ var UserController = {
 			}
 		})
 	},
-	getUsernamesByIds : function(Ids,cb){
+	'getUsernamesByIds' : function(Ids,cb){
 		User.find({ '_id' : {
 			$in : Ids
 		}},'username',function(err,data){
@@ -87,7 +87,10 @@ var UserController = {
 	,
 	'getUsers' : function(username,cb){
 		/* just gets the username of all the  */
-		User.find({'username': new RegExp(username, 'i') },'-tasks -password -tasksCount',function(err,data){
+		User.find({'username': new RegExp(username, 'i') })
+		.populate('userGroups')
+		.select('-tasks -password -tasksCount')
+		.exec(function(err,data){
 			if(err)
 				cb(err)
 			else{
@@ -98,8 +101,51 @@ var UserController = {
 		})
 	},
 
+
+	'getUserById' : function(user_id,cb){
+		/* This takes a userid as the input and returns the userinformation plus the users the user has the access too */
+		User.findOne({
+			_id : user_id
+		})
+		.select("name username tasks userGroups email")
+		.sort("name")
+		.lean()
+		.populate("userGroups")
+		.exec(function(err,user){
+			var userIds = [];
+			
+			user.userGroups.forEach(function(group){
+				
+				group.members.forEach(function(member){
+					
+					if(userIds.indexOf(member) < 0){
+						userIds.push(member);
+					}
+				})		
+			})
+			User.find({
+				_id : { $in : userIds}
+			})
+			.select("name username")
+			.lean()
+			.exec(function(err,data){
+				if(!err){
+					
+					user.accessibleUsers = data;
+					console.log(user);
+					cb(null,user);
+				}else{
+					cb(err);
+				}
+			})
+
+		})
+
+	},
+
+
 	'addUser' : function(userDetails,cb){
-		/* Validate User Info here */
+		/* Validate User Info herde */
 		var err;
 		err = validator.isUserValid(userDetails);
 		if ( err == true ){
@@ -189,15 +235,45 @@ var UserController = {
 			}
 			cb(null,user.tasksCount);
 		})
-	}
-
+	},
+	
+	addUserGroupToUser : function(user_id, group_id,callback){
+		User.findOne({
+			_id : user_id
+		},'',function(err,user){
+				
+			if(!err && user){
+				user.userGroups.push(group_id);
+				user.save(function(data,err){
+					if(!err){
+						console.log('Saved Successfully!');
+						callback(null,data);
+					}else{
+						callback(err);
+					}
+				})
+			}
+			else{
+				callback({
+					'error' : 'No User Founfd by that name!'
+				});				
+			}
+		})
+	}	
 }
+
+
+
+// UserController.getUserById("57488fd34305763c4155ab24",function(err,data){
+// 	console.log(data);	
+// })
 
 module.exports = UserController;
 
 // UserController.getUsernamesByIds(['572b872461e183b832450978'],function(err,data){
 // 	console.log(data);
 // })
+
 
 
 /**  Tests 

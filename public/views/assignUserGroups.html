@@ -1,0 +1,18 @@
+<div ng-controller="assignUserGroupsController">
+    <div class="row">
+        <div class="col-md-12">
+            <h3> {{formName}}
+        </div>
+        <div class="col-md-6">
+            <p>
+                <div class="list-group">                    
+                        <button ng-repeat="user in users" type="button" ng-click="user.click()" class="list-group-item">{{ user.name }}</button>
+                </div>
+            </p>
+        </div>
+        <div class="col-md-6">
+           <list-box datasource="datasource" > 
+           </dlb>
+        </div>
+    </div>
+</div>

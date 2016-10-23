@@ -17,6 +17,7 @@ router.delete('/tasks/:key',passport.authenticate('jwt'),taskAPIController.delet
 router.get('/users',passport.authenticate('jwt'),userAPIController.getUsers); //It should be an authenticated route!! Temporarily setting it to unauthenticated!
 router.post('/users',registrationController.newUserRequestHandler);
 router.get('/users/:username',passport.authenticate('jwt'),userAPIController.getUser);
+router.get('/users/:userId',passport.authenticate('jwt'),userAPIController.getUserById);
 router.post('/token',authController.requestAuthorisationToken);
 
 router.get('/comments/:key',passport.authenticate('jwt'),taskAPIController.getCommentsOfTaskByKey)
