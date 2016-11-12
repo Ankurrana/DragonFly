@@ -1,11 +1,28 @@
-
+<style>
+	.searchList li{
+		padding:10px;
+		padding-bottom:2px;
+	}
+	.searchList li:hover{
+		color: blue;
+		cursor:pointer;
+	}
+</style>
+<div class="row">
+		<div ng-controller="searchBoxController" class="col-md-12 col-sm-12 col-xs-12">
+			<input id="searchBox" class="search-query form-control input large" ng-change="search.search()" ng-model="search.query" placeholder="Search..">
+			<ul class="list-unstyled searchList" >
+				<li ng-repeat="result in search.results" ng-click="result.onclick()" ng-bind-html="result.description" ></li>
+			</ul>
+		</div>
+	</div>
 
 <div id="detailBox" class="detailBoxContainer">
 	<div ng-controller="detailBoxController">
 	<div ng-show="showWaiter">
 	<waiter></waiter>
 	</div>
-
+	
 
 	<div  ng-show="showDetailBox">
 			

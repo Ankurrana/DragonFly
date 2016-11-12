@@ -193,7 +193,16 @@ var taskAPIController = {
 				})
 			}
 		})
-	}	
+	},
+	'search' : function(req,res){
+		var username = req.user.username;
+		var taskKey = req.params['searchKey'];
+		Task.searchTaskByDesc(username,taskKey,function(err,data){
+			res.send(data);
+		});
+		
+	}
+
 }
 
 module.exports = taskAPIController;

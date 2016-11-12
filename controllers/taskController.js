@@ -286,6 +286,26 @@ var TaskController = {
 					cb(err)
 			})
 	
+	},
+	searchTaskByDesc : function(username,searchkey,cb){
+		// Search key is a string which shall be matched against the Tasks asigned to this particular user
+		
+		User
+		.findOne({'username' : username})
+		.select('_id')
+		.exec(function(err,user){
+			console.log(username);
+			Task.find({
+				'owner' : user._id,
+				'description' : new RegExp(searchkey,"i")
+			})
+			.populate('owner')
+			.select('description key owner.name')
+			.exec(function(err,data){
+				console.log(data);
+				cb(err,data);
+			})
+		})	
 	}
 }
 
