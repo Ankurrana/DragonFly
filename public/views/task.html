@@ -12,8 +12,8 @@
 
 </style>
 
-	
 <div>
+	
 	<div id="task.status" type="task" class="row">
 			<div class="col-md-8 col-xs-12">
 				<li class="list-group-item task">
@@ -21,11 +21,13 @@
 				</li>
 			</div>
 			<div class="col-md-4 col-xs-12">
-				<button id="completeButton" key="{{task.key}}" class="btn btn-success form-group pull-right" ng-click="taskCompleted(this.task.key)"><span class="glyphicon glyphicon-ok"></span></button>
-				<button id="resetButton" key="{{task.key}}" class="btn btn-danger form-group pull-right" ng-click="taskInProgress(this.task.key)"><span class="glyphicon glyphicon-remove"></span></button>
-				<button id="detailButton" onclick="document.getElementById('detailBox').scrollIntoView({block: 'end', behavior: 'smooth'})" key="{{task.key}}" class="btn btn-info form-group pull-right" ng-click="showDetails(this.task.key)"><span class="glyphicon glyphicon-info-sign"></span></button>
+				<button id="completeButton" key="{{task.key}}" class="btn btn-success form-group pull-right" ng-click="taskCompleted(this.task.key)" data-toggle="tooltip" data-placement="top" title="Mark Completed"  onmouseover="$(this).tooltip('show')"><span class="glyphicon glyphicon-ok"></span></button>
+				<button id="resetButton" key="{{task.key}}" data-toggle="tooltip" data-placement="top" title="Reset" onmouseover="$(this).tooltip('show')" class="btn btn-danger form-group pull-right" ng-click="taskInProgress(this.task.key)"><span class="glyphicon glyphicon-remove" ></span></button>
+				<button id="detailButton" onclick="document.getElementById('detailBox').scrollIntoView({block: 'end', behavior: 'smooth'})"  key="{{task.key}}" data-toggle="tooltip" data-placement="top" title="Details"  class="btn btn-info form-group pull-right" ng-click="showDetails(this.task.key)" onmouseover="$(this).tooltip('show')" ><span class="glyphicon glyphicon-info-sign"></span></button>
 				<!-- <button key="{{task.key}}" class="btn btn-info form-group pull-right" ng-click="edit(this.task.key)"><span class="glyphicon glyphicon-pencil"></span></button> -->
 			</div>
 		</li>
 	</div>
 </div>
+
+	

@@ -23,6 +23,12 @@ var taskSchema = new mongoose.Schema({
 	'schedule' : {
 		type : Object
 	},
+	'scheduleDates' : {
+		type : [{
+			'Date' : Date,
+			'Completed' : Boolean
+		}]
+	},
 	'key' : {
 		type : String
 	},

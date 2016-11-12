@@ -10,16 +10,18 @@
 }
 
 </style>
+
 <div class="row">
+
 	<div class="col-md-5 col-xs-12">
 		<div> 
 			<input id="date" type="date" class="form-control col-md-3 col-xs-12" ng-model="date.val" ng-change="updateView()"></input>
 		</div>
 	</div>
 	<div class="col-md-4 col-xs-12 centered">
-			<button class="btn btn-primary" ng-click="date.previous()"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></button>	
+			<button class="btn btn-primary" ng-click="date.previous()" data-toggle="tooltip" data-placement="top" title="Previous" onmouseover="$(this).tooltip('show')" ><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></button>	
 			<button class="btn btn-primary" ng-click="date.today()"><span>Today</span></button>
-			<button class="btn btn-primary" ng-click="date.next()"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button>
+			<button class="btn btn-primary" ng-click="date.next()" data-toggle="tooltip" data-placement="top" title="Next" onmouseover="$(this).tooltip('show')"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button>
 	</div>
 	<div class="col-md-3 col-xs-12">
 		<form class="form-inline">
@@ -45,6 +47,7 @@
 				<div class ng-show="showWaiter">
 				<waiter></waiter>
 				</div>
+				
 				<div ng-repeat="task in tasks">
 					<task></task>
 				</div>

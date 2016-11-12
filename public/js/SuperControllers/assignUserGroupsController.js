@@ -6,6 +6,7 @@ var group = function(_id, _name, _isSelected, userIdItIsAssignedTo,service){
     this.value = this.id;
     this.isSelected = _isSelected;
     this.userIdItIsAssignedTo = userIdItIsAssignedTo;
+    this.groups;
     this.update = function(){
         service.update({
             groupId : this.id,
@@ -25,6 +26,19 @@ var group = function(_id, _name, _isSelected, userIdItIsAssignedTo,service){
     
 }
 
+
+var AUTGUser = function(userId, username,clickFunction){
+    this.id = userId;
+    this.name = username;
+    this.groups = [];
+    this.addGroup = function(group){
+        this.group.push(this.group);
+    }
+    this.click = clickFunction
+}
+
+ 
+
 Superapp.controller('assignUserGroupsController',['$scope','$http','$cookies','$resource','$route','$window',
 '$rootScope','UserGroups','Users',
 function($scope,$http,$cookies,$resource,$route,$window,$rootScope,UserGroups,Users){
@@ -33,65 +47,17 @@ function($scope,$http,$cookies,$resource,$route,$window,$rootScope,UserGroups,Us
 
     fetchUsers = function(){
         Users.get({},function(_users){
-                $scope.users = _users;
-                UserGroups.get({},function(AllGroups){
-                   _rows = []
-                    
-                    AllGroups.forEach(function(GroupItem){
-                         _rows.push(new group(
-                                GroupItem._id,
-                                GroupItem.name,
-                                false,
-                                user._id,
-                                Users
-                            ))
-                    })
-
-                    
-                     _users.forEach(function(user){
-                        user.userGroups.forEach(function(item){
-                            for(var j=0;j<_rows;j++){
-                                
-                            }
-                         })
-                     }) 
-
-                    // for(var i=0;i<AllGroups.length;i++){
-                    //     var add = true;
-                    //     for(var j=0;j<_rows.length;j++){
-                    //         if( _rows[j].id == AllGroups[i]._id ){
-                    //             add = false;
-                    //         }
-                    //     }
-                    //     if(add){
-                    //         _rows.push(new group(
-                    //             AllGroups[i]._id,
-                    //             AllGroups[i].name,
-                    //             false,
-                    //             user._id,
-                    //             Users
-                    //         ))
-                    //     }
-                    // }
-                    
-                    
-               
-              
-             
-
-
-                 
-                  user.click = function(){
-                      var _rows = [];
-                      $scope.datasource = {
-                            "descriptionString" : "User Selected : " + this.name,
-                            "columnName" : 'Groups',
-                            "rows" : _rows
-                      }
-                  } 
-              })  
-
-              $scope.users = _users;
+            console.log(_users);
+            UserGroups.get({},function(_groups){
+                console.log(_groups);
+                var userObjects = [];
+                _users.forEach(function(element) {
+                    var userObject = new AUTGUser(element._id, element.name);
+                    element.UserGroups.forEach(function(groupA){
+                        userObject.addGroup( new  group(groupA._id, groupA.name, true,element._id,Users))
+                    })  
+                });                
+            })               
         })
     }
 
@@ -110,3 +76,50 @@ function($scope,$http,$cookies,$resource,$route,$window,$rootScope,UserGroups,Us
 
 }])
 
+
+
+// _rows = []
+//                     AllGroups.forEach(function(GroupItem){
+//                          _rows.push(new group(
+//                                 GroupItem._id,
+//                                 GroupItem.name,
+//                                 false,
+//                                 user._id,
+//                                 Users
+//                             ))
+//                     })
+
+
+
+
+                    
+//                      _users.forEach(function(user){
+//                         user.userGroups.forEach(function(item){
+//                             for(var j=0;j<_rows;j++){
+                                
+//                             }
+//                          })
+//                      }) 
+
+//                     // for(var i=0;i<AllGroups.length;i++){
+//                     //     var add = true;
+//                     //     for(var j=0;j<_rows.length;j++){
+//                     //         if( _rows[j].id == AllGroups[i]._id ){
+//                     //             add = false;
+//                     //         }
+//                     //     }
+//                     //     if(add){
+//                     //         _rows.push(new group(
+//                     //             AllGroups[i]._id,
+//                     //             AllGroups[i].name,
+//                     //             false,
+//                     //             user._id,
+//                     //             Users
+//                     //         ))
+//                     //     }
+//                     // }
+                    
+                    
+               
+              
+             
