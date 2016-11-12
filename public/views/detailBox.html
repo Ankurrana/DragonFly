@@ -19,31 +19,36 @@
 
 <div id="detailBox" class="detailBoxContainer">
 	<div ng-controller="detailBoxController">
-	<div ng-show="showWaiter">
-	<waiter></waiter>
-	</div>
+	
 	
 
 	<div  ng-show="showDetailBox">
 			
 			<div class="panel panel-default">
-				<div class="panel-heading">Task Details</div>
+				<div class="panel-heading">
+					<div ng-show="showWaiter" style="float:left;"><waiter></waiter></div>Task Details</div>
 				<div class="panel-body">
 					<div class="row">
 						<div class="col-md-12 col-sm-12 col-xs-12">
 							<blockquote>
-								<span ng-bind-html="taskDetails.description | autolinker ">
-									<!-- {{ taskDetails.description | autolinker }} -->
+								<span ng-bind-html="taskDetails.description | autolinker "></span>
+								
+								
 								<footer><span ng-bind="taskDetails.owner.name"></span></footer>
 							</blockquote>
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-md-6 col-xs-12 col-sm-12">
-								<h4><span ng-bind="taskDetails.status"></h4>
+						
+						<div class="col-md-12 col-xs-12 col-sm-12">
+								<h5<span ng-bind="taskDetails.status"></h5>
 						</div>
-						<div class="col-md-6 col-xs-12 col-sm-12">
-							<button class="btn btn-danger" ng-click="delete()">Delete</button>	
+						
+						<div class="col-md-12 col-xs-12 col-sm-12">
+								<h5>Start Date : <span ng-bind="taskDetails.startDate"></h5>
+						</div>
+						<div class="col-md-12 col-xs-12 col-sm-12">
+							<button ng-click="delete()">Delete</button>	
 						</div>
 					</div>
 					<div class="row">

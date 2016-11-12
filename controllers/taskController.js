@@ -42,6 +42,19 @@ var TaskController = {
 				ErrorManager(err,'Info','Task with Task Key' + taskKey + 'doesn\'t exist');
 				cb(err,false);
 			}else{
+				/*
+					Start Date of Task should always be more than or equal to the creation date of the task.
+				*/
+				var StartDate ;
+				if( new Date(task.createdAt).valueOf() < new Date(scheduleController.startDate(task.schedule)).valueOf() ){
+					StartDate = moment(new Date(scheduleController.startDate(task.schedule)));
+				}else{
+					StartDate = moment(new Date(task.createdAt));
+					
+				}
+				task.startDate = moment(StartDate).format("ddd, MMM Do YYYY");
+				
+
 				cb(null,task);
 			}
 		})
@@ -108,7 +121,12 @@ var TaskController = {
 				cb(err);
 			}else{
 				for(var i in tasks){
-					if(scheduleController.scheduleContainsDate(tasks[i].schedule,date)){
+					
+					console.log("Created Date " + new Date(tasks[i].createdAt).valueOf());
+					console.log(new Date(date).valueOf());
+					var isTaskCreatedAfterTheDate = new Date(tasks[i].createdAt).valueOf() - 24 * 60 * 60 * 1000  <  new Date(date).valueOf() ;
+					
+					if(isTaskCreatedAfterTheDate && scheduleController.scheduleContainsDate(tasks[i].schedule,date)){
 						result.push(tasks[i]);
 					}
 				}

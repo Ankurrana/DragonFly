@@ -17,7 +17,7 @@ app.controller('searchBoxController',['$scope','$http','$cookies','$resource','$
         }).then(function(data){
             data.data.forEach(function(task){
 
-                task.description = task.description.replace(new RegExp($scope.search.query),function(match){
+                task.description = task.description.replace(new RegExp($scope.search.query,"i"),function(match){
                     return "<b>" + match + "</b>"
                 })
 

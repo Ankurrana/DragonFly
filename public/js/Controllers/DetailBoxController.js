@@ -46,8 +46,9 @@ app.controller('detailBoxController',['$scope','$http','$cookies','$resource','C
 			taskDetails.status = data.status;
 			taskDetails.comments = [];
 			taskDetails.key = data.key;
-			taskDetails.owner = data.owner
-			taskDetails.checkpoints = data.checkpoints
+			taskDetails.owner = data.owner;
+			taskDetails.checkpoints = data.checkpoints;
+			taskDetails.startDate = data.startDate;
 
 			angular.forEach(taskDetails.checkpoints,function(item){
 				item.changeCheckpointStatus = function(status){

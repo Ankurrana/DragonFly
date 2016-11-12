@@ -27,6 +27,10 @@ var schedule = {
 		/* date : 'YYYY-MM-DD' */
 		return later.schedule(schedule).isValid(new Date(date));
 	},
+	startDate : function(schedule){
+		return moment(new Date(later.schedule(schedule).next(1,new Date('2000-01-01'))));
+	}
+	,
 	findDateRange : function(startDate,endDate,cb){
 		if( moment(startDate).isValid()  && moment(endDate).isValid() ){
 			from_Date = moment(startDate).format('YYYY-MM-DD');
@@ -106,8 +110,8 @@ module.exports = schedule;
 //         ]
 //     }
 
-// // var k = later.schedule(schedule).isValid(new Date('2016-05-02'));
-// var k = later.schedule(schedule).next(2);
+// // // var k = later.schedule(schedule).isValid(new Date('2016-05-02'));
+// var k = later.schedule(schedule).next(1,new Date('2006-05-02'));
 
 // console.log(k);
 

@@ -67,7 +67,8 @@ var taskAPIController = {
 				task.completedOn = data.completedOn;
 				task.comments = data.comments;
 				task.key = data.key
-				task.checkpoints = data.checkpoints
+				task.checkpoints = data.checkpoints;
+				task.startDate = data.startDate;
 				res.send(task);
 			}
 		})
