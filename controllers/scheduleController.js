@@ -25,6 +25,8 @@ var schedule = {
 	},
 	scheduleContainsDate : function(schedule,date){
 		/* date : 'YYYY-MM-DD' */
+
+		console.log("My Obj %o", schedule.schedules);
 		return later.schedule(schedule).isValid(new Date(date));
 	},
 	startDate : function(schedule){
@@ -62,6 +64,7 @@ var schedule = {
 }
 
 module.exports = schedule;
+
 
 
 // var today = new Date("May 25, 2016");

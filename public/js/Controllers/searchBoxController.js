@@ -23,6 +23,8 @@ app.controller('searchBoxController',['$scope','$http','$cookies','$resource','$
 
                 task.onclick = function(){
                     $rootScope.$broadcast('showDetails',this.key);
+                    $scope.search.query = "";
+                    $scope.search.search();
                 }
             })
             

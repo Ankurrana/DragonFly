@@ -115,7 +115,7 @@ app.controller('taskController',['$scope','$http','$cookies','$resource','$rootS
 					})
 				}
 			})
-			var nextNDays = function(schedule,n){
+			var nextNDaysFunc = function(schedule,n){
 				for(var i=0;i<n;i++){
 					var day = moment().add(i,'day');
 					// schedule = schedule.and();
@@ -126,9 +126,13 @@ app.controller('taskController',['$scope','$http','$cookies','$resource','$rootS
 				return schedule;
 			}	
 
+
 			if( this.nextNDays ){
-				laterSchedule = nextNDays(laterSchedule,parseInt(this.nextNDays));
+				console.log('Next N days is selected!');
+				laterSchedule = nextNDaysFunc(laterSchedule,parseInt(this.nextNDays));
 			}
+
+			console.log("my object: %o", laterSchedule.schedules)
 
 			
 			return JSON.stringify(laterSchedule.schedules);

@@ -53,7 +53,16 @@ var TaskController = {
 					
 				}
 				task.startDate = moment(StartDate).format("ddd, MMM Do YYYY");
-				
+				if(task.status == "COMPLETED"){
+					if(task.completedAt){
+						task.completedAt = task.completedAt; 
+					}else{
+						task.completedAt = task.updatedAt;
+					}
+					task.completedAt = moment(task.completedAt).format("ddd, MMM Do YYYY");
+				}else{
+					task.completedAt = undefined;
+				}
 
 				cb(null,task);
 			}

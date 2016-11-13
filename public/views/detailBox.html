@@ -47,6 +47,9 @@
 						<div class="col-md-12 col-xs-12 col-sm-12">
 								<h5>Start Date : <span ng-bind="taskDetails.startDate"></h5>
 						</div>
+						<div ng-show="taskDetails.completedAt" class="col-md-12 col-xs-12 col-sm-12">
+								<h5>Completed On : <span ng-bind="taskDetails.completedAt"></h5>
+						</div>
 						<div class="col-md-12 col-xs-12 col-sm-12">
 							<button ng-click="delete()">Delete</button>	
 						</div>
