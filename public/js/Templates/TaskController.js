@@ -13,6 +13,12 @@ var TaskList = function(scope,Task,ln,$rootScope){
 
 	this.localScope.date = {
 		'val' : new Date(),
+		'displayDate' : function(){
+			return moment(this.val).format("ddd, MMM Do YYYY");
+		},
+		'csvFormatDate' : function(){
+			return moment(this.val).format("MMM Do YYYY");
+		},
 		'next' : function(){
 			this.val = new Date( moment(this.val).add(1,'days'));
 		},
@@ -118,4 +124,29 @@ var TaskList = function(scope,Task,ln,$rootScope){
 	this.localScope.edit = function(taskKey){
 		var taskKey = taskKey;
 	}
+
+	this.localScope.exportData = function(){
+		// This function exports a table with Sno., Description and Remarks in csv format
+			var data = this.tasks;
+			var date = that.localScope.date.csvFormatDate();
+			var csvContent = "data:text/csv;charset=utf-8;";
+			csvContent += "Date ," + date + "\n";
+			if(data.length > 0){
+			csvContent += "Sno.,Task Description,Status,Owner,Remarks\n"
+				data.forEach(function(infoArray, index){
+					dataString = index + 1 + "," + infoArray.description + "," + infoArray.status + "," + infoArray.owner.name + ", ";   
+					csvContent += index < data.length ? dataString+ "\n" : dataString;
+				});
+			}else{
+				csvContent += "No Tasks Scheduled"
+			}
+			var encodedUri = encodeURI(csvContent);
+			var link = document.createElement("a");
+			link.setAttribute("href", encodedUri);
+			link.setAttribute("download", "my_data.csv");
+			document.body.appendChild(link); // Required for FF
+
+			link.click();
+	}
 }
+

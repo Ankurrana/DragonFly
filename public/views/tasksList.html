@@ -42,6 +42,13 @@
 
 <div class="row">
 	<div class="col-md-12 col-xs-12">
+		<!--<form action="/export" target="_blank">
+    		<input type="submit" value="Export" />
+		</form>-->
+
+		<input type="button" ng-click="exportData()" value="Export" name="Export"></input>
+	</div>
+	<div class="col-md-12 col-xs-12">
 		<div ng-show="tasks.length > 0">
 			<ol class="list-group">
 				<div class ng-show="showWaiter">
@@ -57,7 +64,7 @@
 		<div ng-show="tasks.length == 0">
 			<br>
 			<br>
-			<center>Congratulations! You have completed tasks scheduled for today!</center>
+			<center>Enjoy, You are all set for<b> <span ng-bind-html="date.displayDate()"></b></span></center>
 		</div>
 	</div>
 </div>

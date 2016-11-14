@@ -17,4 +17,4 @@ var generator = function(scheduleDefinition){
 }
 module.exports = generator;
 
-console.log(generator(scheduleGenerator('year')));
+//console.log(generator(scheduleGenerator('year')));

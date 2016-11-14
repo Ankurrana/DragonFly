@@ -10,6 +10,8 @@ var scheduleController = require('./scheduleController.js');
 var momentRange = require('moment-range')
 var Comment = require('./commentController.js');
 var RandomStringGenerator = require('randomstring');
+var EmailController = require('./EmailController.js')
+var EmailSender = require('../services/EmailSender.js');
 
 var TaskController = {
 	getTask : function(taskId,cb){
@@ -108,6 +110,9 @@ var TaskController = {
 								ErrorManager('Error while adding task to the user Task List');
 								cb(err)
 							}else{
+
+								//EmailSender('ankurofficial@hotmail.com','A new Task Created!',task.description);
+								//console.log('EMail Send!');
 								cb(null,{
 									message : 'Success',
 									success : true
