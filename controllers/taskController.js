@@ -32,7 +32,14 @@ var TaskController = {
 		})
 	},
 	getTaskByKey : function(taskKey,cb){
-		Task.findOne({'key':taskKey}).populate('owner','username name').exec(function(err,task){
+		Task.findOne({'key':taskKey})
+			.populate('owner','username name')
+			.populate({
+				path : 'comments',
+				model : 'Comment',
+			})
+			.exec(function(err,task){
+				
 			if(err){
 				err.message = 'Fatal Error';
 				ErrorManager(err,'Fatal Error','Error while looking for the object Id' + taskId);
@@ -54,19 +61,37 @@ var TaskController = {
 					StartDate = moment(new Date(task.createdAt));
 					
 				}
-				task.startDate = moment(StartDate).format("ddd, MMM Do YYYY");
-				if(task.status == "COMPLETED"){
-					if(task.completedAt){
-						task.completedAt = task.completedAt; 
-					}else{
-						task.completedAt = task.updatedAt;
-					}
-					task.completedAt = moment(task.completedAt).format("ddd, MMM Do YYYY");
-				}else{
-					task.completedAt = undefined;
+				var options = {
+					path : 'comments.createdBy',
+					model : 'User'
 				}
+				//  As of the system is fetching everything about the user.. we need just the username
+				Task
+				.populate(task,options,function(err,task2){
+					console.log(task2);
+					task2.startDate = moment(StartDate).format("ddd, MMM Do YYYY");
+					if(task2.status == "COMPLETED"){
+						if(task2.completedAt){
+							task2.completedAt = task.completedAt; 
+						}else{
+							task2.completedAt = task.updatedAt;
+						}
+						task2.completedAt = moment(task.completedAt).format("ddd, MMM Do YYYY");
+					}else{
+						task2.completedAt = undefined;
+					}
+					// foreach(task2.comments,function(comment){
+					// 	comment.createdBy = comment.createdBy.name;
+					// })
 
-				cb(null,task);
+					// task2.comments.foreach(function(comment){
+					// 	comment.createdBy = comment.createdBy.name;						
+					// })
+
+					cb(null,task2);
+				})
+
+				
 			}
 		})
 	},

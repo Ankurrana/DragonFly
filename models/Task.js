@@ -35,10 +35,10 @@ var taskSchema = new mongoose.Schema({
 	'completedAt' : {
 		type : String 
 	},
-	'comments' : {
-		type : [String],
-		default : []
-	},
+	'comments' : [{
+		type:mongoose.Schema.Types.ObjectId,
+		'ref' : 'Comment'
+	}],
 	'checkpoints' : {
 		type : [CheckPointModel.schema]
 	}
