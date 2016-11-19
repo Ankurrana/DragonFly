@@ -17,7 +17,7 @@ var registrationController = {
 			userDetails.username = formData.username;
 			userDetails.email = formData.email;
 			userDetails.password = formData.password;
-		
+			console.log(userDetails);
 			userController.addUser(userDetails,function(err,userAdded){
 				if(err){
 					var error = errorGenerator(err,function(err){

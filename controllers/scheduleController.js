@@ -2,6 +2,113 @@ var later = require('later');
 var moment = require('moment');
 
 var schedule = {
+	complexScheduleParams : {
+			"dayOfWeek" : {
+				'name' : 'Day of Week',
+				'frequency' : null,
+				'values' : null,
+				'functionName' : 'dayOfWeek'
+			},
+			"dayOfMonth" : {
+				'name' : 'Day of Month',
+				'frequency' : null,
+				'values' : null,
+				'functionName' : 'dayOfMonth'
+			},
+			"weekOfMonth" : {
+				'name' : 'Week Of Month',
+				'frequency' : null,
+				'values' : null,
+				'functionName' : 'weekOfMonth'
+			},
+			"weekOfYear" : { 
+				'name' : 'Week Of Year',
+				'frequency' : null,
+				'values' : null,
+				'functionName' : 'weekOfYear'
+			},
+			"month" : {
+				'name' : 'Month',
+				'frequency' : null,
+				'values' : null,
+				'functionName' : 'month'
+			},
+			"year" : {
+				'name' : 'Year',
+				'frequency' : null,
+				'values' : null,
+				'functionName' : 'year'
+			},
+		},
+		getScheduleStringForComplexSchedule : function(){
+			var laterSchedule = later.parse.recur();
+
+			for( var param in this.complexScheduleParams){
+				if( this.complexScheduleParams.hasOwnProperty(param)){
+					param = this.complexScheduleParams[param];
+					console.log("%o",param);
+					if( param.values ){
+						var valArray = param.values.split(",");
+						var fre = "on";
+						valArray.forEach(function(value, key){
+							var range = value.split('-');
+							var start,end;
+							if(range.length == 2){
+								start = parseInt(range[0]);
+								end = parseInt(range[1]);
+							}else{
+								start = parseInt(range[0]);
+								end = parseInt(range[0]);
+							}	
+							
+							for(var i = start;i<=end;i++) 
+								laterSchedule[fre](i)[param.functionName]();
+						})
+					}
+				}
+			}
+
+			
+			// this.complexScheduleParams.forEach(function(param){
+			// 	console.log("Object %o",this.complexScheduleParams)
+			// 	if( param.values ){
+			// 		var valArray = param.values.split(",");
+			// 		var fre = param.frequency;
+			// 		angular.forEach(valArray,function(value, key){
+			// 			var range = value.split('-');
+			// 			var start,end;
+			// 			if(range.length == 2){
+			// 				start = parseInt(range[0]);
+			// 				end = parseInt(range[1]);
+			// 			}else{
+			// 				start = parseInt(range[0]);
+			// 				end = parseInt(range[0]);
+			// 			}	
+						
+			// 			for(var i = start;i<=end;i++) 
+			// 				laterSchedule[fre](i)[param.functionName]();
+			// 		})
+			// 	}
+			// })
+			// var nextNDaysFunc = function(schedule,n){
+			// 	for(var i=0;i<n;i++){
+			// 		var day = moment().add(i,'day');
+			// 		// schedule = schedule.and();
+			// 		schedule.on(day.date()).dayOfMonth().on(day.month()+1).month().on(day.year()).year()
+			// 		if( i+1 < n )
+			// 			schedule.and();
+			// 	}
+			// 	return schedule;
+			// }	
+
+
+			// if( this.nextNDays ){
+			// 	console.log('Next N days is selected!');
+			// 	laterSchedule = nextNDaysFunc(laterSchedule,parseInt(this.nextNDays));
+			// }			
+			return JSON.stringify(laterSchedule.schedules);
+		},
+	
 	convertScheduleStringToLaterSchedule : function(description){
 		var schedule = later.parse.recur();
 		if(description == 'today'){
@@ -17,6 +124,29 @@ var schedule = {
 			var today = moment();
 			schedule.on(today.month()+1).month().on(today.year()).year();	
 		}else{
+			// Here check instead of scheduledescription , we need a stringyfied JSON Object. We need the following JSON Object : 
+
+			/* dda
+			*	dayOfWeek : Value
+			*	dayOfMonth : Value
+			*	WeekOfMonth : Value
+			*	weekOfYear : Value
+			*	Month : Value
+			*	Year : Value	
+			*/
+		
+			
+			var JSONObject =  JSON.parse(description);	
+			console.log(JSONObject["dayOfWeek"]);
+			this.complexScheduleParams["dayOfWeek"].values =  JSONObject["dayOfWeek"];
+			this.complexScheduleParams["dayOfMonth"].values =  JSONObject["dayOfMonth"];
+			this.complexScheduleParams["weekOfMonth"].values =  JSONObject["weekOfMonth"];
+			this.complexScheduleParams["weekOfYear"].values =  JSONObject["weekOfYear"];
+			this.complexScheduleParams["month"].values =  JSONObject["month"];
+			this.complexScheduleParams["year"].values =  JSONObject["year"];
+			console.log("My Obj %o",this.complexScheduleParams);
+			description = this.getScheduleStringForComplexSchedule();
+			console.log("THis is the description : " , description);
 			schedule.schedules  = JSON.parse(description);
 		}
 		return {
@@ -26,7 +156,7 @@ var schedule = {
 	scheduleContainsDate : function(schedule,date){
 		/* date : 'YYYY-MM-DD' */
 
-		console.log("My Obj %o", schedule.schedules);
+		// console.log("My Obj %o", schedule.schedules);
 		return later.schedule(schedule).isValid(new Date(date));
 	},
 	startDate : function(schedule){

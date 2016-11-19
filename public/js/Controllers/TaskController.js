@@ -95,7 +95,21 @@ app.controller('taskController',['$scope','$http','$cookies','$resource','$rootS
 		},
 		getScheduleStringForComplexSchedule : function(){
 			var laterSchedule = later.parse.recur();
+			// This complex schedule functionality is being transferred to the server side as we dont have later.js for java/android
+			var JSONObject =  {
+				"dayOfWeek" : this.complexScheduleParams[0].values,
+				"dayOfMonth" : this.complexScheduleParams[1].values,
+				"weekOfMonth" : this.complexScheduleParams[2].values,
+				"weekOfYear" : this.complexScheduleParams[3].values,
+				"month" : this.complexScheduleParams[4].values,
+				"year" : this.complexScheduleParams[5].values
+			}
+			
+			return JSON.stringify(JSONObject);
+
+
 			angular.forEach(this.complexScheduleParams,function(param){
+				// console.log("Object %o",this.complexScheduleParams)
 				if( param.values ){
 					var valArray = param.values.split(",");
 					var fre = param.frequency;
@@ -132,7 +146,7 @@ app.controller('taskController',['$scope','$http','$cookies','$resource','$rootS
 				laterSchedule = nextNDaysFunc(laterSchedule,parseInt(this.nextNDays));
 			}
 
-			console.log("my object: %o", laterSchedule.schedules)
+			// console.log("my object: %o", laterSchedule.schedules)
 
 			
 			return JSON.stringify(laterSchedule.schedules);
@@ -140,8 +154,14 @@ app.controller('taskController',['$scope','$http','$cookies','$resource','$rootS
 		submit : function(){
 			var description = this.getDescription();
 			var schedule = this.getSelectedOption();
-			if( schedule == 'complex' ) schedule = this.getScheduleStringForComplexSchedule();
-
+			if( schedule == 'complex' ) schedule = this.getScheduleStringForComplexSchedule();   // Set it back up
+			// if( schedule == 'complex' ){ 
+			// 	schedule = {
+			// 		"dayOfWeek" : "5",
+			// 		"weekOfMonth" : "2"
+			// 	}
+			// }
+			console.log(" Task Controller : Object being send is "  + schedule);
 			var newSavedTask = Task.save({
 				'description' : description,
 				'schedule' : schedule

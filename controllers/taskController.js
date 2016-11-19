@@ -68,7 +68,7 @@ var TaskController = {
 				//  As of the system is fetching everything about the user.. we need just the username
 				Task
 				.populate(task,options,function(err,task2){
-					console.log(task2);
+					// console.log(task2);
 					task2.startDate = moment(StartDate).format("ddd, MMM Do YYYY");
 					if(task2.status == "COMPLETED"){
 						if(task2.completedAt){
@@ -161,8 +161,8 @@ var TaskController = {
 			}else{
 				for(var i in tasks){
 					
-					console.log("Created Date " + new Date(tasks[i].createdAt).valueOf());
-					console.log(new Date(date).valueOf());
+					// console.log("Created Date " + new Date(tasks[i].createdAt).valueOf());
+					// console.log(new Date(date).valueOf());
 					var isTaskCreatedAfterTheDate = new Date(tasks[i].createdAt).valueOf() - 24 * 60 * 60 * 1000  <  new Date(date).valueOf() ;
 					
 					if(isTaskCreatedAfterTheDate && scheduleController.scheduleContainsDate(tasks[i].schedule,date)){
@@ -336,7 +336,7 @@ var TaskController = {
 					'checkpoints.$.status' : status
 				}
 			},function(err,data){
-				console.log(data);
+				// console.log(data);
 				if(!err)
 					cb(null,data)
 				else
@@ -351,7 +351,7 @@ var TaskController = {
 		.findOne({'username' : username})
 		.select('_id')
 		.exec(function(err,user){
-			console.log(username);
+			// console.log(username);
 			Task.find({
 				'owner' : user._id,
 				'description' : new RegExp(searchkey,"i")
@@ -359,7 +359,7 @@ var TaskController = {
 			.populate('owner')
 			.select('description key owner.name')
 			.exec(function(err,data){
-				console.log(data);
+				// console.log(data);
 				cb(err,data);
 			})
 		})	
