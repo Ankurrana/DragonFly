@@ -356,6 +356,9 @@ var TaskController = {
 				'owner' : user._id,
 				'description' : new RegExp(searchkey,"i")
 			})
+			.sort({
+				createdAt : -1
+			})
 			.populate('owner')
 			.select('description key owner.name')
 			.exec(function(err,data){
