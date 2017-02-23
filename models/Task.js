@@ -1,6 +1,7 @@
 var mongoose = require('./mongooseConnection.js');
 var UserModel = require('./User.js');
 var CheckPointModel = require('./Checkpoint.js');
+var FilesModel = require('./Files.js');
 
 var taskSchema = new mongoose.Schema({
 	'description' : {
@@ -41,6 +42,9 @@ var taskSchema = new mongoose.Schema({
 	}],
 	'checkpoints' : {
 		type : [CheckPointModel.schema]
+	},
+	'files' : {
+		type:[FilesModel.schema]
 	}
 },{
 	timestamps : {
@@ -133,13 +137,59 @@ taskSchema.statics.addCheckpointToTask = function(task_id,checkpoint,callback){
 
 
 }
+taskSchema.statics.addFileToTask = function(task_id,file,callback){
+	console.log(file);
+	Task.findOne({_id:task_id},"",function(err,doc){
+		if(err)
+			callback(err);
+		else{		
+			doc.files.push(file)
+			doc.save(function(err,data){
+				if(err)
+					callback(err)
+				else
+					callback(null,{
+						'success' : 'File Added Successfully'
+					})
+
+			});
+		}
+	})
+}
+
+
+taskSchema.statics.getFile = function(task_id,id,callback){
+	Task.findOne({_id:task_id},"",function(err,doc){
+		if(err)
+			callback(err);		
+		else{
+			console.log(id);
+			var file = doc.files.pull(id).toObject()[0];
+			if(file != null){
+				var myfile = {
+					filename : file.filename,
+					binaryData : file.binaryData
+				}
+				console.log(myfile);	
+				callback(null,myfile);
+			}else{
+				callback({
+					"error" : "no file found!"
+				})
+			}
+			
+		}
+	})
+
+
+}
 
 
 var Task =  mongoose.model('Task',taskSchema);
 module.exports = Task;
 
 
-// var task = new Task({
+// var task = new Task({ 
 // 	description : "Bla Bla Black Sheep!",
 // 	'schedule' : {
 // 		    schedules:

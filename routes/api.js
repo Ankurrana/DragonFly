@@ -23,6 +23,9 @@ router.post('/token',authController.requestAuthorisationToken);
 router.get('/comments/:key',passport.authenticate('jwt'),taskAPIController.getCommentsOfTaskByKey)
 router.post('/comments/:key',passport.authenticate('jwt'),taskAPIController.addCommentToTaskByKey)
 
+router.post('/files/:key',passport.authenticate('jwt'),taskAPIController.addfileToTaskByKey)
+router.get('/files/:key/:id',passport.authenticate('jwt'),taskAPIController.getFile)
+
 
 router.post('/checkpoints/:key',passport.authenticate('jwt'),taskAPIController.addCheckPointToTaskByKey)
 router.put('/checkpoints/:key/:id',passport.authenticate('jwt'),taskAPIController.updateCheckpoint)

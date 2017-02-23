@@ -69,6 +69,7 @@ var taskAPIController = {
 				task.key = data.key
 				task.checkpoints = data.checkpoints;
 				task.startDate = data.startDate;
+				task.files = data.files;
 				res.send(task);
 			}
 		})
@@ -202,6 +203,31 @@ var taskAPIController = {
 			res.send(data);
 		});
 		
+	},
+	addfileToTaskByKey : function(req,res){
+		var taskKey = req.params['key']
+		if(req && req.body){
+			var file = req.files["file"];
+			
+			Task.addFileToTask(taskKey,file,function(err,data){
+				if(!err)
+					res.send(data);
+				else
+					res.status(400).send(err)
+			})
+		}
+	},
+	getFile : function(req,res){
+		if(req && req.body){
+			var fileId  =  req.params.id;
+			var key = req.params.key;
+			Task.getFileOfTask(key,fileId,function(err,data){
+				if(!err)
+					res.send(data);
+				else
+					res.status(400).send(err)
+			})
+		}
 	}
 
 }

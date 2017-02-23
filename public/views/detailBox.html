@@ -7,6 +7,9 @@
 		color: blue;
 		cursor:pointer;
 	}
+	span{
+		word-wrap: break-word;	
+	}
 </style>
 <div class="row">
 		<div ng-controller="searchBoxController" class="col-md-12 col-sm-12 col-xs-12">
@@ -19,9 +22,6 @@
 
 <div id="detailBox" class="detailBoxContainer">
 	<div ng-controller="detailBoxController">
-	
-	
-
 	<div  ng-show="showDetailBox">
 			
 			<div class="panel panel-default">
@@ -67,6 +67,31 @@
 								</form>
 						</div>
 						</div>
+					
+					<div class="row">
+						<div class="col-md-12 col-xs-12">							
+							<form class="form-inline">
+								  	<div class="form-group">
+								    	<label for="fileUpload">Upload File</label>
+								    	<input type="file" id="myfile" file-model="myfile"/>	
+								 	 </div>
+							  		<button type="submit" class="btn btn-default" ng-click="uploadFile()">Upload File</button>
+								</form>
+						</div>	
+
+					</div>
+					<div class="row">
+						<div class="col-md-12 col-xs-12">							
+							<ul class="list-group" style="list-style:none">
+
+									<li class="list-item" style="cursor:pointer" ng-click="file.download()" ng-repeat="file in taskDetails.files">
+										<span class="glyphicon glyphicon-download" ></span>
+										<span ng-bind-html="file.getFileName()"></span>
+									</li>
+								</ul>
+							</div>
+						</div>	
+
 					</div>
 					<div class="row">
 						<div class="col-md-12 col-xs-12">

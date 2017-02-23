@@ -3,6 +3,7 @@ var path = require('path');
 var moment = require('moment');
 var User = require('../models/User.js');
 var Checkpoint = require('../models/Checkpoint.js');
+var File = require('../models/Files.js');
 var UserController = require('./userController.js');
 var ErrorManager = require('./ErrorController.js');
 var validator = require('./validatorController.js');
@@ -12,6 +13,8 @@ var Comment = require('./commentController.js');
 var RandomStringGenerator = require('randomstring');
 var EmailController = require('./EmailController.js')
 var EmailSender = require('../services/EmailSender.js');
+
+var fs = require('fs');
 
 var TaskController = {
 	getTask : function(taskId,cb){
@@ -33,12 +36,16 @@ var TaskController = {
 	},
 	getTaskByKey : function(taskKey,cb){
 		Task.findOne({'key':taskKey})
+			.select('-files.binaryData')
 			.populate('owner','username name')
 			.populate({
 				path : 'comments',
 				model : 'Comment',
 			})
 			.exec(function(err,task){
+
+
+			console.log(task);
 				
 			if(err){
 				err.message = 'Fatal Error';
@@ -366,96 +373,96 @@ var TaskController = {
 				cb(err,data);
 			})
 		})	
+	},
+
+	addFileToTask : function(taskKey, file ,cb){
+		Task.getTaskByKey(taskKey,function(err,data){
+			if(!err && data){
+				var taskId = data._id;
+
+					 	// fs.writeFile('image_orig.png', original_data, 'binary', function(err) {});
+
+
+			    var base64Image = fs.readFileSync(file.file)
+			    // console.log("base64 str:");
+			    // console.log(base64Image);
+			    // console.log(base64Image.length);
+
+
+			    Task.addFileToTask(taskId,
+						new File({
+							'filename' : file.filename,
+							'binaryData' : base64Image
+						}), 
+						function(err,data){
+							if(err){
+								console.log(err);
+								cb(err)
+							}else{
+								cb(null,data);
+							}
+						})
+
+			 //    var decodedImage = new Buffer(base64Image, 'base64').toString('binary');
+				// 	    console.log("decodedImage:");
+				// 	    console.log(decodedImage);
+				// 	    fs.writeFile('C:/image_decoded_text.txt', decodedImage, 'binary', function(err) {});
+				
+				// fs.readFile(file.file, function(err, data) {
+				//   if (err) throw err;
+
+				//   // Encode to base64
+				//   console.log(encodedImage);
+
+				//   var encodedImage = new Buffer(data,'binary').toString('base64');
+				  
+				
+			}else{
+				cb(err);
+			}
+		})
 	}
+,
+
+
+	getFileOfTask : function(taskKey,File_id,cb){
+		Task.aggregate([
+		    { "$match": {
+		        "key": taskKey
+		    }},{
+		    	'$unwind' : "$files"
+		    },{
+		    	'$match': {
+		    		"files._id" : require('mongoose').Types.ObjectId(File_id)
+		    	}
+		    },{
+		    	$project : {
+		    		"files" : 1
+		    	}
+ 		    }
+		],function(err,result) {
+				  // var decodedImage = new Buffer(encodedImage, 'base64').toString('binary');
+			//console.log(new Buffer(result[0].files.binaryData,'base64').toString('binary'));
+
+			if(!err){
+				var file = {
+					"binaryData" : result[0].files.binaryData.buffer,
+					"filename" : result[0].files.filename
+				} 
+
+				var buffer = new Buffer(file.binaryData.buffer,'binary');
+				var finalFile =  buffer.toString('utf8')
+
+					cb(null,file);
+			}else{
+				cb(err);
+			}
+				
+		})
+	}
+
+
 }
 
 
 module.exports = TaskController;
-
-
-
-
-
-// TaskController.addCheckpointToTask('5XIQ3cilfKZo9xKhe1c3nP7bjAOpYPFr','Call her for sure',function(err,data){
-// 	if(!err)
-// 		console.log('Checkpoint Added!');
-// 	else
-// 		console.log(err);
-// })
-
-// TaskController.getTask('57531b616edfdb00129722ff',function(err,data){
-// 	console.log(data);
-// })
-
-
-// TaskController.getCommentsOfTaskByKey('onmHiLLPiab4Uo8Ex1CF3d8Lu9grFDVy',function(err,data){
-// 	console.log(data);
-// });
-
-/*Tests*/
-// TaskController.getCommentsOfTaskByKey('ankurrana-59',function);
-
-
-
-// TaskController.getTasksForDateRange('asdas','2016-03-01','2016-04-03',function(err,range){
-// 	console.log(range);
-// });
-
-// TaskController.updateTaskByKey('ankurrana-4',{
-// 	description : 'task with key - ankurrana-4 was updated to this description',
-// 	schedule : 'today'
-// },function(err,dasd){
-// 	console.log(err);
-// 	console.log(dasd);
-// })
-
-
-// UserController.getTasksOfUserByUsername('ankurrana',function(err,taskIds){
-// 	TaskController.getTasksForDateRange(taskIds,'2016-03-20','2016-03-20',function(err,tasks){
-// 		console.log(err);
-// 		console.log(tasks);	
-// 	})
-// })
-
-
-
-
-// UserController.getTasksOfUserByUsername('ankur',function(err,data){
-// 	console.log(err);
-// 	TaskController.getTasksForDate(data,'2016-03-06',function(err,data){
-// 		console.log(err);
-// 		console.log(data);
-// 	});	
-// })
-
-// TaskController.updateTask('56d7ff0d82cd18fc1a5629f3',{
-// 	description : 'UPDATED task',
-// 	schedule : 'tomorrow'
-// },function(err,asd){
-// 	console.log(err);
-// 	console.log(asd);
-// })
-
-
-
-// TaskController.addTask({
-// 	'description' : 'qwerty',
-// 	'author' : 'slkdkfur',
-// 	'schedule' : 'asdasflhsf'
-// },'ankur ranas',function(err,asd){
-// 	console.log(err);
-// 	console.log(asd);
-// })
-
-
-
-// TaskController.getTask('56dc154abced9b836367495',function(sda,asdasd){
-// 	console.log(sda);
-// 	console.log(asdasd);
-// })
-
-
-// var Person = function(name){
-// 	this.name = name; 
-// 	get
-// }
